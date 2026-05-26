@@ -29,11 +29,9 @@ public class Solution {
     // 统计t中字符的种类
     Map<Character, Integer> need = new HashMap<>();
 
-    int needCount = 0;
     for (int i = 0; i <= n - 1; i++) {
       char curChar = t.charAt(i);
       need.put(curChar, need.getOrDefault(curChar, 0) + 1);
-      needCount++;
     }
 
     int start = 0;
@@ -53,21 +51,20 @@ public class Solution {
       }
 
       // 缩小窗口
-      while (needCount == valid) {
-        char d = s.charAt(left);
-
+      while (valid == need.size()) {
         // 记录长度
         if (i - left + 1 < minLen) {
           start = left;
           minLen = i - left + 1;
         }
 
-        if (need.containsKey(d)) {
-          if (window.get(d).equals(need.get(d))) {
+        c = s.charAt(left);
+        if (need.containsKey(c)) {
+          if (window.get(c).equals(need.get(c))) {
             // 窗口内字符匹配数减1,所以是while
             valid--;
           }
-          window.put(d, window.get(d) - 1);
+          window.put(c, window.get(c) - 1);
         }
 
         left++;
@@ -80,8 +77,8 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    String s = "ADOBECODEBANC";
-    String t = "ABC";
+    String s = "aa";
+    String t = "aa";
     System.out.println(solution.minWindow(s, t));
   }
 }

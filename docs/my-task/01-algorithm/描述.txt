@@ -1,13 +1,4 @@
-算法刷题力扣Top100刷完第一遍，虽然前面的很多已经忘了，成就感还是很不错的，现在需要进行下一步计划了：
-1、我的刷题飞书笔记
-    /Users/ssl/code/note-algorithm/docs/my-task/01-algorithm/第一次刷题整理.png
-2、官方top100分类
-    /Users/ssl/code/note-algorithm/docs/my-task/01-algorithm/官方top100分类.png
-3、我的Top100分类
-    /Users/ssl/code/note-algorithm/docs/my-task/01-algorithm/Top100分类表.md
-我发现3中我的Top100分类没有官方Top100的方便，请更新Top100分类表.md文件，以力扣官方的分类为主，缺少的题可以补充，
+正确：com.ssl.note.leetcode.编号刷题.LC76_最小覆盖子串.Solution.minWindow
+错误：com.ssl.note.leetcode.编号刷题.LC76_最小覆盖子串.Test.minWindow
 
-回复采用中文
-文档格式：markdown，取当前北京时间，文档命名方式：月-日-时-分 文件名
-需要复制进飞书文档，注意文档不能有空行或者换行，相关流程图采用mermaid语法，尽量清晰明了
-文档保存地址:/Users/ssl/code/note-algorithm/docs/my-task/01-algorithm
+上述2个解法的区别，仅在于window.get(c).equals(need.get(c))和windows.get(cur) == need.get(cur)，举例说明为啥后者会错？

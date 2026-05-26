@@ -17,19 +17,13 @@ public class Solution1 {
     if (nums == null || nums.length == 0) {
       return 0;
     }
-    int pre = nums[0];// 前一个元素的最大累加和
-    int max = nums[0];
-
-    for (int i = 1; i < nums.length; i++) {
-      // 如果前一个元素的最大累加和＜0 = 负收益，就丢弃
-      if (pre < 0) {
-        pre = 0;
-      }
-      pre += nums[i];
-
+    int max = Integer.MIN_VALUE;
+    int pre = 0;
+    for (int num : nums) {
+      if (pre < 0) pre = 0;  // 前面是负收益就丢弃
+      pre += num;
       max = Math.max(max, pre);
     }
-
     return max;
   }
 
