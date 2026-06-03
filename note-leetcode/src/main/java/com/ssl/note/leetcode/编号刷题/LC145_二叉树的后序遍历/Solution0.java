@@ -4,7 +4,7 @@ import com.ssl.note.common.utils.TreeNode;
 
 import java.util.*;
 
-public class Solution {
+public class Solution0 {
   /**
    * 二叉树后续遍历
    * 双栈法
@@ -17,14 +17,10 @@ public class Solution {
     // 前序遍历的栈
     Deque<TreeNode> stack = new ArrayDeque<>();
     stack.push(root);
-    // 辅助栈
-    Deque<TreeNode> temp = new ArrayDeque<>();
 
     while (!stack.isEmpty()) {
       TreeNode node = stack.pop();
-      // 辅助栈底到栈顶：根右左，出栈才是左右根
-      temp.push(node);
-      // 正常栈底到栈顶：根左右，出栈是根右左
+      // 入栈：根左右，出栈：根右左
       if (node.left != null) {
         stack.push(node.left);
       }
@@ -32,10 +28,8 @@ public class Solution {
         stack.push(node.right);
       }
     }
-
-    while (!temp.isEmpty()) {
-      res.add(temp.pop().val);
-    }
+    // 根右左 翻转= 左右根=后序遍历
+    Collections.reverse(res);
 
     return res;
   }
