@@ -18,31 +18,29 @@ public class Solution {
     for (int i = 0; i < inorder.length; i++) {
       map.put(inorder[i], i);
     }
-
-    return dfs(0, 0, preorder.length - 1, preorder, map);
+    return help(preorder, 0, map, 0, inorder.length-1);
   }
 
-  /**
-   * 前序找根，中序划范围。
-   * root   = 前序数组的指针，告诉你"根是谁"
-   * left   = 中序数组的左边界，告诉你"从哪开始"
-   * right  = 中序数组的右边界，告诉你"到哪结束"
-   */
-  private TreeNode dfs(int preRoot, int inLeft, int inRight,
-                       int[] preorder, Map<Integer, Integer> map) {
-    if (inLeft > inRight) {
+  private TreeNode help(int[] pre, int preStart, Map<Integer, Integer> map, int inStart, int inEnd) {
+    if (inStart > inEnd) {
       return null;
     }
+    int index = map.get(pre[preStart]);
+    int leftCount = index - inStart;
 
-    TreeNode node = new TreeNode(preorder[preRoot]);
-
-    int rootIndex = map.get(preorder[preRoot]);
-    // 左子树长度
-    int leftSize = rootIndex - inLeft;
-
-    node.left = dfs(preRoot + 1, inLeft, rootIndex - 1, preorder, map);
-    node.right = dfs(preRoot + leftSize + 1, rootIndex + 1, inRight, preorder, map);
-
+    // 前序：preStart,[preStart+1,preStart+leftCount],[preStart+leftCount+1,preEnd]
+    // 中序：[inStart,index-1],index,[index+1,inEnd]
+    TreeNode node = new TreeNode(pre[preStart]);
+    node.left = help(pre, preStart + 1, map, inStart, index - 1);
+    node.right = help(pre, preStart + leftCount + 1, map, index + 1, inEnd);
     return node;
+  }
+
+  public static void main(String[] args) {
+    int[] preOrder = new int[]{3,9,20,15,7};
+    int[] inorder = new int[]{9,3,15,20,7};
+    Solution solution = new Solution();
+    TreeNode root = solution.buildTree(preOrder, inorder);
+    System.out.println(root.val);
   }
 }
