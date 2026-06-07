@@ -17,8 +17,10 @@ public class Solution {
     int carry = 0;
     // 只要有一个链表还有节点，就继续
     while (head1 != null || head2 != null) {
-      // 当前数的合
-      int sum = (head1 != null ? head1.val : 0) + (head2 != null ? head2.val : 0) + carry;
+      // 当前数的合，末尾必须加上上一位的进位carry
+      int sum = (head1 != null ? head1.val : 0)
+          + (head2 != null ? head2.val : 0)
+          + carry;
       // sum=11，取1
       int value = sum % 10;
       // sum=11，判断是否进位
