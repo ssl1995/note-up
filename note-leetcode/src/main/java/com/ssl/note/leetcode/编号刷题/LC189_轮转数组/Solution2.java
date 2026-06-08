@@ -1,4 +1,4 @@
-package com.ssl.note.leetcode.编号刷题.LC89_轮转数组;
+package com.ssl.note.leetcode.编号刷题.LC189_轮转数组;
 
 import java.util.Arrays;
 
@@ -25,7 +25,6 @@ public class Solution2 {
     reverse(nums, 0, k - 1);
     // 反转后的后n-k个反转
     reverse(nums, k, n - 1);
-
   }
 
   private void reverse(int[] nums, int left, int right) {
