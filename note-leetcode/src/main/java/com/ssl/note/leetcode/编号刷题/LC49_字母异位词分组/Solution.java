@@ -19,10 +19,10 @@ public class Solution {
     for (String str : strs) {
       // 使用次数 + 特殊字符，组成一个唯一键
       String key = getCountKey(str);
-
+      // key不存在就执行新建arraylist;存在就新增
       map.computeIfAbsent(key, k -> new ArrayList<>()).add(str);
     }
-
+    // 返回一个二维链表
     return new ArrayList<>(map.values());
   }
 
