@@ -28,7 +28,7 @@ public class Solution {
   }
 
   // 回溯1：通用模板
-  private void backtrack(int[] candidates, int index, int target, List<Integer> temp, List<List<Integer>> res) {
+  private void backtrack(int[] candidates, int start, int target, List<Integer> temp, List<List<Integer>> res) {
     if (target < 0) {
       return;
     }
@@ -36,8 +36,9 @@ public class Solution {
       res.add(new ArrayList<>(temp));
       return;
     }
-    for (int i = index; i < candidates.length; i++) {
+    for (int i = start; i < candidates.length; i++) {
       temp.add(candidates[i]);
+      // 每个数字可以重复出现：i
       backtrack(candidates, i, target - candidates[i], temp, res);
       temp.remove(temp.size() - 1);
     }
@@ -45,8 +46,9 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    int[] nums = { 2, 3, 5 };
-    int target = 8;
+    int[] nums = {2, 5, 3, 2};
+    int target = 5;
+    // [[2, 3], [5], [3, 2]]
     System.out.println(solution.combinationSum(nums, target));
   }
 

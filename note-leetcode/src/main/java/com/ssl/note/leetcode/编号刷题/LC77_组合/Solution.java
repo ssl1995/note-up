@@ -28,13 +28,13 @@ public class Solution {
 
     return res;
   }
-
+  // 组合
   private void backtrack(int n, int k, int start, List<Integer> path, List<List<Integer>> res) {
     if (path.size() == k) {
       res.add(new ArrayList<>(path));
       return;
     }
-    // 组合从start开始
+    // 组合从start开始，[start,n]在[1,n]中
     for (int i = start; i <= n; i++) {
       path.add(i);
 

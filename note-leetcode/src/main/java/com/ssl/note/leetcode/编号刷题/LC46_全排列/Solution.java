@@ -17,35 +17,36 @@ public class Solution {
    */
   public List<List<Integer>> permute(int[] nums) {
     List<Integer> path = new ArrayList<>();
-    boolean[] used = new boolean[nums.length];
     List<List<Integer>> res = new ArrayList<>();
-    backtrack(nums, path, used, res);
+
+    // 不含重复数字，就使用used数组
+    boolean[] used = new boolean[nums.length];
+    backtrack(nums, used, path, res);
 
     return res;
   }
 
-  // 回溯：path和used数组方式
-  private void backtrack(int[] nums,
-                         List<Integer> path, boolean[] used,
-                         List<List<Integer>> res) {
+  // 全排列
+  private void backtrack(int[] nums, boolean[] used,// 全排列不含重复，不从start开始，所以需要used数组
+                         List<Integer> path, List<List<Integer>> res) {
     if (path.size() == nums.length) {
       res.add(new ArrayList<>(path));
       return;
     }
     for (int i = 0; i < nums.length; i++) {
+      // 每次都从头开始选，选过的都跳过
       if (used[i]) {
         continue;
       }
       path.add(nums[i]);
       used[i] = true;
 
-      backtrack(nums, path, used, res);
+      backtrack(nums, used, path, res);
 
       path.remove(path.size() - 1);
       used[i] = false;
     }
   }
-
 
   public static void main(String[] args) {
     Solution solution = new Solution();

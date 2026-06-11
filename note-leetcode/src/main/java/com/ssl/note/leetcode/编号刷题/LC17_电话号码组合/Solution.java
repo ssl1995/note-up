@@ -41,14 +41,16 @@ public class Solution {
     String lett = map.get(digits.charAt(index));
     for (Character c : lett.toCharArray()) {
       temp.append(c);
+
       backtrack(digits, index + 1, temp, res, map);
+
       temp.deleteCharAt(temp.length() - 1);
     }
   }
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    String digits = "23";
+    String digits = "9";
     System.out.println(solution.letterCombinations(digits));
     System.out.println("---");
     System.out.println("".length());

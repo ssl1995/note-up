@@ -30,7 +30,7 @@ public class Solution1 {
   }
 
   // 回溯1：通用模板
-  private void backtrack(int[] candidates, int index, int target, List<Integer> temp, List<List<Integer>> res) {
+  private void backtrack(int[] candidates, int start, int target, List<Integer> temp, List<List<Integer>> res) {
     if (target < 0) {
       return;
     }
@@ -38,14 +38,14 @@ public class Solution1 {
       res.add(new ArrayList<>(temp));
       return;
     }
-    for (int i = index; i < candidates.length; i++) {
-
+    for (int i = start; i < candidates.length; i++) {
       // 剪枝优化：排序完后，当前值已经大于剩余target，后续的值都更大，直接break
       if (candidates[i] > target) {
         break;
       }
 
       temp.add(candidates[i]);
+      // 每个数字可以重复出现：i
       backtrack(candidates, i, target - candidates[i], temp, res);
       temp.remove(temp.size() - 1);
     }
