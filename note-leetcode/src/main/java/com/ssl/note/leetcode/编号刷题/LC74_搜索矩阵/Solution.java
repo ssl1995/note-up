@@ -11,6 +11,7 @@ public class Solution {
   public boolean searchMatrix(int[][] matrix, int target) {
     int m = matrix.length;
     int n = matrix[0].length;
+    // 一维数组范围：[0,mn-1]
     int left = 0;
     int right = m * n - 1;
 

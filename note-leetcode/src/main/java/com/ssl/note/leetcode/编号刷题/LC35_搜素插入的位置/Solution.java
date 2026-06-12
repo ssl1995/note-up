@@ -23,7 +23,8 @@ public class Solution {
         left = mid + 1;
       }
     }
-    // 那么结果接的再判断一下
+    // nums=[1,3,5,6],t=7时，此时nums[left]=6
+    // t=7应该插到末尾，所以需要特判一下
     if (nums[left] < target) {
       return left + 1;
     }
