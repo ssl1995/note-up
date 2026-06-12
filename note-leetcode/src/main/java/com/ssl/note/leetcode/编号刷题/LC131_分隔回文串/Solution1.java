@@ -18,6 +18,8 @@ public class Solution1 {
     int n = s.length();
     // 动态规划，预处理回文串串的判断
     boolean[][] dp = new boolean[n][n];
+    // i倒序是为了让 dp[i+1][j-1]先算出来
+    // j从i开始是因为子串必须满足 i <= j
     for (int i = n - 1; i >= 0; i--) {
       for (int j = i; j <= n - 1; j++) {
         if (s.charAt(i) == s.charAt(j)) {
