@@ -73,22 +73,21 @@ public class Solution {
    * 3  (3,0)   (3,1)   (3,2)   (3,3)
    */
   private boolean isValid(char[][] board, int row, int col, int n) {
-    // 逐行从上往下放置，检查上半部分
-    // 检查列：当前列的上半部分
+    // 检查当前行所在的列是否被用过
     for (int i = 0; i < row; i++) {
       if (board[i][col] == 'Q') {
         return false;
       }
     }
 
-    // 检查45°斜线（左上 → 右下）
+    // 检查45°斜线是否用过（左上 → 右下）
     for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
       if (board[i][j] == 'Q') {
         return false;
       }
     }
 
-    // 检查135°斜线（右上 → 左下）
+    // 检查135°斜线是否用过（右上 → 左下）
     for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
       if (board[i][j] == 'Q') {
         return false;
@@ -103,7 +102,6 @@ public class Solution {
     for (char[] cs : board) {
       String s = new String(cs);
       temp.add(s);
-//      temp.add(String.copyValueOf(cs));
     }
     res.add(temp);
   }
