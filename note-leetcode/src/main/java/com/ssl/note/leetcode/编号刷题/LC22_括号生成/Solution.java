@@ -31,14 +31,14 @@ public class Solution {
     if (leftNeed > 0) {
       path.append("(");
       backtrack(leftNeed - 1, rightNeed, path, res);
-      // 回溯
+      // 当问题要求枚举所有可行解，并且你用同一个可变变量记录当前路径、在递归返回后还要尝试其他分支时，就必须回溯。
       path.deleteCharAt(path.length() - 1);
     }
     // 3. 递归体：leftNeed小于rightNeed时，说明还可以添加右括号
     if (leftNeed < rightNeed) {
       path.append(")");
       backtrack(leftNeed, rightNeed - 1, path, res);
-      // 回溯
+      // 当问题要求枚举所有可行解，并且你用同一个可变变量记录当前路径、在递归返回后还要尝试其他分支时，就必须回溯。
       path.deleteCharAt(path.length() - 1);
     }
   }
