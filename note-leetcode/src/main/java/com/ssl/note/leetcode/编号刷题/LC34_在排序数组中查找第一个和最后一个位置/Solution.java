@@ -18,53 +18,41 @@ public class Solution {
     if (nums.length == 0) {
       return new int[]{-1, -1};
     }
-    return new int[]{binarySort1(nums, target), binarySort2(nums, target)};
+    return new int[]{findFirst(nums, target), findLast(nums, target)};
   }
 
-  /**
-   * 返回>=t的第一个下标
-   */
-  private int binarySort1(int[] nums, int t) {
-    int left = 0;
-    int right = nums.length - 1;
+  // 找第一个 >= target 的位置
+  private int findFirst(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
     while (left <= right) {
       int mid = left + (right - left) / 2;
-      if (nums[mid] < t) {
-        left++;
-      } else if (nums[mid] > t) {
-        right--;
+      // 找左边界：把 < target 的通通扔掉，剩下的第一个就是答案
+      if (nums[mid] < target) {
+        left = mid + 1;
       } else {
-        if (mid == 0 || nums[mid - 1] < t) {
-          return mid;
-        }
-        // 找第一个
-        right--;
+        right = mid - 1;
       }
     }
-    return -1;
+    // left 是第一个 >= target 的位置
+    // 比如[1,2,3],t=5,此时left=4,需要判断：1、不越界。
+    // 比如[1,3,5,6],t=4,此时left=2,需要判断：2、是否相等
+    return (left < nums.length && nums[left] == target) ? left : -1;
   }
 
-  /**
-   * 返回<=t的第一个下标
-   */
-  private int binarySort2(int[] nums, int t) {
-    int left = 0;
-    int right = nums.length - 1;
+  // 找最后一个 <= target 的位置
+  private int findLast(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
     while (left <= right) {
       int mid = left + (right - left) / 2;
-      if (nums[mid] < t) {
-        left++;
-      } else if (nums[mid] > t) {
-        right--;
+      // 找右边界：把 <= target 的通通收下，最后一个收下的就是答案
+      if (nums[mid] <= target) {
+        left = mid + 1;
       } else {
-        if (mid == nums.length - 1 || nums[mid + 1] > t) {
-          return mid;
-        }
-        // 找最后一个
-        left++;
+        right = mid - 1;
       }
     }
-    return -1;
+    // right 是最后一个 <= target 的位置
+    return (right >= 0 && nums[right] == target) ? right : -1;
   }
 
   public static void main(String[] args) {
