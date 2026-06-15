@@ -16,13 +16,15 @@ public class Solution {
    * 输入：nums1 = [1,3], nums2 = [2]
    * 合并后：[1,2,3]
    * 总长度3为奇数，中位数 = 2
+   * 解法一：时间复杂度不是最优解，但是是最清晰的写法
    * 时间复杂度：O(m+n)，需要遍历两个数组
    * 空间复杂度：O(m+n)，需要额外空间存储合并后的数组
    */
   public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    // 时间复杂度是O(m+n)，不是最优解，但是是最容易理解的
     int n1 = nums1.length;
     int n2 = nums2.length;
-    // 合并成一个nums数组
+    // 1、合并成一个nums数组
     int[] nums = new int[n1 + n2];
     int i = 0, j = 0, k = 0;
     while (i < n1 && j < n2) {
@@ -32,7 +34,6 @@ public class Solution {
         nums[k++] = nums2[j++];
       }
     }
-
     while (i < n1) {
       nums[k++] = nums1[i++];
     }
@@ -40,7 +41,8 @@ public class Solution {
     while (j < n2) {
       nums[k++] = nums2[j++];
     }
-    // 找中位数
+
+    // 2、找中位数
     int size = n1 + n2;
     boolean isEven = (size & 1) == 0;
     // 偶数

@@ -22,6 +22,7 @@ public class Solution {
     int right = nums.length - 1;
     while (left <= right) {
       int mid = left + (right - left) / 2;
+      // 多次旋转排序数组，数组存在断崖点=最小值就是断崖点=唯一一个左边元素比右边元素大位置
       if (nums[mid] < nums[right]) {
         // <,最小值可能是nums[mid]
         right = mid;
@@ -29,12 +30,12 @@ public class Solution {
         // >,最小值不可能是nums[mid]
         left = mid + 1;
       } else {
+        // 有重复元素时，无法确定最小值在哪边，只能保守right--，不能left++
         // [1,0,1,1,1]
         // 如果选择left++，上述的情况就会把最小值0给遗漏掉
         // [1,1,1,0,1]
         // nums[mid]==nums[right]时，无法确定最小值，只能缩小范围
         right--;
-
       }
     }
     // nums = [3,4,5,1,2]
