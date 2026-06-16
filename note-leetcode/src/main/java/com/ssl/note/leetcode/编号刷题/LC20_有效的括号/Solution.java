@@ -18,27 +18,30 @@ public class Solution {
     if (s == null) {
       return false;
     }
-    Map<Character, Character> map = new HashMap<>();
-    map.put('(', ')');
-    map.put('[', ']');
-    map.put('{', '}');
-
     Deque<Character> stack = new ArrayDeque<>();
 
-    for (int i = 0; i < s.length(); i++) {
-      char c = s.charAt(i);
-      if (map.containsKey(c)) {
+    for (char c : s.toCharArray()) {
+      if (Objects.equals(c, '(') || Objects.equals(c, '[') || Objects.equals(c, '{')) {
         stack.push(c);
         continue;
       }
-      // 出栈时没有元素，就不可能是有效的括号
-      if (stack.isEmpty()) {
-        return false;
+      if (Objects.equals(c, ')')) {
+        if (!Objects.equals(stack.peek(), '(')) {
+          return false;
+        }
+        stack.pop();
       }
-
-      char pop = stack.pop();
-      if (map.get(pop) != c) {
-        return false;
+      if (Objects.equals(c, '}')) {
+        if (!Objects.equals(stack.peek(), '{')) {
+          return false;
+        }
+        stack.pop();
+      }
+      if (Objects.equals(c, ']')) {
+        if (!Objects.equals(stack.peek(), '[')) {
+          return false;
+        }
+        stack.pop();
       }
     }
     // s='{'时，栈还有元素

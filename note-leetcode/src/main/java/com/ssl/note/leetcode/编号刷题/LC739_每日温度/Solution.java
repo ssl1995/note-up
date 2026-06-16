@@ -19,7 +19,9 @@ public class Solution {
     int[] res = new int[temperatures.length];
     Deque<Integer> stack = new ArrayDeque<>();
 
+    // 单调栈标准写法
     for (int i = 0; i < temperatures.length; i++) {
+      // 单调递减栈：栈底到栈顶是递减的，所以入>栈顶就要弹出
       while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
         Integer pop = stack.pop();
         res[pop] = i - pop;
