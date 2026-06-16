@@ -53,10 +53,10 @@ public class Solution {
     swap(nums, gt, right);
 
     // 根据target的位置决定搜索方向
-    if (target <= lt) {
+    if (lt >= target) {
       // target在小于pivot的区间，在左半部分继续搜索
       return quickSelect(nums, left, lt, target);
-    } else if (target >= gt) {
+    } else if (gt <= target) {
       // target在大于pivot的区间，在右半部分继续搜索
       return quickSelect(nums, gt, right, target);
     } else {
@@ -76,7 +76,7 @@ public class Solution {
   }
 
   public static void main(String[] args) {
-    int[] nums = {3,2,3,1,2,4,5,5,6};
+    int[] nums = {3, 2, 3, 1, 2, 4, 5, 5, 6};
     int k = 4;
     Solution solution = new Solution();
     // 4
