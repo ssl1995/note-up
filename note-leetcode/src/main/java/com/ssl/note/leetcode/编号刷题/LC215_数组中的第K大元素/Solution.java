@@ -26,13 +26,15 @@ public class Solution {
     int random = new Random().nextInt(right - left + 1) + left;
     swap(nums, random, right);
 
-    // 三路分割的核心逻辑
+    // 三路快排while循环结束后：
+    // [left,lt]: <pivot
+    // [lt+1,gt-1]: =pivot
+    // [gt,right]: >pivot
     int pivot = nums[right];  // 选择最右元素作为pivot
     int lt = left - 1;        // 小于pivot的右边界（初始为left-1）
-    int gt = right;           // 大于pivot的左边界（初始为right）
+    int gt = right;           // 大于pivot的左边界（初始为right）=未处理区域的右边界
     int i = left;             // 当前遍历位置（从left开始）
-
-    // 遍历过程：将数组分为三部分
+    // i只能扫描未处理区域，一旦越过 gt，就会去动已经归位的元素，分区立刻乱掉
     while (i < gt) {
       if (nums[i] < pivot) {
         // 当前元素小于pivot，放到左侧
@@ -49,7 +51,7 @@ public class Solution {
         i++;
       }
     }
-    // 将pivot放到正确的位置（大于pivot区间的最左侧）
+    // 遗忘：将pivot放到正确的位置（大于pivot区间的最左侧）
     swap(nums, gt, right);
 
     // 根据target的位置决定搜索方向
