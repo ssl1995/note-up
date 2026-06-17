@@ -18,16 +18,15 @@ public class Solution {
     if (prices == null) {
       return 0;
     }
-    // 贪心：一次遍历用当前找到的最低价格来计算,就是本题最优解
-    int min = prices[0];
-    int max = 0;
+    int min = Integer.MAX_VALUE;
+    int res = Integer.MIN_VALUE;
 
-    for (int price : prices) {
-      min = Math.min(min, price);
-
-      max = Math.max(max, price - min);
+    // 贪心：每次遍历到一个数，局部最优解是之前的最小值-当前数就是最大利润
+    for (int num : prices) {
+      min = Math.min(min, num);
+      res = Math.max(res, num - min);
     }
-    return max;
+    return res;
   }
 
   public static void main(String[] args) {
