@@ -16,22 +16,36 @@ public class Solution1 {
       map.put(num, map.getOrDefault(num, 0) + 1);
     }
 
-//    PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>((a, b) -> a.getValue() - b.getValue());
-    PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>(Comparator.comparingInt(Map.Entry::getValue));
+    int n = nums.length;
+    List<List<Integer>> buckets = new ArrayList<>(n + 1);
+    for (int i = 0; i < n + 1; i++) {
+      buckets.add(new ArrayList<>());
+    }
 
     for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-      if (minHeap.size() < k) {
-        minHeap.offer(entry);
-      } else if (minHeap.peek() != null && minHeap.peek().getValue() < entry.getValue()) {
-        minHeap.poll();
-        minHeap.offer(entry);
-      }
+      // 桶下标：频率
+      // 桶放入：数字，可能是相同频率的但不相同的数字
+      buckets.get(entry.getValue()).add(entry.getKey());
     }
 
     int[] res = new int[k];
-    for (int i = 0; i < k; i++) {
-      if (minHeap.peek() != null) {
-        res[i] = minHeap.poll().getKey();
+    int index = 0;
+    // 从后往前遍历桶，拿去前k个数返回
+    for (int i = n; i >= 0; i--) {
+      if (index >= k) {
+        break;
+      }
+      List<Integer> bucket = buckets.get(i);
+      if (bucket.isEmpty()) {
+        continue;
+      }
+      // 每个桶里可能有多个相同的频率的不同的数，返回k个数
+      for (int num : bucket) {
+        if (index >= k) {
+          break;
+        }
+        res[index] = num;
+        index++;
       }
     }
 
@@ -40,7 +54,7 @@ public class Solution1 {
 
   public static void main(String[] args) {
     Solution1 solution1 = new Solution1();
-    int[] nums = {1, 1, 1, 2, 2, 3};
+    int[] nums = {1, 2, 1, 2, 1, 2, 3, 1, 3, 2};
     int t = 2;
     System.out.println(Arrays.toString(solution1.topKFrequent(nums, t)));
   }
