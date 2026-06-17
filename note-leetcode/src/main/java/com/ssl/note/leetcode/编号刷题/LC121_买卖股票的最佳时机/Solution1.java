@@ -18,21 +18,14 @@ public class Solution1 {
     if (prices == null) {
       return 0;
     }
-    int n = prices.length;
-    int[][] dp = new int[n][2];
-    // i天不持有股票最大利润
-    dp[0][0] = 0;
-    // i天持有股票最大利润
-    dp[0][1] = -prices[0];
-
-    for (int i = 1; i < n; i++) {
-      // i天不持有股票的最大利润：i-1天就没有持有 or i-1天持有，当天卖出
-      dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
-      // i天持有股票的最大利润：i-1天就持有，当天不变 or 当天买入
-      dp[i][1] = Math.max(dp[i - 1][1], -prices[i]);
+    // 股票 + 最大利润 + 有限交易次数 = 状态机DP
+    int hold1 = -prices[0];
+    int sold1 = 0;
+    for (int price : prices) {
+      hold1 = Math.max(hold1, -price);
+      sold1 = Math.max(sold1, hold1 + price);
     }
-    // 返回最后一天不持有股票的最大利润
-    return dp[n - 1][0];
+    return sold1;
   }
 
   public static void main(String[] args) {
