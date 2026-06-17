@@ -26,8 +26,8 @@ public class MedianFinder {
    * medianFinder.addNum(3);    // arr[1, 2, 3]
    * medianFinder.findMedian(); // return 2.0
    */
-  private PriorityQueue<Integer> maxHeap;
-  private PriorityQueue<Integer> minHeap;
+  private PriorityQueue<Integer> maxHeap;// 小的一半放这里，堆顶是小的一半里的最大值
+  private PriorityQueue<Integer> minHeap;// 大的一半放这里，堆顶是大的一半里的最小值
 
   public MedianFinder() {
     maxHeap = new PriorityQueue<>((a, b) -> b - a);
@@ -45,7 +45,7 @@ public class MedianFinder {
     // maxHeap.size() 要么等于 minHeap.size()，要么比 minHeap.size() 大1
     if (maxHeap.size() > minHeap.size() + 1) {
       minHeap.offer(maxHeap.poll());
-    } else if (minHeap.size() > maxHeap.size()) {
+    } else if (maxHeap.size() < minHeap.size()) {
       maxHeap.offer(minHeap.poll());
     }
   }
@@ -54,7 +54,7 @@ public class MedianFinder {
     int num1 = maxHeap.isEmpty() ? 0 : maxHeap.peek();
     int num2 = minHeap.isEmpty() ? 0 : minHeap.peek();
     int size = minHeap.size() + maxHeap.size();
-    // 是否是偶数
+    // 是否是偶数: &1==0 或者 %2==1
     boolean isEven = (size & 1) == 0;
     if (isEven) {
       return (double) (num1 + num2) / 2;
