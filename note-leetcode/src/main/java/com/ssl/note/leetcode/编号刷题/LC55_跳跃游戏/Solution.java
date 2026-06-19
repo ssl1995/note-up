@@ -17,30 +17,26 @@ public class Solution {
     if (nums == null || nums.length == 0) {
       return false;
     }
-    if (nums.length == 1) {
+    int n = nums.length;
+    if (n == 1) {
       return true;
     }
-
     int maxReach = 0;
-    for (int i = 0; i < nums.length; i++) {
-      // 当前位置没有被曾经的最大跳跃位置命中
+    for (int i = 0; i < n; i++) {
       if (i > maxReach) {
         return false;
       }
-      // 计算当前可达的最长位置
       maxReach = Math.max(maxReach, i + nums[i]);
-      // 是否超过数组长度
-      if (maxReach >= nums.length - 1) {
+      if (maxReach >= n - 1) {
         return true;
       }
     }
-    // 是否超过数组长度
-    return maxReach >= nums.length - 1;
+    return maxReach >= n - 1;
   }
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    int[] nums = {2, 3, 1, 1, 4};
+    int[] nums = {0, 2, 3};
     System.out.println(solution.canJump(nums));
   }
 }

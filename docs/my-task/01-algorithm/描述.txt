@@ -1,4 +1,5 @@
-正确：com.ssl.note.leetcode.编号刷题.LC76_最小覆盖子串.Solution.minWindow
-错误：com.ssl.note.leetcode.编号刷题.LC76_最小覆盖子串.Test.minWindow
+跳跃游戏I:com.ssl.note.leetcode.编号刷题.LC55_跳跃游戏.Solution.canJump
+跳跃游戏II:com.ssl.note.leetcode.编号刷题.LC45_跳跃游戏II.Solution.jump
+跳跃游戏III:com.ssl.note.leetcode.编号刷题.LC1306_跳跃游戏III.Solution.canReach
 
-上述2个解法的区别，仅在于window.get(c).equals(need.get(c))和windows.get(cur) == need.get(cur)，举例说明为啥后者会错？
+我用贪心算法做出了第一套题，面试的时候，后续的2道题如何思考和写出来？
