@@ -18,8 +18,9 @@ public class Solution1 {
   public List<List<Integer>> generate(int numRows) {
 
     List<List<Integer>> res = new ArrayList<>();
-
     List<Integer> row = new ArrayList<>();
+
+    // 初始化：第一行没有上一行数据
     row.add(1);
     res.add(row);
 
@@ -29,10 +30,12 @@ public class Solution1 {
       List<Integer> cur = new ArrayList<>();
       // 第一个元素=1
       cur.add(1);
+
       // 中间元素=上一行相邻两个元素之和
       for (int j = 1; j < i; j++) {
         cur.add(pre.get(j - 1) + pre.get(j));
       }
+
       // 最后一个元素=1
       cur.add(1);
 

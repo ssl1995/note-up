@@ -23,8 +23,8 @@ public class Solution {
     //"[1, 3, 3, 1, 0]"
     //"[1, 4, 6, 4, 1]"
     for (int i = 0; i < n; i++) {
-      dp[i][0] = 1;
-      dp[i][i] = 1;
+      dp[i][0] = 1;// 第一列
+      dp[i][i] = 1;// 对角线
       // 第一次循环可以填充左半边数据
       for (int j = 1; j < i; j++) {
         dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
