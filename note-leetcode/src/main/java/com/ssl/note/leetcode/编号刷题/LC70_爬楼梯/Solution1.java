@@ -18,8 +18,7 @@ public class Solution1 {
     if (n <= 2) {
       return n;
     }
-    // 出现n+1和动态规划转移公式，对数组长度至少要有3个数
-    // 所以n必须>=2，前面的if(n==1)必须有
+    // 动态规划
     int[] dp = new int[n + 1];
     dp[1] = 1;
     dp[2] = 2;

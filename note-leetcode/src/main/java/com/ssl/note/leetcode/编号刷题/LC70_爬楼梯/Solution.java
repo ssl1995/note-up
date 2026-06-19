@@ -18,6 +18,7 @@ public class Solution {
     if (n <= 2) {
       return n;
     }
+    // 递归
     return climbStairs(n - 1) + climbStairs(n - 2);
   }
 

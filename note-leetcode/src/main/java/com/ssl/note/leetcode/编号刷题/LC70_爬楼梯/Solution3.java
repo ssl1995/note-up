@@ -12,6 +12,8 @@ public class Solution3 {
    */
   public int climbStairs(int n) {
     double sqrt5 = Math.sqrt(5);
+    // 了解就行
+    // 波那契数列的通项公式：F(n) = [((1+√5)/2)^(n+1) - ((1-√5)/2)^(n+1)] / √5
     double fin = Math.pow((1 + sqrt5) / 2, n + 1) - Math.pow((1 - sqrt5) / 2, n + 1);
     return (int) Math.round(fin / sqrt5);
   }

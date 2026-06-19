@@ -20,41 +20,25 @@ public class Solution2 {
     }
     int a = 1;
     int b = 2;
-
+    // 动态规划优化成迭代：从3阶台阶开始遍历
     for (int i = 3; i <= n; i++) {
       int c = a + b;
-
       a = b;
       b = c;
+      // 下面这种写法也行
+//      int c = b;
+//      b = a + b;
+//      a = c;
     }
-    // 返回b的写法
+    // 返回b
     return b;
-  }
-
-  // 返回c的写法
-  public int climbStairs1(int n) {
-    if (n <= 2) {
-      return n;
-    }
-    int a = 1;
-    int b = 2;
-    int c = a + b;
-
-    for (int i = 3; i <= n; i++) {
-      c = a + b;
-
-      a = b;
-      b = c;
-    }
-
-    return c;
   }
 
   public static void main(String[] args) {
     Solution2 solution = new Solution2();
     int n = 4;
     // 3
-    System.out.println(solution.climbStairs1(n));
+    System.out.println(solution.climbStairs(n));
   }
 
 }
