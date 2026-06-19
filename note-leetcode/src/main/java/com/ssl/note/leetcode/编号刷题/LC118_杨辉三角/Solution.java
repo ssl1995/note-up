@@ -15,23 +15,28 @@ public class Solution {
    * - 时间复杂度：O(n²)，其中n是numRows，需要计算每个元素
    * - 空间复杂度：O(n²)，需要存储整个杨辉三角
    */
-  public List<List<Integer>> generate(int numRows) {
-    int[][] dp = new int[numRows][numRows];
-    for (int i = 0; i < numRows; i++) {
+  public List<List<Integer>> generate(int n) {
+    int[][] dp = new int[n][n];
+    //"[1, 0, 0, 0, 0]"
+    //"[1, 1, 0, 0, 0]"
+    //"[1, 2, 1, 0, 0]"
+    //"[1, 3, 3, 1, 0]"
+    //"[1, 4, 6, 4, 1]"
+    for (int i = 0; i < n; i++) {
       dp[i][0] = 1;
       dp[i][i] = 1;
-
+      // 第一次循环可以填充左半边数据
       for (int j = 1; j < i; j++) {
-        dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+        dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
       }
     }
     List<List<Integer>> res = new ArrayList<>();
-    for (int i = 0; i < numRows; i++) {
-      List<Integer> row = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+      List<Integer> temp = new ArrayList<>();
       for (int j = 0; j <= i; j++) {
-        row.add(dp[i][j]);
+        temp.add(dp[i][j]);
       }
-      res.add(row);
+      res.add(temp);
     }
     return res;
   }
