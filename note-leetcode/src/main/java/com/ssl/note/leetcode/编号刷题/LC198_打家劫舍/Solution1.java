@@ -10,23 +10,24 @@ public class Solution1 {
    * 偷窃到的最高金额 = 2 + 9 + 1 = 12 。
    */
   public int rob(int[] nums) {
-    if (nums == null || nums.length == 0) {
-      return -1;
-    }
-    if (nums.length == 1) {
+    int n = nums.length;
+    if (n == 1) {
       return nums[0];
     }
-
-    int pre1 = nums[0];
-    int pre2 = Math.max(nums[0], nums[1]);
-
-    for (int i = 2; i < nums.length; i++) {
-      // 陷阱：前一天不偷pre2 vs (前两天偷pre1 + 当天偷nums[i])
-      int temp = Math.max(pre2, pre1 + nums[i]);
-      pre1 = pre2;
-      pre2 = temp;
+    if (n == 2) {
+      return Math.max(nums[0], nums[1]);
     }
-    return pre2;
+    // 动态规划优化成2个变量迭代
+    int a = nums[0];
+    int b = Math.max(nums[0], nums[1]);
+
+    for (int i = 2; i < n; i++) {
+      int c = Math.max(a + nums[i], b);
+      a = b;
+      b = c;
+    }
+
+    return b;
   }
 
   public static void main(String[] args) {

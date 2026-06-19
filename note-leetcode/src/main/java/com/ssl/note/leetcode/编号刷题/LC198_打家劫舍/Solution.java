@@ -23,12 +23,12 @@ public class Solution {
     }
     int n = nums.length;
     int[] dp = new int[n];
+    // 初始化
     dp[0] = nums[0];
     dp[1] = Math.max(nums[0], nums[1]);
 
     for (int i = 2; i < n; i++) {
-      // 状态转移方程：偷第i间房屋 vs 不偷第i间房屋
-      // 动态转移方程涉及i-1和i-2，就要考虑：初始化条件和数组长度
+      // 状态转移方程：不偷第i间房屋 vs 偷第i间房屋
       dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
     }
 

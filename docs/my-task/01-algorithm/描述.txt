@@ -1,5 +1,7 @@
-跳跃游戏I:com.ssl.note.leetcode.编号刷题.LC55_跳跃游戏.Solution.canJump
-跳跃游戏II:com.ssl.note.leetcode.编号刷题.LC45_跳跃游戏II.Solution.jump
-跳跃游戏III:com.ssl.note.leetcode.编号刷题.LC1306_跳跃游戏III.Solution.canReach
+打家劫舍I：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC198_打家劫舍\Solution.java
+打家劫舍II:com.ssl.note.leetcode.编号刷题.LC213_打家劫舍II.Solution.rob
+打家劫舍III:com.ssl.note.leetcode.编号刷题.LC337_打家劫舍III.Solution.rob
+打家劫舍IV:com.ssl.note.leetcode.编号刷题.LC2560_打家劫舍IV.Solution.minCapability
+打家劫舍V:com.ssl.note.leetcode.编号刷题.LC3840_打家劫舍V.Solution.rob
 
-我用贪心算法做出了第一套题，面试的时候，后续的2道题如何思考和写出来？
+分析这5道题的面试解题思路，输出一份综合对比的解法md
