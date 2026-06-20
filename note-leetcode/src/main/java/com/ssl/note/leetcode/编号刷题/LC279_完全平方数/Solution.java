@@ -10,13 +10,14 @@ public class Solution {
    * 题目约束：1<=n<=10^4
    */
   public int numSquares(int n) {
+    // 拆解子问题：n = (n - j²) + j²，那么n = 组成 (n - j²) 的最少个数 + 1
     // dp[i]:表示构成整数i最少需要多少个完全平方数
+    // 数组长度为什么是 n+1？
+    // 因为我们需要表示 dp[0], dp[1], ..., dp[n] 一共 n+1 个状态
     int[] dp = new int[n + 1];
     // 题目n>=1，思考如何推导dp[0]=0
-    // dp[1] = min(dp[1 - 1*1] + 1)
-    //       = dp[0] + 1
-    //       = 0 + 1    // 因为 dp[0] = 0
-    //       = 1        // 正确！
+    // dp[1] = min(dp[1 - 1*1] + 1)=dp[0]+1 =1,推导出来dp[0]=0
+    // 0不需要任何完全平方数
     dp[0] = 0;
 
     for (int i = 1; i <= n; i++) {
@@ -24,8 +25,6 @@ public class Solution {
       dp[i] = i;
       // 注意：j*j<=i,是小于等于
       for (int j = 1; j * j <= i; j++) {
-        // 这个公式的推导用纸理解下
-        // 因为有+1，比如dp[1]=1,所以初始化dp[0]=0
         dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
       }
     }
