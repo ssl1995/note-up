@@ -24,26 +24,30 @@ public class Solution {
     if (coins == null || coins.length == 0) {
       return -1;
     }
+    // dp[i] 为凑成金额 i 所需的最少硬币数
     int[] dp = new int[amount + 1];
-    // 模拟不可达，设置值为amount + 1
-    Arrays.fill(dp, amount + 1);
+    // 由于是求最小值，如果用Integer.MAX_VALUE，+1会越界
+    // 凑成金额 amount 最多只需要 amount 枚 1 元硬币（如果硬币里有 1 的话）
+    // 所以 amount + 1 已经是一个"不可能达到"的值了。
+    Arrays.fill(dp,amount+1);
     dp[0] = 0;
 
-    for (int i = 1; i <= amount + 1; i++) {
-      for (int coin : coins) {
-        if (i - coin >= 0) {
-          dp[i] = Math.min(dp[i - coin] + 1, dp[i]);
+    for (int i = 1; i <= amount; i++) {
+      for (int j = 0; j < coins.length; j++) {
+        // 金额够大才比较
+        if (i >= coins[j]) {
+          dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
         }
       }
     }
 
-    return dp[amount] > amount ? -1 : dp[amount];
+    return dp[amount] == amount+1 ? -1 : dp[amount];
   }
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    int[] coins = {3};
-    int t = 2;
+    int[] coins = {2};
+    int t = 3;
     System.out.println(solution.coinChange(coins, t));
   }
 }
