@@ -21,8 +21,9 @@ public class Solution {
     int[] dp = new int[n];
     // 每一个数都可以是自己的子序列
     Arrays.fill(dp, 1);
-
+    // 不能max=0,比如[2,2,2]最长地址子系列是自己，是1
     int maxLen = 1;
+
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < i; j++) {
         // 子序列，递增

@@ -14,9 +14,10 @@ public class Solution1 {
     if (nums == null || nums.length == 0) {
       return 0;
     }
-    // 维护一个递增序列 tail，其中 tail[i] 表示长度为 i+1 的最长递增子序列的最小末尾元素。
+    // 贪心思路：相同长度的递增子序列，末尾元素越小越好。因为越小的元素越容易追加递增的数
+    // 维护一个递增序列 tail，其中 tail[i] 表示长度为 i+1 的最长递增子序列的最小末尾元素
     int[] tail = new int[nums.length];
-    // tail的长度就是最长递增子序列的长度
+    // tail本身不一定是真实子序列，但len是正确的。
     int len = 0;
 
     for (int num : nums) {
@@ -32,6 +33,7 @@ public class Solution1 {
       }
 
       tail[left] = num;
+      // 比所有尾数都大，len++
       if (left == len) {
         len++;
       }
