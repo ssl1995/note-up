@@ -31,7 +31,7 @@ public class Solution1 {
     }
 
     for (int i = 1; i <= n; i++) {
-      // 只尝试长度合法且存在的单词长度
+      // 遍历长度，只尝试长度合法且存在的单词长度
       for (int len = 1; len <= Math.min(i, maxLen); len++) {
         Set<String> words = lenMap.get(len);
         if (words == null) {

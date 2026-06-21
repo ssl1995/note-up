@@ -1,7 +1,1 @@
-打家劫舍I：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC198_打家劫舍\Solution.java
-打家劫舍II:com.ssl.note.leetcode.编号刷题.LC213_打家劫舍II.Solution.rob
-打家劫舍III:com.ssl.note.leetcode.编号刷题.LC337_打家劫舍III.Solution.rob
-打家劫舍IV:com.ssl.note.leetcode.编号刷题.LC2560_打家劫舍IV.Solution.minCapability
-打家劫舍V:com.ssl.note.leetcode.编号刷题.LC3840_打家劫舍V.Solution.rob
-
-分析这5道题的面试解题思路，输出一份综合对比的解法md
+给出这道题的思路和解法：com.ssl.note.leetcode.编号刷题.LC140_单词拆分II.Solution.wordBreak
