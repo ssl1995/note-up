@@ -1,18 +1,9 @@
 package com.ssl.note.leetcode.编号刷题.LC139_单词拆分;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-/**
- * @author SongShengLin
- * @date 2022/2/21 11:11 PM
- * @description
- */
-public class Solution {
+public class Solution1 {
+
   /**
    * 单词拆分
    * 输入: s = "applepenapple", wordDict = ["apple", "pen"]
@@ -27,20 +18,27 @@ public class Solution {
    */
   public boolean wordBreak(String s, List<String> wordDict) {
     int n = s.length();
-    // dp[i]：s的前i个字符是否能被拆分
     boolean[] dp = new boolean[n + 1];
     dp[0] = true;
 
-    // 优化查询效率
-    Set<String> set = new HashSet<>(wordDict);
+    // 按单词长度分组：{长度 -> 该长度下的所有单词集合}
+    Map<Integer, Set<String>> lenMap = new HashMap<>();
+    int maxLen = 0;
+    for (String word : wordDict) {
+      int len = word.length();
+      lenMap.computeIfAbsent(len, k -> new HashSet<>()).add(word);
+      maxLen = Math.max(maxLen, len);
+    }
 
     for (int i = 1; i <= n; i++) {
-      for (int j = 0; j < i; j++) {
-        // 存在优化点：set.contains操作极端情况下存在O^3的时间复杂度
-        boolean isTrue = dp[j] && set.contains(s.substring(j, i));
-        // 前i个字符串是否包含在字典中，一旦有一个满足条件就要跳出内层循环
-        // 如果不跳过，后续的字符串可能会覆盖前面的结果
-        if (isTrue) {
+      // 只尝试长度合法且存在的单词长度
+      for (int len = 1; len <= Math.min(i, maxLen); len++) {
+        Set<String> words = lenMap.get(len);
+        if (words == null) {
+          continue;
+        }
+        // 前 i-len 个字符能拆，且 s[i-len..i-1] 在字典中
+        if (dp[i - len] && words.contains(s.substring(i - len, i))) {
           dp[i] = true;
           break;
         }
@@ -50,17 +48,18 @@ public class Solution {
     return dp[n];
   }
 
+
   public static void main(String[] args) {
-    Solution solution = new Solution();
+    Solution1 solution = new Solution1();
     String s = "leetcode";
     List<String> wordDict = new ArrayList<>();
     wordDict.add("leet");
     wordDict.add("code");
 
-    System.out.println("原始版本: " + solution.wordBreak(s, wordDict));
+    System.out.println("优化版本: " + solution.wordBreak(s, wordDict));
 
     // 额外测试一个 false 用例
     String s2 = "leetcodex";
-    System.out.println("原始版本(false): " + solution.wordBreak(s2, wordDict));
+    System.out.println("优化版本: " + solution.wordBreak(s2, wordDict));
   }
 }
