@@ -13,13 +13,13 @@ public class Solution1 {
     if (nums == null) {
       return false;
     }
-    
+
     // 计算数组元素的总和
     int sum = 0;
     for (int num : nums) {
       sum += num;
     }
-    
+
     // 如果总和是奇数，无法分割成两个和相等的子集，直接返回false
     if ((sum & 1) == 1) {
       return false;
@@ -28,9 +28,9 @@ public class Solution1 {
     // 目标值为总和的一半
     int target = sum / 2;
 
-    // dp数组：dp[j]表示是否可以通过选择数组中的元素，使得它们的和等于j
+    // dp数组：dp[j]能够凑出和为j的子集
     boolean[] dp = new boolean[target + 1];
-    // 初始化：和为0总是可以实现的（不选任何元素）
+    // 初始化：和为0不需要任何子集=true
     dp[0] = true;
 
     // 遍历数组中的每个元素
