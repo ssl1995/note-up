@@ -1,5 +1,6 @@
 package com.ssl.note.leetcode.编号刷题.LC32_最长有效括号;
 
+import java.util.Deque;
 import java.util.LinkedList;
 
 /**
@@ -8,40 +9,44 @@ import java.util.LinkedList;
  * @description
  */
 public class Solution {
+
   /**
    * 最长有效括号
    * 输入：s = ")()())"
    * 输出：4
    * 解释：最长有效括号子串是 "()()"
+   * 方法一：栈
+   * 核心：栈底保存最后一个没有被匹配的右括号的下标
+   * 时间复杂度：O(n)，空间复杂度：O(n)
    */
   public int longestValidParentheses(String s) {
     if (s.isEmpty()) {
       return 0;
     }
     int max = 0;
-    // 栈：左括号直接存下标,保证栈底为最后一个没有被匹配的右括号的下标
-    LinkedList<Integer> stack = new LinkedList<>();
-    // 栈底初始化放坐标=-1，防止只有)括号放入
+    // 栈底保存最后一个没有被匹配的右括号的下标
+    Deque<Integer> stack = new LinkedList<>();
+    // 有效长度 = 当前匹配成功的右括号位置 - 最近一个未匹配位置
+    // 如果s="()",那么都是匹配的左右，当)遍历时，出栈后，peek=-1就能计算正确长度
+    // 栈底初始化放-1，作为"虚拟的最后一个未匹配右括号"
     stack.push(-1);
 
     char[] cs = s.toCharArray();
     for (int i = 0; i < cs.length; i++) {
-      // 遇到(，栈中存下标
       if (cs[i] == '(') {
         stack.push(i);
-      } else if (cs[i] == ')') {
-        // 遇到)，出栈
-        // 出栈的，其实是不参与长度计算的
-        stack.pop();
-
-        // 栈空，说明初始化-1的坐标已取出=)没有成功匹配到(
+      } else {
+        if (!stack.isEmpty()) {
+          stack.pop();
+        }
         if (stack.isEmpty()) {
-          // 栈底存最近一个没有匹配成功的右括号下标
+          // 没有匹配的(，当前)成为新的"最后一个未匹配右括号"
           stack.push(i);
         } else {
-          // 栈非空，说明()括号匹配成功
-          // 更新长度，stack.peek()是最近一个没有匹配成功的右括号的下标，i是当前右括号的下标
-          max = Math.max(max, i - stack.peek());
+          // peek:最后一个没有被批评的右括号下标
+          Integer peek = stack.peek();
+          // 匹配上的括号长度=左闭右开：i-peek+1-1=i-peek
+          max = Math.max(max, i - peek);
         }
       }
     }
@@ -49,9 +54,4 @@ public class Solution {
     return max;
   }
 
-  public static void main(String[] args) {
-    Solution solution = new Solution();
-    String s = ")()())";
-    System.out.println(solution.longestValidParentheses(s));
-  }
 }
