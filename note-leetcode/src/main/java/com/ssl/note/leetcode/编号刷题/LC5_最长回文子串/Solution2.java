@@ -20,8 +20,9 @@ public class Solution2 {
     int n = s.length();
     int begin = 0;
     char[] cs = s.toCharArray();
-
-    int maxLen = 0;
+    // 单个字符也是回文串，初始化长度=1
+    int maxLen = 1;
+    // 中心扩展法：假设每个位置都作为回文中心，往外扩展，记录最长
     for (int i = 0; i < n; i++) {
       // 假设回文串长度是奇数
       int len1 = getPalindromeCenterLen(cs, n, i, i);
@@ -31,10 +32,13 @@ public class Solution2 {
 
       if (curLen > maxLen) {
         maxLen = curLen;
-        // i相当于回文中心，根据i和maxLen算begin下标
+        // 根据回文中心i和当前最长回文长度 maxLen，反推回文子串的起始位置begin
         // 奇数：i-maxLen/2
         // 偶数：i-maxLen/2+1
-        // 统一：i-(maxLen-1)/2
+
+        // 奇数时：中心字符本身算 1 个，左右各 (maxLen-1)/2 个
+        // 偶数时：中心左边界到左边界的距离也是 (maxLen-1)/2
+        // 统一：i-(maxLen-1)/2 = 中心位置-中心到回文左边界的长度
         begin = i - (maxLen - 1) / 2;
       }
     }
@@ -48,13 +52,11 @@ public class Solution2 {
     int i = left;
     int j = right;
     while (i >= 0 && j < n) {
-      // 向外扩散，等于才扩散
-      if (cs[i] == cs[j]) {
-        i--;
-        j++;
-      } else {
+      if(cs[i]!=cs[j]){
         break;
       }
+      i--;
+      j++;
     }
     // 循环跳出：cs[i]!=cs[j],如abbc,cs[i]=a,cs[j]=c,回文中心长度为2
     // 此时的回文中心长度：j-i+1-2=3-0-1=2

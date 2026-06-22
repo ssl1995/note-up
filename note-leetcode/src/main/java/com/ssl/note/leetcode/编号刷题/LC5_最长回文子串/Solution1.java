@@ -22,12 +22,12 @@ public class Solution1 {
     int begin = 0;
     char[] cs = s.toCharArray();
     // 暴力破解：最后一个字符没必要枚举了
-    for (int i = 0; i < len - 1; i++) {
-      for (int j = i + 1; j < len; j++) {
+    for (int i = 0; i < len - 1; i++) {// 起点
+      for (int j = i + 1; j < len; j++) {// 终点
         // 最长回文串：长度>之前的max，且，是回文串
         if (j - i + 1 > maxLen && isPalindrome(cs, i, j)) {
-          maxLen = j - i + 1;
-          begin = i;
+          begin = i;// 记录起点
+          maxLen = j - i + 1;// 记录最长长度
         }
       }
     }

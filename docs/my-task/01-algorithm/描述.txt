@@ -1,1 +1,2 @@
-给出这道题的思路和解法：com.ssl.note.leetcode.编号刷题.LC140_单词拆分II.Solution.wordBreak
+最长回文子串：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC5_最长回文子串\Solution1.java
+这道题解法很多，整理所有题解思路，面试时候最推荐用哪个解法？
