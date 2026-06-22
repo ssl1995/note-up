@@ -12,10 +12,11 @@ public class Solution {
    * 方法：计数排序
    */
   public void sortColors(int[] nums) {
-    // 荷兰国旗问题
     if (nums == null) {
       return;
     }
+    // 0、1、2想到数组下标计数排序
+    // 但是这个方法需要遍历2次数组，不是最优解
     int[] count = new int[3];
     for (int num : nums) {
       count[num]++;

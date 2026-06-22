@@ -9,29 +9,35 @@ public class Solution1 {
    * 使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列
    * 输入：nums = [2,0,2,1,1,0]
    * 输出：[0,0,1,1,2,2]
-   * 方法：计数排序
    */
   public void sortColors(int[] nums) {
     if (nums == null) {
       return;
     }
+    // 荷兰国旗解法
+    // [0, left)      全是 0
+    // [left, cur)    全是 1
+    // [cur, right]   未处理区
+    // (right, end]   全是 2
+    // 左闭右开：left 左边全是 0，cur 左边全是 1，right 右边全是 2。
     int left = 0;
     int cur = 0;
     int right = nums.length - 1;
 
     while (cur <= right) {
       if (nums[cur] == 0) {
-        // 交换到0区
+        // 见0换左边
         swap(nums, cur, left);
         left++;
         cur++;
       } else if (nums[cur] == 1) {
-        // 中间是1区，不交换
+        // 见1直接走
         cur++;
       } else if (nums[cur] == 2) {
-        // 交换到2区
+        // 见2换右边
         swap(nums, cur, right);
         right--;
+        // cur不动，从right位置换过来的数还没有检查
       }
     }
   }
