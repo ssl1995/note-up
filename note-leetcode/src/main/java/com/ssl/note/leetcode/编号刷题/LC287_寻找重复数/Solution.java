@@ -13,18 +13,19 @@ public class Solution {
     if (nums == null || nums.length == 0) {
       return -1;
     }
-    // 初始化慢指针，从第一节点开始
+    // 初始化慢指针和快指针，都从第一个节点开始
+    // 注意：Floyd 判圈算法要求两个指针从同一点出发
     int slow = nums[0];
-    // 初始化快指针，从第二个节点开始
-    int fast = nums[nums[0]];
+    int fast = nums[0];
 
-    while (slow != fast) {
+    // 第一阶段：找相遇点
+    do {
       slow = nums[slow];
       fast = nums[nums[fast]];
-    }
+    } while (slow != fast);
 
-    // 第一次相遇后
-    // 快指针从节点0（链表真正的起点）开始
+    // 第二次相遇后
+    // 快指针从第一个节点开始
     fast = nums[0];
     while (slow != fast) {
       slow = nums[slow];
@@ -36,7 +37,7 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    int[] nums = {1, 3, 2, 2, 2};
+    int[] nums = {1, 3, 4, 2, 2};
     System.out.println(solution.findDuplicate(nums));
   }
 }
