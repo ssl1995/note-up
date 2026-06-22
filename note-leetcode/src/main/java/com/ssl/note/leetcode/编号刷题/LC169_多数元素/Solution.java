@@ -15,16 +15,16 @@ public class Solution {
     int count = 1;
 
     for (int i = 1; i < nums.length; i++) {
-      if (count == 0) {
-        x = nums[i];
-        // 注意：重置时需要将计数器=1,而不是0
-        count = 1;
-        continue;
-      }
+      // 投票
       if (nums[i] == x) {
         count++;
       } else {
         count--;
+      }
+      // 计数器如果=0,重置计数器和候选数
+      if (count == 0) {
+        x = nums[i];
+        count = 1;
       }
     }
     return x;
