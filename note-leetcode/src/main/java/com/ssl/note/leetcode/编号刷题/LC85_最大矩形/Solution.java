@@ -2,7 +2,6 @@ package com.ssl.note.leetcode.编号刷题.LC85_最大矩形;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  * @author SongShengLin
@@ -29,9 +28,15 @@ public class Solution {
     int maxArea = 0;
     for (char[] cs : matrix) {
       for (int i = 0; i < col; i++) {
-        // 如果遇到0，重置高度=0
-        // 如果遇到1，高度=上次高度+1
-        heights[i] = cs[i] == '0' ? 0 : ++heights[i];
+        boolean isOne = cs[i] == '1';
+        if (isOne) {
+          // 如果遇到1，高度=上次高度+1
+          heights[i] += 1;
+        } else {
+          // 如果遇到0，重置高度=0
+          heights[i] = 0;
+        }
+//        heights[i] = cs[i] == '0' ? 0 : ++heights[i];
       }
       maxArea = Math.max(maxArea, largestRectangleArea(heights));
     }
@@ -83,6 +88,7 @@ public class Solution {
         {'0', '1'},
         {'1', '0'}
     };
+    // [ 1, 0 ]
     System.out.println(solution.maximalRectangle(matrix1));
   }
 }
