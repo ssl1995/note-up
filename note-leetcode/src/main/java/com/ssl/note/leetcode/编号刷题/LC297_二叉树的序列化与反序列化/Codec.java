@@ -11,17 +11,18 @@ public class Codec {
   // 分隔符：反序列化确定队列
   private final String SPLIT = "!";
   // null符：前序遍历，把nul记录下来，一个前序序列就能唯一确定一棵树
-  private final String NULL = "#";
+  private final String NULL_VALUE = "#";
 
   /**
    * 序列化-二叉树
-   * 先序遍历
+   * 前序遍历
    */
   public String serialize(TreeNode root) {
     if (root == null) {
       // 难点：null节点也需要一个分隔符
-      return NULL + SPLIT;
+      return NULL_VALUE + SPLIT;
     }
+    // 前序遍历
     return root.val + SPLIT +
         serialize(root.left) +
         serialize(root.right);
@@ -31,9 +32,9 @@ public class Codec {
    * 反序列化-二叉树
    */
   public TreeNode deserialize(String data) {
-    // 按照分隔符分割了，队列中已经没有分隔符啦
+    // data:1!2!#!#!3!#!#!，然后按照分隔符拆分
     String[] split = data.split(SPLIT);
-    // 1 2 # # 3 4 # # 5 # #
+    // 12##3##
     Deque<String> queue = new ArrayDeque<>();
     for (String str : split) {
       queue.offer(str);
@@ -45,9 +46,9 @@ public class Codec {
     if (queue.isEmpty()) {
       return null;
     }
-    // 1 2 # # 3 4 # # 5 # #
+    // 12##3##
     String poll = queue.poll();
-    if (poll.equals(NULL)) {
+    if (poll.equals(NULL_VALUE)) {
       return null;
     }
     TreeNode node = new TreeNode(Integer.parseInt(poll));
