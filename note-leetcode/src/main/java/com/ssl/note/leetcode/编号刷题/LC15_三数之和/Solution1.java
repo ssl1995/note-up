@@ -33,6 +33,7 @@ public class Solution1 {
       // 4.双指针
       int left = i + 1;
       int right = n - 1;
+      // 本题left和right不能相同
       while (left < right) {
         int sum = nums[i] + nums[left] + nums[right];
         if (sum < 0) {
