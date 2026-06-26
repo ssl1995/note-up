@@ -19,45 +19,50 @@ public class Solution2 {
    * 起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
    */
   public List<Integer> findAnagrams(String s, String p) {
-    List<Integer> res = new ArrayList<>();
-    if (s.length() < p.length()) {
-      return res;
-    }
-    int[] need = new int[26];
-    int[] window = new int[26];
+    int m = s.length();
+    int n = p.length();
+
+    int[] sMap = new int[26];
+    int[] pMap = new int[26];
+
     int needCount = 0;
-    // 统计p中的字符种类和数量
-    for (char c : p.toCharArray()) {
-      if (need[c - 'a'] == 0) needCount++;
-      need[c - 'a']++;
+    // 记录p所需要字符种类和数量
+    for (int i = 0; i < n; i++) {
+      int index = p.charAt(i) - 'a';
+      if (pMap[index] == 0) {
+        needCount++;
+      }
+      pMap[index]++;
     }
 
-    int left = 0, valid = 0;
-    for (int right = 0; right < s.length(); right++) {
-      // 1.右边字符进入窗口
-      char c = s.charAt(right);
-      int idx = c - 'a';
-      window[idx]++;
-      if (window[idx] == need[idx]) {
+    List<Integer> res = new ArrayList<>();
+    int valid = 0;
+    int left = 0;
+    for (int i = 0; i < m; i++) {
+      int index = s.charAt(i) - 'a';
+      sMap[index]++;
+
+      // 数量对上，种类+1
+      if (sMap[index] == pMap[index]) {
         valid++;
       }
-
-      // 2.窗口超长，左边字符离开
-      while (right - left + 1 > p.length()) {
-        char d = s.charAt(left);
-        int dIdx = d - 'a';
-        if (window[dIdx] == need[dIdx]) {
+      // 缩小：窗口过长
+      while (i - left + 1 > n) {
+        int leftIndex = s.charAt(left) - 'a';
+        // 前面加过，缩小时候也要减少种类
+        if (sMap[leftIndex] == pMap[leftIndex]) {
           valid--;
         }
-        window[dIdx]--;
+        sMap[leftIndex]--;
+        // 缩小，移动左指针
         left++;
       }
-
-      // 3.所有字符种类都匹配
-      if (valid == needCount) {
+      // 记录结果
+      if (needCount == valid) {
         res.add(left);
       }
     }
+
     return res;
   }
 

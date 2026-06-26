@@ -1,3 +1,4 @@
-com.ssl.note.leetcode.编号刷题.LC75_颜色分类.Solution.sortColors、
-com.ssl.note.leetcode.编号刷题.LC75_颜色分类.Solution1.sortColors。
-这道题最优解需要荷兰国旗问题思路，请说出思路和技巧，我面试时候能想起来
+438：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC438_找到字符串中所有字符异位词\Solution2.java
+76：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC76_最小覆盖子串\Solution1.java
+
+以上2道题的最优解，有什么特性吗？比如看到题目什么东西就想到int计数匹配之类的
