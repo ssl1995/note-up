@@ -30,7 +30,7 @@ public class Solution {
       }
       deque.offerLast(i);
       // 2、队首出队：保持队列最大值下标，移除超出窗口范围的元素
-      if (deque.peekFirst() <= i - k) {
+      if (deque.peekFirst() < i - k + 1) {
         deque.pollFirst();
       }
       // 3、记录结果
