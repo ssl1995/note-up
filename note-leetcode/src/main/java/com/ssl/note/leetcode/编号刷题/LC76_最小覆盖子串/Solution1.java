@@ -16,47 +16,41 @@ public class Solution1 {
     if (s == null || t == null || s.length() < t.length()) {
       return "";
     }
-    // 初始化：记录需要的数量
+    int m = s.length();
+    // n=match，滑动窗口内还需要匹配多少个字符
+    int n = t.length();
+
+    char[] cs = s.toCharArray();
+    char[] ct = t.toCharArray();
+    // 计数器：map记录t中字符需要的数量
     int[] map = new int[256];
-    for (char c : t.toCharArray()) {
+    for (char c : ct) {
       map[c]++;
     }
 
-    int left = 0;
-    int matchCount = t.length();// 字符总数（不去重）
-    int start = 0, minLen = Integer.MAX_VALUE;
+    int j = 0;
+    String res = "";
 
-    for (int i = 0; i < s.length(); i++) {
-      char c = s.charAt(i);
-
-      // 扩张：如果是需要的字符，match--
-      if (map[c] > 0) {
-        matchCount--;
+    for (int i = 0; i < m; i++) {
+      // 扩张：如果减完之后 >= 0，说明这个字符本来就是 t 需要的，
+      if (--map[cs[i]] >= 0) {
+        // 真正匹配了一个需要的字符，所以 match--。
+        n--;
       }
-      map[c]--;
-
-      // 当所有字符都匹配上时，尝试收缩
-      while (matchCount == 0) {
-        // 更新最小窗口
-        if (i - left + 1 < minLen) {
-          start = left;
-          minLen = i - left + 1;
+      // 收缩：移除多余字符
+      while (n == 0 && map[cs[j]] < 0) {
+        map[cs[j]]++;
+        j++;
+      }
+      // 更新最小子串
+      if (n == 0) {
+        if (res.isEmpty() || res.length() > i - j + 1) {
+          res = s.substring(j, i + 1);
         }
-
-        // 收缩：移出左边字符
-        char d = s.charAt(left);
-        map[d]++;
-        if (map[d] > 0) {
-          // 移出后 map[d] > 0，说明又缺这个字符了
-          matchCount++;
-        }
-        left++;
       }
     }
-
-    return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
+    return res;
   }
-
 
   public static void main(String[] args) {
     Solution1 solution = new Solution1();
