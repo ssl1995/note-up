@@ -14,41 +14,21 @@ public class Solution2 {
    * 解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
    */
   public int maxSubArray(int[] nums) {
-    // 分治法
-    return divide(nums, 0, nums.length - 1);
-  }
-
-  private int divide(int[] nums, int left, int right) {
-    if (left == right) {
-      return nums[left];
+    if (nums == null || nums.length == 0) {
+      return 0;
     }
-    int mid = left + (right - left) / 2;
-    // 左边找最大
-    int leftMax = divide(nums, left, mid);
-    // 右边找最大
-    int rightMax = divide(nums, mid + 1, right);
-    // 跨越中间
-    int crossMax = crossMax(nums, left, mid, right);
+    int n = nums.length;
+    // dp空间优化：不用数组，只用一个变量
+    int pre = nums[0];
 
-    return Math.max(Math.max(leftMax, rightMax), crossMax);
-  }
+    int res = nums[0];
+    for (int i = 1; i < n; i++) {
+      pre = Math.max(pre + nums[i], nums[i]);
 
-  private int crossMax(int[] nums, int left, int mid, int right) {
-    // 从mid向左扩展
-    int leftSum = Integer.MIN_VALUE;
-    int sum = 0;
-    for (int i = mid; i >= left; i--) {
-      sum += nums[i];
-      leftSum = Math.max(leftSum, sum);
+      res = Math.max(res, pre);
     }
-    // 从mid+1向右扩展
-    int rightSum = Integer.MIN_VALUE;
-    sum = 0;
-    for (int i = mid + 1; i <= right; i++) {
-      sum += nums[i];
-      rightSum = Math.max(rightSum, sum);
-    }
-    return leftSum + rightSum;
+
+    return res;
   }
 
   public static void main(String[] args) {

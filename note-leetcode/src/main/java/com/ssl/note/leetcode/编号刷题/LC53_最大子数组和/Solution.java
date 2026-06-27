@@ -17,17 +17,27 @@ public class Solution {
     if (nums == null || nums.length == 0) {
       return 0;
     }
-    int[] dp = new int[nums.length];
-    dp[0] = nums[0];
+    // 前缀和方法：sum(i,j) = prefix[j] - prefix[i-1]
+    // 要想最大，就得使前者尽量大，后者尽量小
+    int n = nums.length;
+    // 当前前缀和
+    int preSum = 0;
+    // 历史最小前缀和
+    int minPreSum = 0;
 
-    int max = nums[0];
-    for (int i = 1; i < nums.length; i++) {
-      dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+    // 最大连续子数组
+    int res = Integer.MIN_VALUE;
 
-      max = Math.max(max, dp[i]);
+    for (int num : nums) {
+      // 1、先更新前缀和
+      preSum += num;
+      // 2、重点，因为是pre[i-1],所以先更新结果
+      res = Math.max(res, preSum - minPreSum);
+      // 3、最后更新历史最小前缀和
+      minPreSum = Math.min(preSum, minPreSum);
     }
 
-    return max;
+    return res;
   }
 
   public static void main(String[] args) {

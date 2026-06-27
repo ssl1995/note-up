@@ -17,15 +17,24 @@ public class Solution1 {
     if (nums == null || nums.length == 0) {
       return 0;
     }
-    int max = Integer.MIN_VALUE;
-    int pre = 0;
-    for (int num : nums) {
-      if (pre < 0) pre = 0;  // 前面是负收益就丢弃
-      pre += num;
-      max = Math.max(max, pre);
+    //从选择到贪心：假设你现在遍历到第 i 个元素，你面对一个选择：
+    // 1、把 nums[i] 接在之前的子数组后面：之前的和 + nums[i]
+    // 2、从 nums[i] 重新开始一个新子数组：nums[i]
+    // 贪心：如果之前的子数组和是负数，后续加上新的nums[i]只会拖累新的子数组和，不如从nums[i]新开始
+    int[] dp = new int[nums.length];
+    dp[0] = nums[0];
+
+    int res = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+      // 要么接在前一个后面，要么从当前重新开始
+      dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+
+      res = Math.max(res, dp[i]);
     }
-    return max;
+
+    return res;
   }
+
 
   public static void main(String[] args) {
     Solution1 solution = new Solution1();
