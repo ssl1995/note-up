@@ -20,8 +20,7 @@ public class Solution {
     if (intervals == null || intervals.length == 0) {
       return new int[0][2];
     }
-    // 按照左端点排序
-//    Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+    // 按照左端点排序:[[1,3],[2,6],[8,10],[15,18]]
     Arrays.sort(intervals, Comparator.comparingInt(num -> num[0]));
 
     List<int[]> res = new ArrayList<>();
@@ -29,14 +28,11 @@ public class Solution {
       int left = curNum[0];
       int right = curNum[1];
 
-      if (res.isEmpty()) {
-        res.add(new int[]{left, right});
-        continue;
-      }
-
-      if (res.get(res.size() - 1)[1] < left) {
+      // 结果空|| 6<8就记录结果
+      if (res.isEmpty() || res.get(res.size() - 1)[1] < left) {
         res.add(new int[]{left, right});
       } else {
+        // 3>2就要更新
         int[] lastNum = res.get(res.size() - 1);
         // 选择最大的返回：[1,4]和[2,3]比较，输出[1,4]
         lastNum[1] = Math.max(lastNum[1], right);
@@ -48,7 +44,7 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    int[][] nums = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+    int[][] nums = {{1, 3}, {8, 10}, {15, 18}, {2, 6}};
     System.out.println(Arrays.deepToString(solution.merge(nums)));
   }
 }
