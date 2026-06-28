@@ -1,40 +1,55 @@
 package com.ssl.note.leetcode.编号刷题.LC189_轮转数组;
 
-public class Solution1 {
+import java.util.Arrays;
 
+public class Solution1 {
   /**
-   * LC189_轮转数组
    * 给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
    * 输入: nums = [1,2,3,4,5,6,7], k = 3
-   * 输出: [5,6,7,1,2,3,4]
+   * 输出:        [5,6,7,1,2,3,4]
    * 解释:
    * 向右轮转 1 步: [7,1,2,3,4,5,6]
    * 向右轮转 2 步: [6,7,1,2,3,4,5]
    * 向右轮转 3 步: [5,6,7,1,2,3,4]
    */
   public void rotate(int[] nums, int k) {
+    if (nums == null || nums.length == 1 || k < 0) {
+      return;
+    }
+    // k也可能超过数组长度
     int n = nums.length;
     k = k % n;
+    // 如果k==0，直接返回。
     if (k == 0) {
       return;
     }
-    // 每次推动的元素个数
-    int moved = 0;
-    for (int start = 0; moved < n; start++) {
-      int curIndex = start;
-      int curValue = nums[start];
+    // 整体反转
+    reverse(nums, 0, n - 1);
+    // 反转后的前k个反转
+    reverse(nums, 0, k - 1);
+    // 反转后的后n-k个反转
+    reverse(nums, k, n - 1);
+  }
 
-      do {
-        int targetIndex = (curIndex + k) % n;
-        int saved = nums[targetIndex];
-
-        nums[targetIndex] = curValue;
-
-        curValue = saved;
-        curIndex = targetIndex;
-
-        moved++;
-      } while (curIndex != start);
+  private void reverse(int[] nums, int left, int right) {
+    if (left == right) {
+      return;
     }
+    while (left < right) {
+      int temp = nums[left];
+      nums[left] = nums[right];
+      nums[right] = temp;
+
+      left++;
+      right--;
+    }
+  }
+
+  public static void main(String[] args) {
+    Solution1 solution = new Solution1();
+    int[] nums = {1, 2, 3, 4, 5, 6, 7};
+    int k = 3;
+    solution.rotate(nums, k);
+    System.out.println(Arrays.toString(nums));
   }
 }

@@ -13,21 +13,22 @@ public class Solution {
    * 向右轮转 3 步: [5,6,7,1,2,3,4]
    */
   public void rotate(int[] nums, int k) {
+    // k也可能超过数组长度
     int n = nums.length;
     k = k % n;
+    // 如果k==0，直接返回。
     if (k == 0) {
       return;
     }
     int[] copy = new int[n];
     for (int i = 0; i < n; i++) {
-      // 约瑟夫回环问题
+      // 约瑟夫回环问题:原来在位置i的元素，轮转后会去位置 (i + k) % n。
       copy[(i + k) % n] = nums[i];
     }
 
-    //    System.arraycopy(copy,0,nums,0,n);
-    for (int i = 0; i < n; i++) {
-      nums[i] = copy[i];
-    }
-
+    System.arraycopy(copy, 0, nums, 0, n);
+//    for (int i = 0; i < n; i++) {
+//      nums[i] = copy[i];
+//    }
   }
 }
