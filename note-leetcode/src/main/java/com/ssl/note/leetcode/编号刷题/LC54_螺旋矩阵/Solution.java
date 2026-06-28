@@ -32,8 +32,8 @@ public class Solution {
       right--;
 
 
-      // 向左和向上是后走的，考虑到矩阵有可能是一维数组，需要判断
-      // 向左
+      // 向左和向上是后走的
+      // 向左，考虑单行矩阵: [[1,2,3]]，需要判断
       if (top <= bottom) {
         for (int i = right; i >= left; i--) {
           res.add(matrix[bottom][i]);
@@ -41,7 +41,7 @@ public class Solution {
         bottom--;
       }
 
-      // 向上
+      // 向上，考虑单列矩阵: [[1],[2],[3]]，需要判断
       if (left <= right) {
         for (int i = bottom; i >= top; i--) {
           res.add(matrix[i][left]);
@@ -55,7 +55,8 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//    int[][] matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    int[][] matrix = {{1}, {2}, {3}};
     System.out.println(solution.spiralOrder(matrix));
   }
 }
