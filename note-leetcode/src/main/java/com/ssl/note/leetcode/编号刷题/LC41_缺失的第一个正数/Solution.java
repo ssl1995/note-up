@@ -1,9 +1,5 @@
 package com.ssl.note.leetcode.编号刷题.LC41_缺失的第一个正数;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 
 public class Solution {
 
@@ -21,28 +17,26 @@ public class Solution {
     int n = nums.length;
     // 第一次遍历，放正确位置
     for (int i = 0; i < n; i++) {
-      while (
-        // 结果一定在[1,n]范围内
-        // 因为最好情况:{1,2,3,4}结果最小没出现正整数=5
-          nums[i] >= 1 && nums[i] <= n
-              &&
-              // 遍历的数 正确位置：该数-1的索引对应的数
-              nums[i] != nums[nums[i] - 1]
-      ) {
+      // 结果一定在[1,n]范围内，遇到负数就先跳过
+      // nums[i] != i + 1：当前位置没放对，因为[1,1]这种重复的数据就会一直循环不能用
+      // nums[i] != nums[nums[i] - 1]：目标位置还没放对，第一次循环用这个
+      while (nums[i] >= 1 && nums[i] <= n && nums[i] != nums[nums[i] - 1]) {
         // nums[i]正确的位置索引:nums[i]-1
-        int targetIndex = nums[i] - 1;
-        int temp = nums[targetIndex];
-        nums[targetIndex] = nums[i];
+        int temp = nums[nums[i] - 1];
+        nums[nums[i] - 1] = nums[i];
         nums[i] = temp;
       }
     }
-    // 第二次遍历找 i +1 !=nums[i]
+    // 第二次遍历才用i+1!= nums[i]
     for (int i = 0; i < n; i++) {
+      // nums[i] != i + 1：当前位置没放对，第二次遍历就能用
+      // nums[i] != nums[nums[i] - 1]：目标位置还没放对，如果遇到负数，目标位置会越界不能用
       if (i + 1 != nums[i]) {
         return i + 1;
       }
     }
-    // 全部正确答案是n+1
+    // 第二次遍历没找到
+    // 说明是[1,2,3]，n=3，答案是4
     return n + 1;
   }
 
