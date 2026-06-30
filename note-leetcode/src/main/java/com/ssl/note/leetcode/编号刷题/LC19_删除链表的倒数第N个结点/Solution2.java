@@ -22,6 +22,9 @@ public class Solution2 {
     ListNode slow = dummy;
     // 3.快指针先走n步
     while (n > 0) {
+      if (fast == null) {
+        return null;
+      }
       fast = fast.next;
       n--;
     }
