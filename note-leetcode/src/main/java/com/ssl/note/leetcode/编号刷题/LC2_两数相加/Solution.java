@@ -10,28 +10,25 @@ public class Solution {
    * 输出：[7,0,8]
    * 解释：342 + 465 = 807.
    */
-  public ListNode addTwoNumbers(ListNode head1, ListNode head2) {
+  public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
     ListNode dummyNode = new ListNode(-1);
     ListNode cur = dummyNode;
 
     int carry = 0;
     // 只要有一个链表还有节点，就继续
-    while (head1 != null || head2 != null) {
+    while (l1 != null || l2 != null) {
       // 当前数的合，末尾必须加上上一位的进位carry
-      int sum = (head1 != null ? head1.val : 0)
-          + (head2 != null ? head2.val : 0)
+      int sum = (l1 != null ? l1.val : 0)
+          + (l2 != null ? l2.val : 0)
           + carry;
+
       // sum=11，取1
       int value = sum % 10;
       // sum=11，判断是否进位
       carry = sum / 10;
 
-      if (head1 != null) {
-        head1 = head1.next;
-      }
-      if (head2 != null) {
-        head2 = head2.next;
-      }
+      l1 = l1 != null ? l1.next : null;
+      l2 = l2 != null ? l2.next : null;
 
       cur.next = new ListNode(value);
       cur = cur.next;
