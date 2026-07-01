@@ -2,9 +2,6 @@ package com.ssl.note.leetcode.编号刷题.LC234_回文链表;
 
 import com.ssl.note.common.utils.ListNode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author SongShengLin
  * @date 2022/6/19 10:30
@@ -24,8 +21,8 @@ public class Solution1 {
     }
     // 1、快慢指针，找中间节点
     ListNode slow = head;
-    ListNode fast = head;
-    while (fast.next != null && fast.next.next != null) {
+    ListNode fast = head.next;
+    while (fast != null && fast.next != null) {
       slow = slow.next;
       fast = fast.next.next;
     }

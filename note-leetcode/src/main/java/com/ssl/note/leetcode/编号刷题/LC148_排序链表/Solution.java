@@ -14,27 +14,29 @@ public class Solution {
     if (head == null || head.next == null) {
       return head;
     }
-    // 拆
+    // 链表排序选归并排序：只需要从头遍历，天然契合链表
+    // 拆：找中点拆开
     ListNode mid = getMiddleNode(head);
     ListNode rightHead = mid.next;
-    mid.next = null;
+    mid.next = null;// 链表从中间断开
 
-    // 排
+    // 排：递归，假设处理好了左右
     ListNode left = sortList(head);
     ListNode right = sortList(rightHead);
 
-    // 合
+    // 合：合并左右
     return merge(left, right);
   }
 
 
-  // 偶数取左边
+  // 偶数取左边的标准写法，与234 回文链表找中点一样
   private ListNode getMiddleNode(ListNode head) {
     if (head == null) {
       return null;
     }
     ListNode slow = head;
     ListNode fast = head.next;
+    // fast 自己能走两步时，才继续走
     while (fast != null && fast.next != null) {
       slow = slow.next;
       fast = fast.next.next;
@@ -42,6 +44,7 @@ public class Solution {
     return slow;
   }
 
+  // LC21 合并两个有序链表
   private ListNode merge(ListNode left, ListNode right) {
     if (left == null || right == null) {
       return left == null ? right : left;
