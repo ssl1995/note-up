@@ -22,9 +22,9 @@ public class Solution {
     // 将链表分为已反转区域、待反转区域、未反转区域
     // 待反转区域四个指针: pre [start、end] next
     ListNode pre = dummy;
-    ListNode start = null;
+    ListNode start;
     ListNode end = dummy;
-    ListNode next = null;
+    ListNode next;
 
     while (end.next != null) {
       // 1、end走k步

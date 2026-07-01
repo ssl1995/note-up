@@ -11,9 +11,6 @@ public class Solution2 {
    * 复制一个带有随机指针的链表
    */
   public Node copyRandomList(Node head) {
-    if (head == null) {
-      return null;
-    }
     // 1、每个节点后面复制节点
     Node cur = head;
     while (cur != null) {
@@ -36,7 +33,7 @@ public class Solution2 {
 
     // 3、分离=修改复制节点的next
     cur = head;
-    Node newHead = cur.next;
+    Node newHead = cur == null ? null : cur.next;
     while (cur != null) {
       Node copy = cur.next;
       Node next = copy.next;

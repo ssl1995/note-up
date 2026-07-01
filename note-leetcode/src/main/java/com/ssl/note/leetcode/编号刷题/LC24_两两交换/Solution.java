@@ -18,8 +18,14 @@ public class Solution {
     while (prev.next != null && prev.next.next != null) {
       ListNode first = prev.next;
       ListNode second = prev.next.next;
-      // 别忘了prev的next
+
+      // 前：prev → first → second → nextPair
+      // 后：prev → second → first → nextPair
+      // 推：prev.next = second;
+      //    second.next = first;
+      //    first.next = nextPair;
       prev.next = second;
+
       first.next = second.next;
       second.next = first;
 
