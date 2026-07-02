@@ -6,49 +6,7 @@ import java.util.Map;
 
 class LRUCache {
 
-  /**
-   * 手写一个LRU最近最少使用缓存策略
-   * 提供：get(key)，put(key, value)
-   */
-  public LRUCache(int capacity) {
-    head = new Node(-1, -1);
-    tail = new Node(-1, -1);
-    head.next = tail;
-    tail.pre = head;
-
-    map = new HashMap<>();
-
-    size = capacity;
-  }
-
-  public int get(int key) {
-    if (!map.containsKey(key)) {
-      return -1;
-    }
-    Node node = map.get(key);
-    moveToTail(node);
-    return node.value;
-  }
-
-  public void put(int key, int value) {
-    // 存在元素就更新
-    if (map.containsKey(key)) {
-      Node node = map.get(key);
-      node.value = value;
-      moveToTail(node);
-      return;
-    }
-    // 队列满了，移除队首
-    if (size == map.size()) {
-      removeHead();
-    }
-    // 新增节点
-    Node node = new Node(key, value);
-    insertToTail(node);
-    map.put(key, node);// 不能忘记插入map
-  }
-
-  // 双向链表数据结构
+  // 底层Node数据结构
   static class Node {
     Node pre;
     Node next;
@@ -62,11 +20,54 @@ class LRUCache {
     }
   }
 
-  // 整体缓存结构
-  private final int size;
+  // 双向链表数据结构
   private final Map<Integer, Node> map;
   private final Node head;
   private final Node tail;
+  private final Integer capacity;
+
+  /**
+   * 手写一个LRU最近最少使用缓存策略
+   * 提供：get(key)，put(key, value)
+   */
+  public LRUCache(int capacity) {
+    this.head = new Node(-1, -1);
+    this.tail = new Node(-1, -1);
+    this.map = new HashMap<>();
+    this.capacity = capacity;
+
+    this.head.next = this.tail;
+    this.tail.pre = this.head;
+  }
+
+  public int get(int key) {
+    // 不存在
+    if (!map.containsKey(key)) {
+      return -1;
+    }
+    // 存在
+    Node node = map.get(key);
+    moveToTail(node);
+    return node.value;
+  }
+
+  public void put(int key, int value) {
+    // 不存在
+    if (!map.containsKey(key)) {
+      if (capacity == map.size()) {
+        removeHead();
+      }
+      // 新增节点
+      Node node = new Node(key, value);
+      insertToTail(node);
+      // 更新map
+      map.put(key, node);
+    }
+    // 存在
+    Node node = map.get(key);
+    node.value = value;
+    moveToTail(node);
+  }
 
   // 原子操作：删除节点
   private void deleteNode(Node node) {
@@ -88,7 +89,7 @@ class LRUCache {
     tail.pre = node;
   }
 
-  // 通用操作：移动到队尾
+  // 通用操作：移动到队尾（队尾标记最近使用）
   private void moveToTail(Node node) {
     if (node == null) {
       return;
@@ -97,7 +98,7 @@ class LRUCache {
     insertToTail(node);
   }
 
-  // 通用操作：移除队首
+  // 通用操作：移除队首（队首标记最久未使用）
   private void removeHead() {
     Node removeHead = head.next;
     deleteNode(removeHead);
