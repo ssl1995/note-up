@@ -28,19 +28,19 @@ public class Solution2 {
       if (root != null) {
         stack.push(root);
         root = root.left;
-        continue;
-      }
-      // 栈顶元素先不弹出
-      TreeNode peek = stack.peek();
-      // 栈顶元素不能出栈：右子树存在 且 没有访问过，就再访问右子树
-      if (peek.right != null && peek.right != prev) {
-        root = peek.right;
       } else {
-        // 如果右子树为空，或右子树已经访问过，则可以出栈
-        TreeNode pop = stack.pop();
-        res.add(pop.val);
-        // 记录访问过的右子树
-        prev = pop;
+        // 栈顶元素先不弹出
+        TreeNode peek = stack.peek();
+        // 右子树存在 且 没有访问过，需要访问右子树
+        if (peek.right != null && peek.right != prev) {
+          root = peek.right;
+        } else {
+          // 右子树已经访问过，就出栈
+          TreeNode pop = stack.pop();
+          res.add(pop.val);
+          // 记录访问过的右子树
+          prev = pop;
+        }
       }
     }
 

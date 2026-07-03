@@ -1,4 +1,7 @@
-LRU:com.ssl.note.leetcode.编号刷题.LC146_LRU缓存.LRUCache
-LFU:com.ssl.note.leetcode.编号刷题.LC460_LFU缓存.LFUCache
-
-上面的2题，其中LRU我已经实现了，请结合当前LRU实现思维，分析LFU如何实现，输出一份LFU的题解文档
+前序遍历：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC144_二叉树的前序遍历\Solution.java
+中序遍历：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC94_二叉树的中序遍历\Solution.java
+后序遍历：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC145_二叉树的后序遍历\Solution2.java
+以上是我记忆的三个二叉树的遍历非递归常见写法，
+1、总结常规写法
+2、总结完毕后给出morris遍历的学习
+输出成一份md文档，格式是不要有空行，我好复制进飞书
