@@ -20,12 +20,10 @@ public class Solution {
     if (root == null) {
       return null;
     }
-
-    TreeNode left = root.left;
-    TreeNode right = root.right;
-
-    root.left = right;
-    root.right = left;
+    // 交换
+    TreeNode temp = root.left;
+    root.left = root.right;
+    root.right = temp;
 
     invertTree(root.left);
     invertTree(root.right);
@@ -46,6 +44,7 @@ public class Solution {
 
     while (!stack.isEmpty()) {
       TreeNode node = stack.pop();
+      // 先记录当前左右
       TreeNode left = node.left;
       TreeNode right = node.right;
 
@@ -55,7 +54,7 @@ public class Solution {
       if (right != null) {
         stack.push(right);
       }
-
+      // 再交换
       node.left = right;
       node.right = left;
     }

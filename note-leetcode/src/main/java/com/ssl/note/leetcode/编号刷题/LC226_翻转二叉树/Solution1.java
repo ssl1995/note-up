@@ -24,11 +24,10 @@ public class Solution1 {
     invertTree(root.left);
     invertTree(root.right);
 
-    TreeNode left = root.left;
-    TreeNode right = root.right;
-
-    root.left = right;
-    root.right = left;
+    // 交换
+    TreeNode temp = root.left;
+    root.left = root.right;
+    root.right = temp;
 
     return root;
   }
