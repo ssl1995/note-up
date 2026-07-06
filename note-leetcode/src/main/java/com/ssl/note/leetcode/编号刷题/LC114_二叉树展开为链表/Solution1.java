@@ -3,8 +3,6 @@ package com.ssl.note.leetcode.编号刷题.LC114_二叉树展开为链表;
 
 import com.ssl.note.common.utils.TreeNode;
 
-import java.util.*;
-
 /**
  * @author SongShengLin
  * @date 2022/2/21 10:55 PM
@@ -21,22 +19,28 @@ public class Solution1 {
    * 最优解：原地转换
    */
   public void flatten(TreeNode root) {
-    while (root != null) {
+    if(root==null){
+      return;
+    }
+    TreeNode cur = root;
+
+    while (cur != null) {
       // 核心：如果它有左子树，那么前序遍历中左子树的最右节点就是右子树的前驱
-      if (root.left != null) {
+      if (cur.left != null) {
         // 找到左子树的最右节点
-        TreeNode rightmost = root.left;
-        while (rightmost.right != null) {
-          rightmost = rightmost.right;
+        TreeNode pre = cur.left;
+        while (pre.right != null) {
+          pre = pre.right;
         }
-        // 右子树挂到左子树最右边
-        rightmost.right = root.right;
-        // 左子树移到右边
-        root.right = root.left;
-        root.left = null;
+        // 1、左子树最右指针，记录它的后继
+        pre.right = cur.right;
+        // 2、cur左子树移到右边
+        cur.right = cur.left;
+        // 3、cur左子树置空
+        cur.left = null;
       }
-      // 移动到下一个（沿right走）
-      root = root.right;
+      // 难点：移动到下一个（沿right走）
+      cur = cur.right;
     }
   }
 }
