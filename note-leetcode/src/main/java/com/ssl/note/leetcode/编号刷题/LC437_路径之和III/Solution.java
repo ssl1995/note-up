@@ -3,7 +3,6 @@ package com.ssl.note.leetcode.编号刷题.LC437_路径之和III;
 
 import com.ssl.note.common.utils.TreeNode;
 
-import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,8 +27,9 @@ public class Solution {
     // 初始化：路径和0，出现的次数为1
     Map<Long, Integer> map = new HashMap<>();
     map.put(0L, 1);
-
-    dfs(root, root.val, targetSum, map);
+    // 设计和的，需要用long防止int溢出
+    long preSum = root.val;
+    dfs(root, preSum, targetSum, map);
 
     return res;
   }
@@ -37,25 +37,25 @@ public class Solution {
   /**
    * long 防止溢出,为了兼容TreeNode的val定义，使用基本数据类型
    */
-  private void dfs(TreeNode node, long sum,
+  private void dfs(TreeNode node, Long preSum,
                    Integer target, Map<Long, Integer> map) {
     // sum - target = 曾经的某个前缀和，如果出现过，说明结果+1
-    if (map.containsKey(sum - target)) {
-      res += map.get(sum - target);
+    if (map.containsKey(preSum - target)) {
+      res += map.get(preSum - target);
     }
 
-    map.put(sum, map.getOrDefault(sum, 0) + 1);
+    map.put(preSum, map.getOrDefault(preSum, 0) + 1);
 
     if (node.left != null) {
-      dfs(node.left, sum + node.left.val, target, map);
+      dfs(node.left, preSum + node.left.val, target, map);
     }
     if (node.right != null) {
-      dfs(node.right, sum + node.right.val, target, map);
+      dfs(node.right, preSum + node.right.val, target, map);
     }
 
     // DFS从左子树回到父节点后要去右子树，左子树路径上的前缀和不能留在 map 中影响右子树的计算
     // 回溯，消除该节点路径和的影响
-    map.put(sum, map.getOrDefault(sum, 0) - 1);
+    map.put(preSum, map.getOrDefault(preSum, 0) - 1);
   }
 
 

@@ -1,7 +1,6 @@
-前序遍历：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC144_二叉树的前序遍历\Solution.java
-中序遍历：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC94_二叉树的中序遍历\Solution.java
-后序遍历：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC145_二叉树的后序遍历\Solution2.java
-以上是我记忆的三个二叉树的遍历非递归常见写法，
-1、总结常规写法
-2、总结完毕后给出morris遍历的学习
-输出成一份md文档，格式是不要有空行，我好复制进飞书
+前序和中序构建二叉树：com.ssl.note.leetcode.编号刷题.LC105_从前序与中序遍历序列构造二叉树.Solution.buildTree
+中序和后序构建二叉树：com.ssl.note.leetcode.编号刷题.LC106_从中序与后序遍历序列构造二叉树.Solution.buildTree
+
+前者我已经做了，后者还没有做
+1、给出后者的解法
+2、分析总结这类题型的特点和记忆方式，方便面试时候想出来
