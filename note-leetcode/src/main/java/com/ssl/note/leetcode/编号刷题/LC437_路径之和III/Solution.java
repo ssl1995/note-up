@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class Solution {
 
-  // int类型不要做对象参数传递
   private int res = 0;
 
   /**
@@ -19,16 +18,12 @@ public class Solution {
    * LC560 和为k的子数组的二叉树版本
    */
   public int pathSum(TreeNode root, int targetSum) {
-    // 后序要用root.val,防止空指针
-    if (root == null) {
-      return 0;
-    }
-
-    // 初始化：路径和0，出现的次数为1
+    // 初始化Map，当preSum=target时候，说明出现了1次
     Map<Long, Integer> map = new HashMap<>();
     map.put(0L, 1);
-    // 设计和的，需要用long防止int溢出
-    long preSum = root.val;
+    // 初始化前缀和
+    Long preSum = 0L;
+
     dfs(root, preSum, targetSum, map);
 
     return res;
@@ -39,19 +34,19 @@ public class Solution {
    */
   private void dfs(TreeNode node, Long preSum,
                    Integer target, Map<Long, Integer> map) {
-    // sum - target = 曾经的某个前缀和，如果出现过，说明结果+1
+    if (node == null) {
+      return;
+    }
+    preSum += node.val;
+
     if (map.containsKey(preSum - target)) {
       res += map.get(preSum - target);
     }
 
     map.put(preSum, map.getOrDefault(preSum, 0) + 1);
 
-    if (node.left != null) {
-      dfs(node.left, preSum + node.left.val, target, map);
-    }
-    if (node.right != null) {
-      dfs(node.right, preSum + node.right.val, target, map);
-    }
+    dfs(node.left, preSum, target, map);
+    dfs(node.right, preSum, target, map);
 
     // DFS从左子树回到父节点后要去右子树，左子树路径上的前缀和不能留在 map 中影响右子树的计算
     // 回溯，消除该节点路径和的影响

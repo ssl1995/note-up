@@ -1,6 +1,4 @@
-前序和中序构建二叉树：com.ssl.note.leetcode.编号刷题.LC105_从前序与中序遍历序列构造二叉树.Solution.buildTree
-中序和后序构建二叉树：com.ssl.note.leetcode.编号刷题.LC106_从中序与后序遍历序列构造二叉树.Solution.buildTree
+二叉树的最近公共祖先：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC236_二叉树最近公共祖先\Solution.java
+二叉搜索树的最近公共祖先：com.ssl.note.leetcode.编号刷题.LC235_二叉搜索树的最近公共祖先.Solution.lowestCommonAncestor
 
-前者我已经做了，后者还没有做
-1、给出后者的解法
-2、分析总结这类题型的特点和记忆方式，方便面试时候想出来
+第一道题我已经完成并理解，请分析第二道题如何思考理解？并输出一份md总结文档，我复制进飞书

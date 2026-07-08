@@ -29,7 +29,7 @@ public class Solution {
     int left = Math.max(maxGain(node.left), 0);
     int right = Math.max(maxGain(node.right), 0);
 
-    // 路径和可以拐弯，所以自己+左+右
+    // 最大路径和:在递归过程中计算
     maxSum = Math.max(maxSum, node.val + left + right);
 
     // 返回给上级信息不能拐弯：自己 + 左右的最大

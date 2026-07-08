@@ -12,35 +12,43 @@ import java.util.List;
  */
 public class Solution {
 
-    private List<List<Integer>> res;
-    private List<Integer> path;
+  private List<List<Integer>> res;
+  private List<Integer> path;
 
-    /**
-     * 输出二叉树中所有路径和为sum的路径
-     */
-    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
-        if (root == null) {
-            return new ArrayList<>();
-        }
-        res = new ArrayList<>();
-        path = new ArrayList<>();
-        process(root, targetSum);
-        return res;
+  /**
+   * LC113_路径之和II
+   * 给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
+   */
+  public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+    if (root == null) {
+      return new ArrayList<>();
     }
+    res = new ArrayList<>();
+    path = new ArrayList<>();
+    dfs(root, targetSum);
+    return res;
+  }
 
-    private void process(TreeNode root, int targetSum) {
-        if (root == null) {
-            return;
-        }
-        path.add(root.val);
-        targetSum -= root.val;
-        if (root.left == null && root.right == null && targetSum == 0) {
-            res.add(new ArrayList<>(path));
-        }
-        process(root.left, targetSum);
-        process(root.right, targetSum);
-        path.remove(path.size() - 1);
+  private void dfs(TreeNode root, int targetSum) {
+    if (root == null) {
+      return;
     }
+    // 收集临时路径
+    path.add(root.val);
+
+    targetSum -= root.val;
+    if (root.left == null && root.right == null && targetSum == 0) {
+      // 回收满足条件的路径
+      // 必须是复制，因为path后序还要回溯
+      res.add(new ArrayList<>(path));
+    }
+    // 递归左右子树
+    dfs(root.left, targetSum);
+    dfs(root.right, targetSum);
+
+    // 回溯：临时加入的路径需要取消
+    path.remove(path.size() - 1);
+  }
 
 
 }
