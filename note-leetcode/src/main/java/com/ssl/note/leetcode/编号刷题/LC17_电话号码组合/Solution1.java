@@ -1,9 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC17_电话号码组合;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Solution1 {
   /**
@@ -30,24 +28,30 @@ public class Solution1 {
       res.add(path.toString());
       return;
     }
-    char cr = digits.charAt(start);
-    String letter = map[cr - '0'];
-    // letter里面每个数都要选，所以从i=0开始
+    char num = digits.charAt(start);
+    // 2 -> abc
+    String letter = map[num - '0'];
     for (int i = 0; i < letter.length(); i++) {
       path.append(letter.charAt(i));
+
       // 但是递归中的start是digits的指针，所以永远从start+1开始
       backtrack(digits, start + 1, map, path, res);
 
-      path.deleteCharAt(path.length() - 1);
+      path.delete(path.length() - 1, path.length());
+//      path.deleteCharAt(path.length() - 1);
     }
   }
 
   public static void main(String[] args) {
     Solution1 solution = new Solution1();
-    String digits = "9";
-    System.out.println(solution.letterCombinations(digits));
-    System.out.println("---");
-    System.out.println("".length());
+//    String digits = "9";
+//    System.out.println(solution.letterCombinations(digits));
+
+    StringBuilder path =new StringBuilder();
+    path.append("a");
+    path.append("b");
+    System.out.println(path.length());
+    System.out.println(path.delete(path.length() - 1, path.length()));
   }
 
 }
