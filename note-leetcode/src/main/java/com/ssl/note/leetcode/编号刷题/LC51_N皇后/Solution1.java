@@ -33,12 +33,12 @@ public class Solution1 {
     boolean[] colUsed = new boolean[n];
     // 主对角线是否使用过：左上到右下
     // (0,0), (1,1), (2,2), (3,3) → 0-0=0, 1-1=0, 2-2=0, 3-3=0
-    //  特点：行 - 列 = 常数
-    boolean[] diag1 = new boolean[2 * n];
+    //  特点：行 - 列 = 常数，范围[0,2n-1]
+    boolean[] diag1 = new boolean[2 * n - 1];
     // 副对角线是否使用过：右上到左下
     // (0,3), (1,2), (2,1), (3,0) → 0+3=3, 1+2=3, 2+1=3, 3+0=3
-    // 行 + 列 = 常数
-    boolean[] diag2 = new boolean[2 * n];
+    // 行 + 列 = 常数，范围[0,2n-1]
+    boolean[] diag2 = new boolean[2 * n - 1];
 
     List<List<String>> res = new ArrayList<>();
     dfs(board, 0, n, colUsed, diag1, diag2, res);
@@ -52,11 +52,10 @@ public class Solution1 {
       return;
     }
     for (int col = 0; col < n; col++) {
-      // 主对角线在数组中下标：row-col的最小值在(0,n-1)位置，为了让数组下标不越界，加上n-1
-      // 为什么要加n-1?
-      // 因为d1可能为负，比如[-(n-1),n-1]的范围，向前移动n+1变成[0,2n]中，和初始化就对应上了
+      // 主对角线：行减列，可能为负，加 n-1
+      // 主对角线范围：[-(n-1),n-1]，有负数，不能当数组下标，向前加n-1
       int d1 = row - col + n - 1;
-      // 副对角线在数组中的下标：row+col最小值(0,0)就是大于0的，所以不用加任何数
+      // 副对角线：行加列，天然非负，直接用。
       int d2 = row + col;
       if (colUsed[col] || diag1[d1] || diag2[d2]) {
         continue;

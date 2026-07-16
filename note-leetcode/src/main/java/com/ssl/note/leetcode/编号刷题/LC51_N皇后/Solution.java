@@ -39,20 +39,20 @@ public class Solution {
     return res;
   }
 
-  private void backtrack(char[][] board, int row, int n, List<List<String>> res) {
-    if (row == n) {
+  private void backtrack(char[][] board, int i, int n, List<List<String>> res) {
+    if (i == n) {
       addToRes(board, res);
       return;
     }
-    for (int col = 0; col < n; col++) {
-      if (!isValid(board, row, col, n)) {
+    for (int j = 0; j < n; j++) {
+      if (!isValid(board, i, j, n)) {
         continue;
       }
-      board[row][col] = 'Q';
+      board[i][j] = 'Q';
 
-      backtrack(board, row + 1, n, res);
+      backtrack(board, i + 1, n, res);
 
-      board[row][col] = '.';
+      board[i][j] = '.';
     }
   }
 
@@ -73,21 +73,22 @@ public class Solution {
    * 3  (3,0)   (3,1)   (3,2)   (3,3)
    */
   private boolean isValid(char[][] board, int row, int col, int n) {
-    // 检查当前行所在的列是否被用过
+    // 1、检查行，因为是逐行放入Q，所以这里不用检查
+    // 2、检查列
     for (int i = 0; i < row; i++) {
       if (board[i][col] == 'Q') {
         return false;
       }
     }
 
-    // 检查45°斜线是否用过（左上 → 右下）
+    // 3、检查主斜，检查45°斜线是否用过（左上 → 右下）
     for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
       if (board[i][j] == 'Q') {
         return false;
       }
     }
 
-    // 检查135°斜线是否用过（右上 → 左下）
+    // 4、检查副斜，检查135°斜线是否用过（右上 → 左下）
     for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
       if (board[i][j] == 'Q') {
         return false;

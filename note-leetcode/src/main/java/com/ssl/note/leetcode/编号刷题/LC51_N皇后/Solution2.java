@@ -26,7 +26,9 @@ public class Solution2 {
   public List<List<String>> solveNQueens(int n) {
     List<List<String>> ans = new ArrayList<>();
     char[][] board = new char[n][n];
-    for (char[] row : board) Arrays.fill(row, '.');
+    for (char[] row : board) {
+      Arrays.fill(row, '.');
+    }
     int limit = (1 << n) - 1;
     dfs(0, n, limit, 0, 0, 0, board, ans);
     return ans;
