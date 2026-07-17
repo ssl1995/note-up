@@ -39,20 +39,20 @@ public class Solution {
     return res;
   }
 
-  private void backtrack(char[][] board, int i, int n, List<List<String>> res) {
-    if (i == n) {
+  private void backtrack(char[][] board, int row, int n, List<List<String>> res) {
+    if (row == n) {
       addToRes(board, res);
       return;
     }
-    for (int j = 0; j < n; j++) {
-      if (!isValid(board, i, j, n)) {
+    for (int col = 0; col < n; col++) {
+      if (!isValid(board, row, col, n)) {
         continue;
       }
-      board[i][j] = 'Q';
+      board[row][col] = 'Q';
 
-      backtrack(board, i + 1, n, res);
+      backtrack(board, row + 1, n, res);
 
-      board[i][j] = '.';
+      board[row][col] = '.';
     }
   }
 

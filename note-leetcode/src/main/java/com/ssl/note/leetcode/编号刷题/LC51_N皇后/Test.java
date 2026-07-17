@@ -10,57 +10,65 @@ public class Test {
     if (n == 0) {
       return new ArrayList<>();
     }
-    char[][] cs = new char[n][n];
-    for (int i = 0; i < n; i++) {
-      Arrays.fill(cs[i], '.');
+    char[][] board = new char[n][n];
+    for (char[] c : board) {
+      Arrays.fill(c, '.');
     }
 
     List<List<String>> res = new ArrayList<>();
-    backtrack(cs, 0, n, res);
+    dfs(board, n, 0, res);
+
     return res;
   }
 
-  private void backtrack(char[][] cs, int row, int n, List<List<String>> res) {
+  private void dfs(char[][] cs, int n, int row, List<List<String>> res) {
     if (row == n) {
       addRes(cs, res);
       return;
     }
+
     for (int col = 0; col < n; col++) {
-      if (check(cs, row, col, n)) {
+      if (!check(cs, n, row, col)) {
         continue;
       }
       cs[row][col] = 'Q';
-      backtrack(cs, row + 1, n, res);
+
+      dfs(cs, n, row + 1, res);
+
       cs[row][col] = '.';
     }
   }
 
-  private boolean check(char[][] cs, int row, int col, int n) {
+  private boolean check(char[][] cs, int n, int row, int col) {
     for (int i = 0; i < row; i++) {
       if (cs[i][col] == 'Q') {
-        return true;
+        return false;
       }
     }
+
     for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
       if (cs[i][j] == 'Q') {
-        return true;
+        return false;
       }
     }
+
     for (int i = row - 1, j = col + 1; i >= 0 && j <= n - 1; i--, j++) {
       if (cs[i][j] == 'Q') {
-        return true;
+        return false;
       }
     }
-    return false;
+
+    return true;
   }
 
-  private void addRes(char[][] cs, List<List<String>> res) {
-    List<String> temp = new ArrayList<>();
-    for (char[] c : cs) {
-      temp.add(new String(c));
+  private void addRes(char[][] board, List<List<String>> res) {
+    List<String> path = new ArrayList<>();
+    for (char[] cs : board) {
+      path.add(new String(cs));
     }
-    res.add(temp);
+    res.add(path);
   }
+
 
   public static void main(String[] args) {
     Test solution = new Test();
