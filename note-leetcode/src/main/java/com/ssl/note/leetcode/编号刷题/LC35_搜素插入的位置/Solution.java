@@ -8,26 +8,30 @@ public class Solution {
    * 请必须使用时间复杂度为 O(log n) 的算法。
    * 输入: nums = [1,3,5,6], target = 5
    * 输出: 2
+   * 本题翻译：找>=t的第一个下标，时间复杂度O(logN)
    */
   public int searchInsert(int[] nums, int target) {
-    // 找>=t的第一个下标，时间复杂度O(logN)
+    // 左闭右开模板：[0,n)，涵盖"插入到末尾 n"答案
     int left = 0;
-    // 陷阱：这里必须是n的长度=默认是[1,3,5,6,空]的数组
-    // 如果是初始化n-1
-    int right = nums.length - 1;
+    int right = nums.length;
     while (left < right) {
       int mid = left + (right - left) / 2;
       if (nums[mid] >= target) {
+        //  mid 满足条件 → 答案在左半(含mid)，right=mid 不丢解
         right = mid;
       } else {
+        // mid 不满足 → 答案必在右半，left=mid+1
         left = mid + 1;
       }
     }
+    // 1、右指针如果是初始化n-1
+    // int right = nums.length - 1;
+    // 2、结果就得多判断一步
     // nums=[1,3,5,6],t=7时，此时nums[left]=6
     // t=7应该插到末尾，所以需要特判一下
-    if (nums[left] < target) {
-      return left + 1;
-    }
+//    if (nums[left] < target) {
+//      return left + 1;
+//    }
     return left;
   }
 
