@@ -5,7 +5,7 @@ package com.ssl.note.leetcode.编号刷题.LC33_搜索旋转排序数组;
  * @date 2022/1/23 9:52 PM
  * @description
  */
-public class Solution {
+public class Test {
 
   /**
    * 搜索旋转排序数组
@@ -13,33 +13,28 @@ public class Solution {
    * 输出：4
    */
   public int search(int[] nums, int target) {
-    if (nums.length == 0) {
+    if (nums == null || nums.length == 0) {
       return -1;
     }
     int left = 0;
-    // 左闭右闭
     int right = nums.length - 1;
-    // <=
     while (left <= right) {
       int mid = left + (right - left) / 2;
       if (nums[mid] == target) {
         return mid;
-      }
-      // 左侧有序
-      if (nums[0] <= nums[mid]) {
-        // 前面已经判断nums[mid] == t,故 <= t <
-        if (nums[0] <= target && target < nums[mid]) {
-          right = mid - 1;
-        } else {
-          left = mid + 1;
-        }
       } else {
-        //  右侧有序
-        // 前面已经判断nums[mid] == t,故 < t <=
-        if (nums[mid] < target && target <= nums[nums.length - 1]) {
-          left = mid + 1;
+        if (nums[0] <= nums[mid]) {
+          if (nums[0] <= target && target < nums[mid]) {
+            right = mid - 1;
+          } else {
+            left = mid + 1;
+          }
         } else {
-          right = right - 1;
+          if (nums[mid] < target && target <= nums[nums.length - 1]) {
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
         }
       }
     }
@@ -47,7 +42,7 @@ public class Solution {
   }
 
   public static void main(String[] args) {
-    Solution solution = new Solution();
+    Test solution = new Test();
     int[] nums = {4, 5, 6, 7, 0, 1, 2};
     int target = 0;
     System.out.println(solution.search(nums, target));

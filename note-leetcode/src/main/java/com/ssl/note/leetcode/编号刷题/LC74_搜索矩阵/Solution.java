@@ -14,7 +14,7 @@ public class Solution {
     // 一维数组范围：[0,mn-1]
     int left = 0;
     int right = m * n - 1;
-
+    // 闭区间，必须有=
     while (left <= right) {
       int mid = left + (right - left) / 2;
       // 转成二维坐标

@@ -1,6 +1,6 @@
 package com.ssl.note.leetcode.编号刷题.LC153_寻找排序数组中最小值;
 
-public class Solution {
+public class Solution1 {
 
   /**
    * 寻找排序数组中最小值
@@ -20,24 +20,15 @@ public class Solution {
     }
     int left = 0;
     int right = nums.length - 1;
-    while (left <= right) {
+    while (left < right) {
       int mid = left + (right - left) / 2;
-      // 断崖点=唯一一个左边元素比右边元素大位置
-      // 找mid和一个"确定在右段的元素"比大小
       int t = nums[right];
       if (nums[mid] < t) {
-        // <,最小值可能是nums[mid]
+        // mid 有嫌疑，保留
         right = mid;
-      } else if (nums[mid] > t) {
-        // >,最小值不可能是nums[mid]
-        left = mid + 1;
       } else {
-        // 本题题干是没有重复元素的，但是如果有重复元素？
-        // [1,0,1,1,1]
-        // 如果选择left++，上述的情况就会把最小值0给遗漏掉
-        // [1,1,1,0,1]
-        // nums[mid]==nums[right]时，无法确定最小值，只能缩小范围
-        right--;
+        // mid 清白，丢掉
+        left = mid + 1;
       }
     }
     return nums[left];

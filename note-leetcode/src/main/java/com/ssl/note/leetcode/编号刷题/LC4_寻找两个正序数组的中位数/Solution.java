@@ -50,7 +50,7 @@ public class Solution {
       return (double) (nums[(size - 1) / 2] + nums[size / 2]) / 2;
     }
     // 奇数
-    return(double) nums[size / 2];
+    return (double) nums[size / 2];
   }
 
   public static void main(String[] args) {
