@@ -8,10 +8,10 @@ public class Solution1 {
    * 解法二：二划分法（最优解）
    * 时间复杂度：O(log(min(m,n)))，在短数组上二分
    * 空间复杂度：O(1)
-   * 【核心翻译】中位数不是"找一个数"，而是"找一种切法"：
-   * 【记忆口诀】短数组上切一刀，人数守恒定 j；交叉合法就收工，谁大谁向左靠。
-   * 【为什么在短数组上二分】j = half - i 必须落在 [0,n]；
-   * 当 m<=n 时，i ∈ [0,m] 自动保证 j 不越界，还把复杂度降到 log(min)
+   * 1.回到定义：中位数的本质是什么？它把全体数据分成两半——左半所有元素 ≤ 右半所有元素，且左半人数固定 = (m+n+1)/2。
+   * 2.重新表述问题：所以不是去找某个数，而是在 nums1 上切一刀 i、nums2 上切一刀 j，使两个左半拼起来恰好是"全局左半"。
+   * 3.发现只有一个自由度：人数守恒 i + j = (m+n+1)/2，所以 i 一旦定了，j 直接被算出来（j = half - i）——需要搜索的变量从两个降到一个。
+   * 4.合法性只需要"交叉检查"：因为每个数组自身有序（题目白送的），同侧必然合法，只需验证交叉条件： nums1[i-1] ≤ nums2[j] 且 nums2[j-1] ≤ nums1[i]
    */
   public double findMedianSortedArrays(int[] nums1, int[] nums2) {
     // 1、短数组上切一刀
@@ -22,6 +22,7 @@ public class Solution1 {
     // m是短数组长度，n是长数组长度
     int m = nums1.length;
     int n = nums2.length;
+    boolean isEven = (m + n) % 2 == 0;
     // i ∈ [0, m]，存在型二分，闭区间 [left, right]
     int nums1Left = 0, nums1Right = m;
 
@@ -49,11 +50,13 @@ public class Solution1 {
       // -∞<= 5,3<=4
       if (nums1LeftMax <= nums2RightMin && nums1RightMin >= nums2LeftMax) {
         // 划分正确：左半永远满载，奇数答案在左，偶数跨线取均
-        if ((m + n) % 2 == 0) {// 偶数
-          return (double) (Math.max(nums1LeftMax, nums2LeftMax) + Math.min(nums1RightMin, nums2RightMin)) / 2;
+        if (isEven) {// 偶数
+          int num1 = Math.max(nums1LeftMax, nums2LeftMax);
+          int num2 = Math.min(nums1RightMin, nums2RightMin);
+          return (num1 + num2) / 2d;
         } else {
           // 奇数
-          return (double) Math.max(nums1LeftMax, nums2LeftMax);
+          return Math.max(nums1LeftMax, nums2LeftMax);
         }
       }// 5、谁大谁向左靠，以下2个分支调整切口 i 的位置
       else if (nums1LeftMax > nums2RightMin) {
@@ -68,10 +71,9 @@ public class Solution1 {
   }
 
   public static void main(String[] args) {
+    int[] nums1 = {1, 2};
+    int[] nums2 = {-10, -9, -8};
     Solution1 solution = new Solution1();
-    // 奇数个案例：合并后 [1,2,3,4,5]，中位数 = 3.0
-    System.out.println(solution.findMedianSortedArrays(new int[]{4}, new int[]{1, 2, 3, 5}));
-    // 偶数个案例：合并后 [1,2,3,4]，中位数 = 2.5
-//    System.out.println(solution.findMedianSortedArrays(new int[]{1, 2}, new int[]{3, 4}));
+    System.out.println(solution.findMedianSortedArrays(nums1, nums2));
   }
 }

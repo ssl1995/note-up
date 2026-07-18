@@ -25,18 +25,19 @@ public class Solution {
 
     char[] cs = s.toCharArray();
     for (char c : cs) {
-      // 数字，数字可能超过十位
+      // 1、数字，数字可能超过十位
       if (c >= '0' && c <= '9') {
         multi = multi * 10 + (c - '0');
       } else if (c == '[') {
-        // 左括号，压入数字栈和字母栈
+        // 2、左括号，压入数字栈和字母栈
         numsStack.push(multi);
         multi = 0;
 
         letterStack.push(res.toString());
+
         res = new StringBuilder();
       } else if (c == ']') {
-        // 右括号，弹出数字栈和字母栈，拼接字符串
+        // 3、右括号，弹出数字栈和字母栈，拼接字符串
         int count = numsStack.pop();
 
         StringBuilder temp = new StringBuilder();
