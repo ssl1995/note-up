@@ -21,12 +21,10 @@ public class Solution {
     PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>(Comparator.comparingInt(Map.Entry::getValue));
 
     for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-      if (minHeap.size() < k) {
-        minHeap.offer(entry);
-      } else if (minHeap.peek() != null && minHeap.peek().getValue() < entry.getValue()) {
-        // 最小值堆堆顶是小的，出堆
+      // 与LC215堆解法一致
+      minHeap.offer(entry);
+      if (minHeap.size() > k) {
         minHeap.poll();
-        minHeap.offer(entry);
       }
     }
 
