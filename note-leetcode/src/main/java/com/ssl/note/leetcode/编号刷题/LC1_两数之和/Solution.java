@@ -34,7 +34,6 @@ public class Solution {
       return new int[]{otherIndex, i};
     }
     return new int[]{-1, -1};
-
   }
 
   public static void main(String[] args) {
