@@ -32,8 +32,8 @@ public class Solution {
       return 0;
     }
 
-    // 最小堆（优先级队列），按格子高度升序排列
-    // 数组含义：int[]{行坐标, 列坐标, 当前作为边界的高度}
+    // 最小堆：排序是按格子高度升序
+    // 数组含义：int[]{行坐标, 列坐标, 格子高度}
     // 每次弹出高度最小的边界，该高度就是当前能围住内部格子的“水面上限”
     PriorityQueue<int[]> minHeap = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
 //    PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[2] - b[2]);
@@ -117,7 +117,7 @@ public class Solution {
     return res;
   }
 
-
+  // 手撕测试
   public int trapRainWaterTest(int[][] heightMap) {
     if (heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) {
       return 0;
@@ -156,7 +156,7 @@ public class Solution {
         int dirX = curX + dir[0];
         int dirY = curY + dir[1];
 
-        if (dirX < 0 || dirX >=m || dirY < 0 || dirY >=n || visited[dirX][dirY]) {
+        if (dirX < 0 || dirX >= m || dirY < 0 || dirY >= n || visited[dirX][dirY]) {
           continue;
         }
 
@@ -182,7 +182,6 @@ public class Solution {
         {1, 4, 3, 1, 3, 2},
         {3, 2, 1, 3, 2, 4},
         {2, 3, 3, 2, 3, 1}};
-    System.out.println(solution.trapRainWater(h));
-    System.out.println(solution.trapRainWaterTest(h));
+    System.out.println(solution.trapRainWater(h) == solution.trapRainWaterTest(h));
   }
 }
