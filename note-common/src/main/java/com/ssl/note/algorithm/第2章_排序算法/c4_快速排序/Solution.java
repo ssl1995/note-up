@@ -1,9 +1,6 @@
 package com.ssl.note.algorithm.第2章_排序算法.c4_快速排序;
 
-import com.ssl.note.common.utils.RandomUtil;
-
 import java.util.Arrays;
-import java.util.Random;
 
 public class Solution {
 
@@ -28,18 +25,18 @@ public class Solution {
   }
 
   private int partition(int[] nums, int start, int end) {
-    // 可以随机使用一个数作为基准
-    int pivotValue = nums[start];
-    int j = start;
-    for (int i = start + 1; i <= end; i++) {
+    // pivot 放哪头，哪头就是占位符,遍历区间要跳过它
+    int pivotValue = nums[end];
+    int j = start - 1;
+    for (int i = start + 1; i < end; i++) {
       if (nums[i] < pivotValue) {
         // ++j：交换前，j需要提前走一步
         swap(nums, ++j, i);
       }
     }
-    // 最后交换基准
-    swap(nums, j, start);
-    return j;
+    // j是待交换位置前一个位置，最后需要j+1交换
+    swap(nums, j + 1, start);
+    return j + 1;
   }
 
   private void swap(int[] nums, int index1, int index2) {
