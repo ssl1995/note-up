@@ -1,6 +1,6 @@
 package com.ssl.note.leetcode.编号刷题.LC123_买卖股票的最佳时机III;
 
-public class Solution1 {
+public class Solution2 {
 
   /**
    * LC122 买卖股票的最佳时机III
@@ -17,39 +17,33 @@ public class Solution1 {
     if (prices.length <= 1) {
       return 0;
     }
+    // 最多2笔交易，每笔交易有2种状态，总共4种状态
+    // 第一次买入
+    int hold1 = -prices[0];
+    // 第一次卖出
+    int sold1 = 0;
+    // 第二次买入
+    int hold2 =  -prices[0];
+    // 第二次卖出
+    int sold2 = 0;
+    // 状态机：每次都询问自己，是保持 or 执行某个操作更好，最后留下最好的那个
+    // hold1 ⇄ sold1 ⇄ hold2 ⇄ sold2
+    for (int num : prices) {
+      // 保持不买 vs 今天买入（花 num 元）
+      hold1 = Math.max(hold1, -num);
+      // 保持不卖 vs 今天卖出（收入 num 元）
+      sold1 = Math.max(sold1, hold1 + num);
 
-    int res = 0;
-    int n = prices.length;
-    // 普通解：两笔交易不能重叠，所以一定存在某个分割点i，完成2笔交易分成2个区间
-    // 这个解法会超时，但是能更好理解
-    for (int i = 0; i < n; i++) {
-      int max = maxProfitBase(prices, 0, i) + maxProfitBase(prices, i, n - 1);
-      res = Math.max(max, res);
+      // 保持不买 vs 用第一笔赚的钱 today 买入
+      hold2 = Math.max(hold2, sold1 - num);
+      // 保持不卖 vs 今天卖出
+      sold2 = Math.max(sold2, hold2 + num);
     }
-    return res;
-  }
-
-  public int maxProfitBase(int[] prices, int start, int end) {
-    if (prices == null) {
-      return 0;
-    }
-    int min = Integer.MAX_VALUE;
-    int res = 0;
-
-    // 贪心：每次遍历到一个数，局部最优解是之前的最小值-当前数就是最大利润
-    for (int i = start; i <= end; i++) {
-      int num = prices[i];
-      min = Math.min(min, num);
-      if (num > min) {
-        // LC121：只能交易一次，只记录发生的最大值即可
-        res = Math.max(res, num - min);
-      }
-    }
-    return res;
+    return sold2;
   }
 
   public static void main(String[] args) {
-    Solution1 solution = new Solution1();
+    Solution2 solution = new Solution2();
     int[] nums = {3, 3, 5, 0, 0, 3, 1, 4};
     System.out.println(solution.maxProfit(nums));
   }

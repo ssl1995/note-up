@@ -6,41 +6,44 @@ package com.ssl.note.leetcode.编号刷题.LC309_最佳买卖股票时机含冷�
  * @description
  */
 public class Solution1 {
-    /**
-     * 最佳买卖股票时机含冷冻期
-     * 输入: prices = [1,2,3,0,2]
-     * 输出: 3
-     * 解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
-     */
-    public int maxProfit(int[] prices) {
-        if (prices == null || prices.length == 0) {
-            return 0;
-        }
-        int n = prices.length;
-        // dp[i][j]：第i天最大利润，
-        // j=0说明第i天持有股票
-        // j=1说明第i天不持有股票，处于冷冻期
-        // j=2说明第i天不持有股票，不处于冷冻期
-        // dp空间优化
-        int n0 = -prices[0];
-        int n1 = 0;
-        int n2 = 0;
 
-        for (int i = 1; i < n; i++) {
-            int a = Math.max(n2 - prices[i], n0);
-            int b = n0 + prices[i];
-            int c = Math.max(n1, n2);
-
-            n0 = a;
-            n1 = b;
-            n2 = c;
-        }
-        return Math.max(n1, n2);
+  /**
+   * 最佳买卖股票时机含冷冻期
+   * 给定一个整数数组prices，其中第  prices[i] 表示第 i 天的股票价格
+   * 设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+   * 卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
+   * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+   * 输入: prices = [1,2,3,0,2]
+   * 输出: 3
+   * 解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
+   */
+  public int maxProfit(int[] prices) {
+    if (prices == null || prices.length == 0) {
+      return 0;
     }
 
-    public static void main(String[] args) {
-        Solution1 solution = new Solution1();
-        int[] nums = {2, 1};
-        System.out.println(solution.maxProfit(nums));
+    int buy = -prices[0];  // 持有
+    int sellDown = 0;      // 不持有-冷冻
+    int sellNoDown = 0;    // 不持有-可买
+
+    for (int price : prices) {
+      int preBuy = buy;
+      int preDown = sellDown;
+      int preSell = sellNoDown;
+      // 持有
+      buy = Math.max(preBuy, preSell - price);
+      // 不持有，但冷冻期：昨天持有，今天卖出
+      sellDown = preBuy + price;
+      // 不持有，过了冷冻期
+      sellNoDown = Math.max(preSell, preDown);
     }
+
+    return Math.max(sellDown, sellNoDown);
+  }
+
+  public static void main(String[] args) {
+    Solution1 solution = new Solution1();
+    int[] nums = {2, 1};
+    System.out.println(solution.maxProfit(nums));
+  }
 }

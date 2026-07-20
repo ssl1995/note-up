@@ -1,6 +1,8 @@
 package com.ssl.note.leetcode.编号刷题.LC123_买卖股票的最佳时机III;
 
-public class Solution {
+import java.util.Arrays;
+
+public class Solution3 {
 
   /**
    * LC122 买卖股票的最佳时机III
@@ -17,28 +19,22 @@ public class Solution {
     if (prices.length <= 1) {
       return 0;
     }
+    int[] buy = new int[2];
+    int[] sell = new int[2];
+    Arrays.fill(buy, -prices[0]);
 
-    // 第一次买入
-    int hold1 = -prices[0];
-    // 第一次卖出
-    int sold1 = 0;
-    // 第二次买入
-    int hold2 = -prices[0];
-    // 第二次卖出
-    int sold2 = 0;
-    // 状态机：每次都询问自己，是保持 or 执行某个操作更好，最后留下最好的那个
     for (int num : prices) {
-      hold1 = Math.max(hold1, -num);
-      sold1 = Math.max(sold1, hold1 + num);
-
-      hold2 = Math.max(hold2, sold1 - num);
-      sold2 = Math.max(sold2, hold2 + num);
+      for (int i = 0; i < 2; i++) {
+        int prevSell = i == 0 ? 0 : sell[i - 1];
+        buy[i] = Math.max(buy[i], prevSell - num);
+        sell[i] = Math.max(sell[i], buy[i] + num);
+      }
     }
-    return sold2;
+    return sell[1];
   }
 
   public static void main(String[] args) {
-    Solution solution = new Solution();
+    Solution3 solution = new Solution3();
     int[] nums = {3, 3, 5, 0, 0, 3, 1, 4};
     System.out.println(solution.maxProfit(nums));
   }

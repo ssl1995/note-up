@@ -15,18 +15,21 @@ public class Solution {
    * 最大总利润为 4 + 3 = 7 。
    */
   public int maxProfit(int[] prices) {
-    if (prices.length == 0) {
-      return 0;
-    }
+    // min=谷底，同时也是本轮买入价
+    int min = Integer.MAX_VALUE;
     int res = 0;
-    // 题目：允许同一天多次买卖
-    // 贪心：在低点买入、高点卖出=每天涨了都买卖一次的收入和是一样的
-    for (int i = 1; i < prices.length; i++) {
-      int diff = prices[i] - prices[i - 1];
-      if (diff > 0) {
-        res += diff;
+
+    for (int num : prices) {
+      // 谷底买入
+      min = Math.min(min, num);
+      if (num > min) {
+        // LC122:多次交易，涨了就卖
+        res += num - min;
+        // 卖了后，立马买入，等待下一波上涨
+        min = num;
       }
     }
+
     return res;
   }
 

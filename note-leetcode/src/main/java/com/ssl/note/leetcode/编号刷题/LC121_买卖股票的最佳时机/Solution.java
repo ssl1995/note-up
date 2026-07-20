@@ -21,12 +21,15 @@ public class Solution {
       return 0;
     }
     int min = Integer.MAX_VALUE;
-    int res = Integer.MIN_VALUE;
+    int res = 0;
 
     // 贪心：每次遍历到一个数，局部最优解是之前的最小值-当前数就是最大利润
     for (int num : prices) {
       min = Math.min(min, num);
-      res = Math.max(res, num - min);
+      if (num > min) {
+        // LC121：只能交易一次，只记录发生的最大值即可
+        res = Math.max(res, num - min);
+      }
     }
     return res;
   }
