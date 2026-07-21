@@ -1,12 +1,6 @@
 package com.ssl.note.leetcode.编号刷题.LC140_单词拆分II;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Solution {
 
@@ -29,20 +23,20 @@ public class Solution {
   }
 
   private List<String> dfs(String s, int start, Set<String> wordSet, Map<Integer, List<String>> memory) {
-    // 1. 记忆化搜素优化，已经算过，直接返回
+    // 1.记忆化搜素优化，已经算过，直接返回
     if (memory.containsKey(start)) {
       return memory.get(start);
     }
 
     List<String> res = new ArrayList<>();
 
-    // 2. 递归边界：走到字符串末尾
+    // 2.递归边界：走到末尾，返回[""]，让上一层拼出最后一个单词（且不会多出空格）
     if (start == s.length()) {
       res.add("");
       return res;
     }
 
-    // 3. 枚举前缀
+    // 3.枚举切分点end，尝试把s[start..end-1]当作一个单词,递归[end,n]
     for (int end = start + 1; end <= s.length(); end++) {
       String word = s.substring(start, end);
       if (wordSet.contains(word)) {
@@ -65,17 +59,11 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
+    Test test = new Test();
 
     String s1 = "catsanddog";
     List<String> dict1 = Arrays.asList("cat", "cats", "and", "sand", "dog");
     System.out.println(solution.wordBreak(s1, dict1));
-
-    String s2 = "pineapplepenapple";
-    List<String> dict2 = Arrays.asList("apple", "pen", "applepen", "pine", "pineapple");
-    System.out.println(solution.wordBreak(s2, dict2));
-
-    String s3 = "catsandog";
-    List<String> dict3 = Arrays.asList("cats", "dog", "sand", "and", "cat");
-    System.out.println(solution.wordBreak(s3, dict3));
+    System.out.println(test.wordBreak(s1, dict1));
   }
 }

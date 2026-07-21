@@ -1,10 +1,8 @@
 package com.ssl.note.leetcode.编号刷题.LC139_单词拆分;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,7 +23,34 @@ public class Solution {
    * s 和 wordDict[i] 仅由小写英文字母组成
    * wordDict 中的所有字符串 互不相同
    */
-  public boolean wordBreak(String s, List<String> wordDict) {
+  public boolean wordBreak1(String s, List<String> wordDict) {
+    int n = s.length();
+    Set<String> set = new HashSet<>(wordDict);
+
+    // dp[i]：s[0..i]（以下标i结尾的前缀）是否能被拆分
+    boolean[] dp = new boolean[n];
+
+    for (int i = 0; i < n; i++) {
+      // 特判：整个前缀 s[0..i] 本身就是一个单词
+      // （n+1版本里这个case由 dp[0]=true 这个哨兵自动覆盖）
+      if (set.contains(s.substring(0, i + 1))) {
+        dp[i] = true;
+        continue;
+      }
+      // 枚举切分点j：s[0..j]可拆分 且 s[j+1..i]在字典中
+      for (int j = 0; j < i; j++) {
+        if (dp[j] && set.contains(s.substring(j + 1, i + 1))) {
+          dp[i] = true;
+          break;
+        }
+      }
+    }
+
+    return dp[n - 1];
+  }
+
+  // 数组n推导出n+1版本
+  public boolean wordBreak2(String s, List<String> wordDict) {
     int n = s.length();
     // dp[i]：s的前i个字符是否能被拆分
     boolean[] dp = new boolean[n + 1];
@@ -57,10 +82,10 @@ public class Solution {
     wordDict.add("leet");
     wordDict.add("code");
 
-    System.out.println("原始版本: " + solution.wordBreak(s, wordDict));
+    System.out.println("原始版本: " + solution.wordBreak1(s, wordDict));
 
     // 额外测试一个 false 用例
     String s2 = "leetcodex";
-    System.out.println("原始版本(false): " + solution.wordBreak(s2, wordDict));
+    System.out.println("原始版本(false): " + solution.wordBreak2(s2, wordDict));
   }
 }
