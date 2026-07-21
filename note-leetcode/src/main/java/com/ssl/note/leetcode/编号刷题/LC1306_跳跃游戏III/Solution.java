@@ -22,6 +22,7 @@ public class Solution {
     int n = arr.length;
     // 记录访问过的下标，防止在两个位置之间来回跳动造成死循环
     boolean[] visited = new boolean[n];
+    // BFS遍历，用到队列
     Queue<Integer> queue = new LinkedList<>();
     queue.offer(start);
     visited[start] = true;

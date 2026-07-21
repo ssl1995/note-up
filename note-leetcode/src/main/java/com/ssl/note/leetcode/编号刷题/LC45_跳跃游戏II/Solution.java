@@ -15,32 +15,33 @@ public class Solution {
    * 从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
    */
   public int jump(int[] nums) {
-    // 题目保证可以到达 n - 1
+    if (nums == null || nums.length == 0) {
+      return 0;
+    }
     int n = nums.length;
     // 初始位置在下标0，不能跳，比如[0],返回0
     if (n == 1) {
       return 0;
     }
     // 当前能够达到的最远位置
-    int maxReach = 0;
+    int max = 0;
+    // 走到边界需要再走一次
+    int minCount = 0;
     // 当前跳跃的最远边界
     int end = 0;
-    // 走到边界需要再走一次
-    int jump = 0;
     for (int i = 0; i < n; i++) {
-      maxReach = Math.max(maxReach, i + nums[i]);
-      // 当遍历到end时，已经评估完当前跳跃范围内的所有可能起点
-      // 此时需要进行一次跳跃，end更新为新的maxReach
+      max = Math.max(max, i + nums[i]);
+      // 贪心：每一跳都扩到最远，走到边界再跳一次
       if (i == end) {
-        end = maxReach;
-        jump++;
+        end = max;
+        minCount++;
       }
       // end曾经超过终点，直接返回
       if (end >= n - 1) {
-        return jump;
+        return minCount;
       }
     }
-    return jump;
+    return minCount;
   }
 
   public static void main(String[] args) {

@@ -21,17 +21,19 @@ public class Solution {
     if (n == 1) {
       return true;
     }
-    int maxReach = 0;
+    int max = 0;
+
     for (int i = 0; i < n; i++) {
-      if (i > maxReach) {
+      // 当前位置没有跳跃到过，返回false
+      if (i > max) {
         return false;
       }
-      maxReach = Math.max(maxReach, i + nums[i]);
-      if (maxReach >= n - 1) {
+      max = Math.max(max, i + nums[i]);
+      if (max >= n - 1) {
         return true;
       }
     }
-    return maxReach >= n - 1;
+    return max >= n - 1;
   }
 
   public static void main(String[] args) {
