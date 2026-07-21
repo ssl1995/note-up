@@ -24,8 +24,8 @@ public class Solution {
     int n = nums.length;
     int[] dp = new int[n];
     // 初始化
-    dp[0] = nums[0];
-    dp[1] = Math.max(nums[0], nums[1]);
+    dp[0] = nums[0];// 一个房间最大值
+    dp[1] = Math.max(nums[0], nums[1]);// 两个房间挑大的取值
 
     for (int i = 2; i < n; i++) {
       // 状态转移方程：不偷第i间房屋 vs 偷第i间房屋

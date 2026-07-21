@@ -2,11 +2,31 @@ package com.ssl.note.leetcode.编号刷题.LC322_零钱兑换.背包问题;
 
 public class Solution1 {
 
+
+  /**
+   * 完全背包：一维DP空间优化写法
+   * * 问题描述：
+   * * 有 n 个物品，第 i 个物品重量为 w[i]，价值为 v[i]；背包容量为 C。
+   * * 每个物品选无数次，求能装入背包的最大价值。
+   */
+  public int completeKnapsack02(int[] w, int[] v, int C) {
+    int n = w.length;
+    int[] dp = new int[C + 1];
+    for (int i = 0; i < n; i++) {
+      // 完全背包:正序遍历
+      // 因为正序遍历时，正序时它已被本轮更新 = 已选过物品 i 的值，相当于允许再次选择当前物品
+      for (int j = w[i]; j <= C; j++) {
+        // 完全背包：容量正序遍历
+        // 原因：dp[j - w[i]] 需要是本轮已经更新过的值
+        //      这样同一个物品可以被重复选择
+        dp[j] = Math.max(dp[j], dp[j - w[i]] + v[i]);
+      }
+    }
+    return dp[C];
+  }
+
   /**
    * 完全背包：二维DP基础写法
-   * 问题描述：
-   * 有 n 个物品，第 i 个物品重量为 w[i]，价值为 v[i]；背包容量为 C。
-   * 每个物品选无数次，求能装入背包的最大价值。
    */
   public int completeKnapsack01(int[] w, int[] v, int C) {
     int n = w.length;
@@ -31,24 +51,15 @@ public class Solution1 {
     return dp[n][C];
   }
 
-  /**
-   * 完全背包：一维DP空间优化写法
-   */
-  public int completeKnapsack02(int[] w, int[] v, int C) {
-    int n = w.length;
-    int[] dp = new int[C + 1];
-    for (int i = 0; i < n; i++) {
-      // 完全背包:正序遍历
-      // 因为正序遍历时，先更新了小的容量，后面算大容量时用到的小容量已经是本轮更新过的值，相当于允许再次选择当前物品。
-      for (int j = w[i]; j <= C; j++) {
-        // 完全背包：容量正序遍历
-        // 原因：dp[j - w[i]] 需要是本轮已经更新过的值
-        //      这样同一个物品可以被重复选择
-        dp[j] = Math.max(dp[j], dp[j - w[i]] + v[i]);
-        // 01背包：
-        // dp[j] = Math.max(dp[j], dp[j - w[i]] + v[i]);
-      }
-    }
-    return dp[C];
+  public static void main(String[] args) {
+    Solution solution = new Solution();
+    Solution1 solution1 = new Solution1();
+    int[] w = new int[]{2};
+    int[] v = new int[]{3};
+    int C = 4;
+    // dp=[ 0, 0, 3, 3, 3 ]
+    System.out.println(solution.knapsack02(w, v, C));
+    // dp=[ 0, 0, 3, 3, 6 ]
+    System.out.println(solution1.completeKnapsack02(w, v, C));
   }
 }

@@ -21,19 +21,23 @@ public class Solution {
    * 因此，返回 min(5, 9, 9) = 5 。
    */
   public int minCapability(int[] nums, int k) {
+    // 题目问：最小窃取能力下的最大值问题=二分
+    // 转换思维：求最小盗窃能力=判断某个值行不行
+    // 值域：[min,max]
     int left = Arrays.stream(nums).min().getAsInt();
     int right = Arrays.stream(nums).max().getAsInt();
     while (left < right) {
       int mid = left + (right - left) / 2;
-      // 转换思维：求最小盗窃能力=判断行不行
       // 给定一个能力值 cap，能不能做到：只偷金额 ≤ cap 的房子，不偷相邻，且至少偷 k 间
       if (canRob(nums, k, mid)) {
+        // 可行，保留mid
         right = mid;
       } else {
+        // 不可行，淘汰mid
         left = mid + 1;
       }
     }
-    // left会越过去
+    // 区间收敛到一点left=right=最小窃取能力
     return left;
   }
 

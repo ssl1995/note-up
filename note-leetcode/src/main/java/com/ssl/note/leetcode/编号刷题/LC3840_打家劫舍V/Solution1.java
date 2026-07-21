@@ -1,6 +1,6 @@
 package com.ssl.note.leetcode.编号刷题.LC3840_打家劫舍V;
 
-public class Solution {
+public class Solution1 {
 
   /**
    * 你是一名专业小偷，计划偷窃沿街的房屋。每间房屋都藏有一定的现金，并由带有颜色代码的安全系统保护。
@@ -22,34 +22,27 @@ public class Solution {
    */
   public long rob(int[] nums, int[] colors) {
     int n = nums.length;
-    // 0：不偷
-    // 1：偷
-    long[][] dp = new long[n][2];
-    dp[0][0] = 0;
-    dp[0][1] = nums[0];
-
+    // a：前一间不偷时，前 i-1 间的最大金额
+    // b：前一间偷时，前 i-1 间的最大金额
+    long a = 0;
+    long b = nums[0];
     for (int i = 1; i < n; i++) {
-      // 不偷
-      dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
-
-      // 偷
-      boolean isSame = colors[i] == colors[i - 1];
-      if (isSame) {
-        // 偷1：相同颜色，前一天只能不偷
-        dp[i][1] = dp[i - 1][0] + nums[i];
+      // c：当前不偷，前一间偷或不偷取最大值
+      long c = Math.max(a, b);
+      // d：当前偷
+      long d;
+      if (colors[i] == colors[i - 1]) {
+        // 颜色相同，前一间不能偷，只能基于 a 转移
+        d = a + nums[i];
       } else {
-        // 偷2：不同颜色，前一天可偷可不偷
-        dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][1]) + nums[i];
+        // 颜色不同，前一间可偷可不偷，基于 c 转移
+        d = c + nums[i];
       }
+      // 滚动：把当前状态作为下一轮的前一状态
+      a = c;
+      b = d;
     }
-
-    return Math.max(dp[n - 1][0], dp[n - 1][1]);
-  }
-
-  public static void main(String[] args) {
-    Solution solution = new Solution();
-    int[] nums = {1, 4, 3, 5};
-    int[] colors = {1, 1, 2, 2};
-    System.out.println(solution.rob(nums, colors));
+    // 最后一间偷（b）或不偷（a）的最大值
+    return Math.max(a, b);
   }
 }

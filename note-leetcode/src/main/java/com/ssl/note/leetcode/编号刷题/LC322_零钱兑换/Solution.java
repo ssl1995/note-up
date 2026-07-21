@@ -1,6 +1,5 @@
 package com.ssl.note.leetcode.编号刷题.LC322_零钱兑换;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
@@ -29,19 +28,19 @@ public class Solution {
     // 由于是求最小值，如果用Integer.MAX_VALUE，+1会越界
     // 凑成金额 amount 最多只需要 amount 枚 1 元硬币（如果硬币里有 1 的话）
     // 所以 amount + 1 已经是一个"不可能达到"的值了。
-    Arrays.fill(dp,amount+1);
+    Arrays.fill(dp, amount + 1);
     dp[0] = 0;
 
     for (int i = 1; i <= amount; i++) {
-      for (int j = 0; j < coins.length; j++) {
-        // 金额够大才比较
-        if (i >= coins[j]) {
-          dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+      for (int coin : coins) {
+        // 金额够大才比较：写状态转移方程想到判断条件，防止数组越界
+        if (i >= coin) {
+          dp[i] = Math.min(dp[i], dp[i - coin] + 1);
         }
       }
     }
 
-    return dp[amount] == amount+1 ? -1 : dp[amount];
+    return dp[amount] == amount + 1 ? -1 : dp[amount];
   }
 
   public static void main(String[] args) {
