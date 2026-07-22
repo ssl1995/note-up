@@ -1,5 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC416_分割等和子集;
 
+import java.util.Arrays;
+
 public class Solution1 {
   /**
    * 分割等和子集
@@ -15,10 +17,7 @@ public class Solution1 {
     }
 
     // 计算数组元素的总和
-    int sum = 0;
-    for (int num : nums) {
-      sum += num;
-    }
+    int sum = Arrays.stream(nums).sum();
 
     // 如果总和是奇数，无法分割成两个和相等的子集，直接返回false
     if ((sum & 1) == 1) {
@@ -50,7 +49,8 @@ public class Solution1 {
 
   public static void main(String[] args) {
     Solution1 solution1 = new Solution1();
-    int[] nums = {2, 2, 3, 5};
+    int[] nums = {1, 5, 11, 5};
+    // dp:[ true, true, false, false, false, true, true, false, false, false, true, true ]
     System.out.println(solution1.canPartition(nums));
   }
 }

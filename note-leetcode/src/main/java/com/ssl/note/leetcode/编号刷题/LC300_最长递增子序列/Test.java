@@ -2,16 +2,8 @@ package com.ssl.note.leetcode.编号刷题.LC300_最长递增子序列;
 
 import java.util.Arrays;
 
-public class Solution {
+public class Test {
 
-  /**
-   * 最长递增子序列
-   * 输入：nums = [10,9,2,5,3,7,101,18]
-   * 输出：4
-   * 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4
-   * 时间复杂度：O(n^2)，稍微有点长，可以用下一个版本的优化
-   * 空间复杂度：O(n)
-   */
   public int lengthOfLIS(int[] nums) {
     int n = nums.length;
     // dp[i]:以nums[i]结尾的最长递增序列
@@ -36,8 +28,9 @@ public class Solution {
   }
 
   public static void main(String[] args) {
-    Solution solution = new Solution();
-    int[] arr1 = {10, 9, 1, 5, 2, 6, 66, 18};
-    System.out.println(solution.lengthOfLIS(arr1));
+    Test test = new Test();
+    int[] nums = {10, 9, 2, 5, 3, 7, 101, 18};
+    int res = 4;
+    System.out.println(test.lengthOfLIS(nums) == res);
   }
 }

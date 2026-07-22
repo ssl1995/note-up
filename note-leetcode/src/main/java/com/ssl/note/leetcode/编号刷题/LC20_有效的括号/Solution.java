@@ -1,6 +1,9 @@
 package com.ssl.note.leetcode.编号刷题.LC20_有效的括号;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author SongShengLin
@@ -19,30 +22,26 @@ public class Solution {
       return false;
     }
     Deque<Character> stack = new ArrayDeque<>();
+    Map<Character, Character> map = new HashMap<>();
+    map.put('(', ')');
+    map.put('[', ']');
+    map.put('{', '}');
+
 
     for (char c : s.toCharArray()) {
-      if (Objects.equals(c, '(') || Objects.equals(c, '[') || Objects.equals(c, '{')) {
+      // 入栈
+      if (map.containsKey(c)) {
         stack.push(c);
         continue;
       }
-      if (Objects.equals(c, ')')) {
-        if (!Objects.equals(stack.peek(), '(')) {
-          return false;
-        }
-        stack.pop();
+      // 出栈
+      if (stack.isEmpty()) {
+        return false;
       }
-      if (Objects.equals(c, '}')) {
-        if (!Objects.equals(stack.peek(), '{')) {
-          return false;
-        }
-        stack.pop();
+      if (map.get(stack.peek()) != c) {
+        return false;
       }
-      if (Objects.equals(c, ']')) {
-        if (!Objects.equals(stack.peek(), '[')) {
-          return false;
-        }
-        stack.pop();
-      }
+      stack.pop();
     }
     // s='{'时，栈还有元素
     return stack.isEmpty();
@@ -50,6 +49,6 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    System.out.println(solution.isValid("{"));
+    System.out.println(solution.isValid("(]"));
   }
 }

@@ -15,7 +15,6 @@ public class Solution {
    */
   public int maxProduct(int[] nums) {
 
-    // 所以每一位数组元素都需要存当前位置的最大乘积、最小乘积
     // iMax:表示0到i的最大乘积
     int iMax = 1;
     // iMin:表示0到i的最小乘积
@@ -29,10 +28,7 @@ public class Solution {
         iMax = iMin;
         iMin = temp;
       }
-      // 在解法中， iMax 和 iMin 的定义是 以当前元素结尾的最大/最小乘积 。这里的"以当前元素结尾"是保证连续性的核心：
-      // "结尾"意味着连续 ：如果子数组包含当前元素，并且是连续的，那么它要么是：
-      //  1. 延续之前的子数组 ：即之前的子数组加上当前元素（ iMax * num 或 iMin * num ）
-      //  2. 以当前元素开始新的子数组 ：即只包含当前元素（ num 本身）
+      // num和乘积取最值，是因为可以取自己
       iMax = Math.max(iMax * num, num);
       iMin = Math.min(iMin * num, num);
 
@@ -42,7 +38,8 @@ public class Solution {
   }
 
   public static void main(String[] args) {
-    int[] nums = {2, 3, -2, 4};
+//    int[] nums = {2, 3, -2, 4};
+    int[] nums = {0, 1};
     Solution solution = new Solution();
     System.out.println(solution.maxProduct(nums));
   }

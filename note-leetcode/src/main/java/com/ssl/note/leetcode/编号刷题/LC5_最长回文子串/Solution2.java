@@ -2,71 +2,51 @@ package com.ssl.note.leetcode.编号刷题.LC5_最长回文子串;
 
 
 public class Solution2 {
+    /**
+     * 最长回文子串
+     * 动态规划法:面试选这个解法
+     * 输入：s = "babad"
+     * 输出："bab"
+     * 解释："aba" 同样是符合题意的答案。
+     */
+    public String longestPalindrome(String s) {
+        if (s.length() < 2) {
+            return s;
+        }
+        int n = s.length();
+        // dp[j][i]：子串s[j..i]（从第j个字符到第i个字符）是否为回文串
+        boolean[][] dp = new boolean[n][n];
+        // 初始化：单个字符一定是回文串
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = true;
+        }
+        // 单个字符也是回文串，初始化长度=1
+        int maxLen = 1;
+        int begin = 0;
+        for (int i = 0; i < n; i++) {// i是右边结束位置
+            for (int j = 0; j < i; j++) {// j是左边起始位置
+                if (s.charAt(i) == s.charAt(j)) {
+                    // 左右相等时，子串长度<=3（也是边界保护），必须是回文串：end - start + 1 <= 3
+                    // 否则就判断中间子串是否是回文串：dp[start + 1][end - 1]
+                    dp[j][i] = i - j + 1 <= 3 || dp[j + 1][i - 1];
+                } else {
+                    dp[j][i] = false;
+                }
+                // 记录最长子串的长度和起始位置
+                if (dp[j][i] && i - j + 1 > maxLen) {
+                    begin = j;// 开始位置
+                    maxLen = i - j + 1;// 长度
+                }
+            }
+        }
 
-  /**
-   * 最长回文子串
-   * 返回一个字符串的最长回文子串
-   * 输入：s = "babad"
-   * 输出："bab"
-   * 解释："aba" 同样是符合题意的答案。
-   * 中心扩展法
-   * 时间复杂度：n^2
-   * 空间复杂度：1
-   */
-  public String longestPalindrome(String s) {
-    if (s.length() < 2) {
-      return s;
+        return s.substring(begin, begin + maxLen);
     }
-    int n = s.length();
-    int begin = 0;
-    char[] cs = s.toCharArray();
-    // 单个字符也是回文串，初始化长度=1
-    int maxLen = 1;
-    // 中心扩展法：假设每个位置都作为回文中心，往外扩展，记录最长
-    for (int i = 0; i < n; i++) {
-      // 假设回文串长度是奇数
-      int len1 = getPalindromeCenterLen(cs, n, i, i);
-      // 假设回文串长度是偶数
-      int len2 = getPalindromeCenterLen(cs, n, i, i + 1);
-      int curLen = Math.max(len1, len2);
 
-      if (curLen > maxLen) {
-        maxLen = curLen;
-        // 根据回文中心i和当前最长回文长度 maxLen，反推回文子串的起始位置begin
-        // 奇数：i-maxLen/2
-        // 偶数：i-maxLen/2+1
-
-        // 奇数时：中心字符本身算 1 个，左右各 (maxLen-1)/2 个
-        // 偶数时：中心左边界到左边界的距离也是 (maxLen-1)/2
-        // 统一：i-(maxLen-1)/2 = 中心位置-中心到回文左边界的长度
-        begin = i - (maxLen - 1) / 2;
-      }
+    public static void main(String[] args) {
+        Solution2 solution3 = new Solution2();
+        String s = "babad";
+        System.out.println(solution3.longestPalindrome(s));
     }
-    return s.substring(begin, begin + maxLen);
-  }
 
-  /**
-   * 返回cs中[i,j]作为回文中心，往外扩的回文子串的最大长度
-   */
-  private int getPalindromeCenterLen(char[] cs, int n, int left, int right) {
-    int i = left;
-    int j = right;
-    while (i >= 0 && j < n) {
-      if(cs[i]!=cs[j]){
-        break;
-      }
-      i--;
-      j++;
-    }
-    // 循环跳出：cs[i]!=cs[j],如abbc,cs[i]=a,cs[j]=c,回文中心长度为2
-    // 此时的回文中心长度：j-i+1-2=3-0-1=2
-    return j - i - 1;
-  }
-
-
-  public static void main(String[] args) {
-    Solution2 solution2 = new Solution2();
-    String s = "abbaabde";
-    System.out.println(solution2.getPalindromeCenterLen(s.toCharArray(), s.length(), 3, 4));
-  }
 }

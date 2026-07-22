@@ -17,15 +17,15 @@ public class Solution {
   public int minDistance(String word1, String word2) {
     int m = word1.length();
     int n = word2.length();
-    // dp[i][j] 表示 word1 的前 i 个字符转换成 word2 的前 j 个字符所需的最少操作数
+    // dp[i][j]表示word1的前i个字符转换成word2的前j个字符所需的最少操作数
     int[][] dp = new int[m + 1][n + 1];
     // 初始化
     dp[0][0] = 0;
-    // word2 为空，只能把 word1 的字符一个个删除
+    // word2为空，只能把word1的字符一个个删除
     for (int i = 0; i < m + 1; i++) {
       dp[i][0] = i;
     }
-    // word1 为空，只能往 word2 一个个插入
+    // word1为空，只能往word2一个个插入
     for (int j = 0; j < n + 1; j++) {
       dp[0][j] = j;
     }
@@ -37,12 +37,15 @@ public class Solution {
           dp[i][j] = dp[i - 1][j - 1];
           continue;
         }
-        // 删除：dp[i-1][j] + 1
-        // 新增：dp[i][j-1] + 1
-        // 替换：dp[i-1][j-1] + 1
-        // 字母不相同：（删除、新增、替换取最小） + 1
-        int min1 = Math.min(dp[i][j - 1], dp[i - 1][j - 1]);
-        int min = Math.min(min1, dp[i - 1][j - 1]);
+        // 字母不相同：才有有需要操作
+
+        // 删除：删掉word1[i-1]-> dp[i-1][j] + 1
+        int delete = dp[i - 1][j] + 1;
+        // 新增：往word1末尾插入word2[j-1]-> dp[i][j-1] + 1
+        int insert = dp[i][j - 1] + 1;
+        // 替换：把 word1[i-1] 改成 word2[j-1]-> dp[i-1][j-1] + 1
+        int update = dp[i - 1][j - 1] + 1;
+        int min = Math.min(Math.min(delete, insert), update);
         dp[i][j] = min + 1;
       }
     }

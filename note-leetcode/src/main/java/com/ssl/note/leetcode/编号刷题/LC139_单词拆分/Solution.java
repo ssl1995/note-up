@@ -24,24 +24,22 @@ public class Solution {
    * wordDict 中的所有字符串 互不相同
    */
   public boolean wordBreak1(String s, List<String> wordDict) {
-    int n = s.length();
     Set<String> set = new HashSet<>(wordDict);
-
+    int n = s.length();
     // dp[i]：s[0..i]（以下标i结尾的前缀）是否能被拆分
     boolean[] dp = new boolean[n];
 
     for (int i = 0; i < n; i++) {
-      // 特判：整个前缀 s[0..i] 本身就是一个单词
-      // （n+1版本里这个case由 dp[0]=true 这个哨兵自动覆盖）
+      // 1、[0..i]本身就是一个单词
       if (set.contains(s.substring(0, i + 1))) {
         dp[i] = true;
-        continue;
-      }
-      // 枚举切分点j：s[0..j]可拆分 且 s[j+1..i]在字典中
-      for (int j = 0; j < i; j++) {
-        if (dp[j] && set.contains(s.substring(j + 1, i + 1))) {
-          dp[i] = true;
-          break;
+      } else {
+        // 2、找切割点j：s[0..j]可拆分 且 s[j+1..i]在字典中
+        for (int j = 0; j < i; j++) {
+          if (dp[j] && set.contains(s.substring(j + 1, i + 1))) {
+            dp[i] = true;
+            break;
+          }
         }
       }
     }
@@ -49,23 +47,19 @@ public class Solution {
     return dp[n - 1];
   }
 
-  // 数组n推导出n+1版本
+  // 数组n推导出n+1版本，时间复杂度虽然不变，但是耗时会降低
   public boolean wordBreak2(String s, List<String> wordDict) {
+    Set<String> set = new HashSet<>(wordDict);
     int n = s.length();
     // dp[i]：s的前i个字符是否能被拆分
     boolean[] dp = new boolean[n + 1];
     dp[0] = true;
 
-    // 优化查询效率
-    Set<String> set = new HashSet<>(wordDict);
-
     for (int i = 1; i <= n; i++) {
       for (int j = 0; j < i; j++) {
-        // 存在优化点：set.contains操作极端情况下存在O^3的时间复杂度
-        boolean isTrue = dp[j] && set.contains(s.substring(j, i));
         // 前i个字符串是否包含在字典中，一旦有一个满足条件就要跳出内层循环
         // 如果不跳过，后续的字符串可能会覆盖前面的结果
-        if (isTrue) {
+        if (dp[j] && set.contains(s.substring(j, i))) {
           dp[i] = true;
           break;
         }
