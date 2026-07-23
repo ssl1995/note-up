@@ -30,36 +30,31 @@ public class Solution {
     int m = s.length();
     int n = p.length();
 
+    // 双串问题，因为空串也是合法字符串，所以开m+1和n+1
     // dp[i][j]表示s的前i个字符和p的前j个字符是否匹配
     boolean[][] dp = new boolean[m + 1][n + 1];
-    dp[0][0] = true;// 空串彼此匹配
-
-    // 初始化状态:题目规定了s是原始串，p是含有正则的匹配串
-    for (int j = 2; j < n + 1; j += 2) {
-      // s:空串
-      // p=a*b*c*这种形式
-      dp[0][j] = dp[0][j - 2] && p.charAt(j - 1) == '*';
+    // 初始化：s=""和p=""，匹配
+    dp[0][0] = true;
+    // 初始化：s=""，p=a*b*c*
+    // 空串一个字符都没有，p里每个字符都必须被*消成0次,并且*不能单独存在
+    for (int j = 1; j <= n; j++) {
+      dp[0][j] = (p.charAt(j - 1) == '*') && j >= 2 && dp[0][j - 2];
     }
 
     // 动态转移
     for (int i = 1; i < m + 1; i++) {
       for (int j = 1; j < n + 1; j++) {
-        if (p.charAt(j - 1) != '*') {
-          // 情况1:p[j-1]不是*
-          dp[i][j] = dp[i - 1][j - 1] // 前面都匹配
-              && // 并且(当前位置能匹配 或 p当前是.)
-              (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '.');
+        boolean check = p.charAt(j - 1) == '*';
+        // 情况1:当前不是*
+        if (!check) {
+          // 前面都匹配 且 (当前位置能匹配 或 p当前是.)
+          dp[i][j] = dp[i - 1][j - 1] && (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '.');
         } else {
-          // 情况2:p[j-1]是*
-          // *匹配0次：删除p的最近2个字符，比如s=a,p=ab*
-          if (dp[i][j - 2]) {
-            dp[i][j] = true;
-          } else {
-            // *匹配1次或多次:s[0..i-2] 已经和 p[0..j-1] 匹配
-            dp[i][j] = dp[i - 1][j]
-                &&// 并且s[i-1] 和 p[j-2] 匹配（或者 p[j-2] 是 .）
-                (s.charAt(i - 1) == p.charAt(j - 2) || p.charAt(j - 2) == '.');
-          }
+          // 情况2:当前是*
+          // 2.1 *匹配0次：删除p的最近2个字符
+          // 2.2 *匹配1次或多次: s被吃掉1个是匹配的 且 s当前能被(p前一个数匹配 or p前一个是.)
+          dp[i][j] = dp[i][j - 2] ||
+              (dp[i - 1][j] && (s.charAt(i - 1) == p.charAt(j - 2) || p.charAt(j - 2) == '.'));
         }
       }
     }
