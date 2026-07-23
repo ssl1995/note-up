@@ -2,7 +2,6 @@ package com.ssl.note.leetcode.编号刷题.LC84_柱状图中最大矩形;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Stack;
 
 /**
  * @author SongShengLin
@@ -10,6 +9,7 @@ import java.util.Stack;
  * @description
  */
 public class Solution {
+
   /**
    * 柱状图中最大矩形
    * 输入：heights = [2,1,5,6,2,3]

@@ -9,30 +9,40 @@ public class Solution {
    * 使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列
    * 输入：nums = [2,0,2,1,1,0]
    * 输出：[0,0,1,1,2,2]
-   * 方法：计数排序
    */
   public void sortColors(int[] nums) {
     if (nums == null) {
       return;
     }
-    // 0、1、2想到数组下标计数排序
-    // 但是这个方法需要遍历2次数组，不是最优解
-    int[] count = new int[3];
-    for (int num : nums) {
-      count[num]++;
-    }
+    // 荷兰国旗解法:
+    // 如果初始化left=0,right=n-1：
+    // [0,left),[left,i,right],(right,n-1]
+    int left = 0;
+    int right = nums.length - 1;
+    int i = 0;
 
-    for (int i = 0; i < count[0]; i++) {
-      nums[i] = 0;
+    while (i <= right) {
+      if (nums[i] == 0) {
+        // 见0换左边
+        swap(nums, left++, i++);
+      } else if (nums[i] == 1) {
+        // 见1直接走
+        i++;
+      } else if (nums[i] == 2) {
+        // 见2换右边
+        // cur不动，从right位置换过来的数还没有检查
+        swap(nums, right--, i);
+      }
     }
+  }
 
-    for (int i = count[0]; i < count[0] + count[1]; i++) {
-      nums[i] = 1;
+  private void swap(int[] nums, int i, int j) {
+    if (i == j) {
+      return;
     }
-
-    for (int i = count[0] + count[1]; i < count[0] + count[1] + count[2]; i++) {
-      nums[i] = 2;
-    }
+    int temp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = temp;
   }
 
   public static void main(String[] args) {

@@ -13,26 +13,21 @@ public class Solution {
     if (nums == null || nums.length == 0) {
       return -1;
     }
-    // 初始化慢指针和快指针，都从第一个节点开始
-    // 注意：Floyd 判圈算法要求两个指针从同一点出发
-    int slow = nums[0];
-    int fast = nums[0];
+    // 题目要求空间复杂度O(1)，就不能用哈希表方法
+    int n = nums.length;
+    // 长度n：num
+    // 长度n-1:num-1
+    int[] count = new int[n];
 
-    // 第一阶段：找相遇点
-    do {
-      slow = nums[slow];
-      fast = nums[nums[fast]];
-    } while (slow != fast);
+    for (int num : nums) {
+      count[num]++;
 
-    // 第二次相遇后
-    // 快指针从第一个节点开始
-    fast = nums[0];
-    while (slow != fast) {
-      slow = nums[slow];
-      fast = nums[fast];
+      if (count[num] > 1) {
+        return num;
+      }
     }
 
-    return slow;
+    return -1;
   }
 
   public static void main(String[] args) {

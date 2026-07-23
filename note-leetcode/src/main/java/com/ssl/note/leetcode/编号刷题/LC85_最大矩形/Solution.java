@@ -9,12 +9,16 @@ import java.util.Deque;
  * @description
  */
 public class Solution {
+
   /**
    * 最大矩形
-   * matrix = [["1","0","1","0","0"],
+   * matrix =
+   * [
+   * ["1","0","1","0","0"],
    * ["1","0","1","1","1"],
    * ["1","1","1","1","1"],
-   * ["1","0","0","1","0"]]
+   * ["1","0","0","1","0"]
+   * ]
    * 输出：6
    * 解析：这道题主要是考查LC84题的应用
    */
@@ -28,16 +32,11 @@ public class Solution {
     int maxArea = 0;
     for (char[] cs : matrix) {
       for (int i = 0; i < col; i++) {
-        boolean isOne = cs[i] == '1';
-        if (isOne) {
-          // 如果遇到1，高度=上次高度+1
-          heights[i] += 1;
-        } else {
-          // 如果遇到0，重置高度=0
-          heights[i] = 0;
-        }
-//        heights[i] = cs[i] == '0' ? 0 : ++heights[i];
+        // 如果遇到1，高度=上次高度+1
+        // 如果遇到0，重置高度=0
+        heights[i] = cs[i] == '0' ? 0 : ++heights[i];
       }
+      // 每一行转换后的数组都算一次矩阵的最大面积
       maxArea = Math.max(maxArea, largestRectangleArea(heights));
     }
 
@@ -57,6 +56,7 @@ public class Solution {
 
     int maxArea = 0;
     for (int i = 0; i < n; i++) {
+      // 单调递增栈
       while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
         int j = stack.pop();
         int k = stack.isEmpty() ? -1 : stack.peek();
