@@ -15,19 +15,21 @@ public class Solution2 {
     // 计算i左边最高列
     int[] left = new int[n];
     for (int i = 1; i <= n - 1; i++) {
+      // i位置左边的最高不包含自己
       left[i] = Math.max(left[i - 1], height[i - 1]);
     }
     // 计算i右边最高列
     int[] right = new int[n];
     for (int i = n - 2; i >= 0; i--) {
+      // i位置左边的最高不包含自己
       right[i] = Math.max(right[i + 1], height[i + 1]);
     }
     // 计算雨水：列的左右两边最高列中的最小 - 当前列高度
     for (int i = 0; i <= n - 1; i++) {
       int min = Math.min(left[i], right[i]);
-      // 当前列高度 < 左右两边最高列中的最小，才能接到雨水
-      if (height[i] < min) {
-        water += min - height[i];
+      int diff = min - height[i];
+      if (diff > 0) {
+        water += diff;
       }
     }
 

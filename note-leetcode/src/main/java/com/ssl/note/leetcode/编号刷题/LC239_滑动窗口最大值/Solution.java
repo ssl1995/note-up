@@ -1,8 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC239_滑动窗口最大值;
 
-import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Deque;
+import java.util.PriorityQueue;
 
 /**
  * @author SongShengLin
@@ -15,29 +14,25 @@ public class Solution {
    * 滑动窗口最大值
    */
   public int[] maxSlidingWindow(int[] nums, int k) {
-    if (nums == null || nums.length < k || k < 1) {
-      return new int[]{};
-    }
 
-    int[] res = new int[nums.length - k + 1];
-    // 存坐标
-    Deque<Integer> deque = new ArrayDeque<>();
-
-    for (int i = 0; i < nums.length; i++) {
-      // 1、添加队尾：维持单调递减
-      while (!deque.isEmpty() && nums[deque.peekLast()] <= nums[i]) {
-        deque.pollLast();
-      }
-      deque.offerLast(i);
-      // 2、队首出队：保持队列最大值下标，移除超出窗口范围的元素
-      if (deque.peekFirst() < i - k + 1) {
-        deque.pollFirst();
-      }
-      // 3、记录结果
-      if (i - k + 1 >= 0) {
-        res[i - k + 1] = nums[deque.peekFirst()];
-      }
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+    for (int i = 0; i < k; i++) {
+      maxHeap.offer(nums[i]);
     }
+    int n = nums.length;
+    int[] res = new int[n - k + 1];
+    // i位置表示前k个位置的最大值，末尾或者第一个数需要单独处理
+    res[0] = maxHeap.peek();
+
+    for (int i = k; i < n; i++) {
+      maxHeap.offer(nums[i]);
+      // AC会超时,remove+offer操作时间复杂度O(2logK)
+      maxHeap.remove(nums[i - k]);
+
+      res[i - k + 1] = maxHeap.peek();
+    }
+    // 如果没有初始化res[0]，这里就得单独赋值末尾元素
+//    res[n-k]=maxHeap.peek();
     return res;
   }
 
