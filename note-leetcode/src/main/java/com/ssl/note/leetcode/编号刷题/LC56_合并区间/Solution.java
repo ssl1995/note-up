@@ -21,6 +21,7 @@ public class Solution {
       return new int[0][2];
     }
     // 按照左端点排序:[[1,3],[2,6],[8,10],[15,18]]
+//    Arrays.sort(intervals, (a, b) -> a[1] - b[1]);
     Arrays.sort(intervals, Comparator.comparingInt(num -> num[0]));
 
     List<int[]> res = new ArrayList<>();
