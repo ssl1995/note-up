@@ -4,7 +4,7 @@ import com.ssl.note.common.utils.ArrayUtil;
 
 import java.util.Random;
 
-public class Solution {
+public class Solution_quickSort {
 
   /**
    * LC912_排序数组
@@ -56,7 +56,7 @@ public class Solution {
   }
 
   public static void main(String[] args) {
-    Solution solution = new Solution();
+    Solution_quickSort solution = new Solution_quickSort();
     int times = 1001;
     while (times-- > 0) {
       int[] nums = {5, 1, 1, 2, 0, 0};
