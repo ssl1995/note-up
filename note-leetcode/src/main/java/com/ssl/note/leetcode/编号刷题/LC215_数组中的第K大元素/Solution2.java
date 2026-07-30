@@ -10,47 +10,49 @@ public class Solution2 {
    * 输出: 4
    */
   public int findKthLargest(int[] nums, int k) {
+    // 第1大的数：n-1
+    // 第k大的数：n-k
     int target = nums.length - k;
-    return quickSelect(nums, 0, nums.length-1, target);
+    return quickSelect(nums, 0, nums.length - 1, target);
   }
 
   private int quickSelect(int[] nums, int left, int right, int target) {
     while (true) {
-      int[] bound = partition(nums, left, right);
-      int lt = bound[0];
-      int gt = bound[1];
+      // [l,r]闭区间写法，我还是习惯这种写法
+      int[] partition = partition(nums, left, right);
+      int l = partition[0];
+      int r = partition[1];
 
-      if (target <= lt) {
-        right = lt;       // 只改边界，不递归
-      } else if (target > gt) {
-        left = gt + 1;
-      } else {
+      if (l <= target && target <= r) {
         return nums[target];
+      } else if (target < l) {
+        right = l - 1;
+      } else {
+        left = r + 1;
       }
     }
   }
 
-  private int[] partition(int[] nums, int left, int right) {
-    int randomIndex = left + new Random().nextInt(right - left + 1);
-    swap(nums, randomIndex, right);
-
-    int pivot = nums[right];
-    int lt = left - 1;
-    int gt = right;
-    int i = left;
-
-    while (i < gt) {
+  // 三路快排
+  private int[] partition(int[] nums, int l, int r) {
+    int random = new Random().nextInt(r - l + 1) + l;
+    // 1、先保存基准值，不能用 nums[random]，否则交换后基准值会跟着变
+    int pivot = nums[random];
+    int a = l;
+    int b = r;
+    int i = l;
+    // 2、扫描右边界是 b 而不是 r，i > b 时终止
+    while (i <= b) {
       if (nums[i] < pivot) {
-        swap(nums, ++lt, i++);
+        swap(nums, i++, a++);
       } else if (nums[i] > pivot) {
-        swap(nums, --gt, i);
+        swap(nums, i, b--);
       } else {
         i++;
       }
     }
-    swap(nums, gt, right);
-
-    return new int[]{lt, gt};
+    // 闭区间：直接返回a和b，而不是a-1和b-1
+    return new int[]{a, b};
   }
 
   private void swap(int[] nums, int i, int j) {

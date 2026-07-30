@@ -10,60 +10,49 @@ public class Solution1 {
    * 输出: 4
    */
   public int findKthLargest(int[] nums, int k) {
-    // 计算目标位置：第k大元素在排序数组中的索引
+    // 第1大的数：n-1
+    // 第k大的数：n-k
     int target = nums.length - k;
-    // 调用三路快速选择函数
     return quickSelect(nums, 0, nums.length - 1, target);
   }
 
   private int quickSelect(int[] nums, int left, int right, int target) {
-    int[] bound = partition(nums, left, right);
-    int lt = bound[0];
-    int gt = bound[1];
+    while (true) {
+      // (l,r)开区间写法
+      int[] partition = partition(nums, left, right);
+      int l = partition[0];
+      int r = partition[1];
 
-    // [left,lt],[lt+1,gt],[gt+1,right]
-    if (target <= lt) {
-      // target在小于区，只搜左边
-      return quickSelect(nums, left, lt, target);
-    } else if (target > gt) {
-      // target在大于区，只搜右边（gt已归位必须排除，用gt+1）
-      return quickSelect(nums, gt + 1, right, target);
-    } else {
-      // lt < target <= gt，target落在等于区，pivot就是答案
-      return nums[target];
+      if (l < target && target < r) {
+        return nums[target];
+      } else if (target <= l) {
+        right = l;
+      } else {
+        left = r;
+      }
     }
   }
 
-  private int[] partition(int[] nums, int left, int right) {
-    // 随机选择pivot:防止有序数组退化O(n²)
-    int random = new Random().nextInt(right - left + 1) + left;
-    swap(nums, random, right);
-
-    // 三路快排while循环结束后：
-    // [left    lt] [lt+1   i-1] [i   gt-1] [gt  right-1] [right]
-    //  < pivot      = pivot       未处理区     > pivot     pivot(人质)
-    int pivot = nums[right];  // 选择最右元素作为pivot
-    int lt = left - 1;        // 小于pivot的右边界（初始为left-1）
-    int gt = right;           // 大于pivot的左边界（初始为right）=未处理区域的右边界
-    int i = left;             // 当前遍历位置（从left开始）
-    // i只能扫描未处理区域，一旦越过 gt，就会去动已经归位的元素，分区立刻乱掉
-    while (i < gt) {
+  // 三路快排
+  private int[] partition(int[] nums, int l, int r) {
+    int random = new Random().nextInt(r - l + 1) + l;
+    // 1、先保存基准值，不能用 nums[random]，否则交换后基准值会跟着变
+    int pivot = nums[random];
+    int a = l;
+    int b = r;
+    int i = l;
+    // 2、扫描右边界是 b 而不是 r，i > b 时终止
+    while (i <= b) {
       if (nums[i] < pivot) {
-        // 当前元素小于pivot，放到左侧
-        swap(nums, ++lt, i++);
+        swap(nums, i++, a++);
       } else if (nums[i] > pivot) {
-        // 当前元素大于pivot，放到右侧
-        swap(nums, --gt, i);
-        // 注意：这里i不增加，因为交换过来的元素还没检查
+        swap(nums, i, b--);
       } else {
-        // 当前元素等于pivot，保持在中间
         i++;
       }
     }
-    // 将gt归位到最终位置
-    swap(nums, gt, right);
-
-    return new int[]{lt, gt};
+    // 开区间：等于基准的归位区间是 [a, b]，开区间边界必须是 {a-1, b+1}
+    return new int[]{a - 1, b + 1};
   }
 
   private void swap(int[] nums, int i, int j) {
@@ -77,9 +66,9 @@ public class Solution1 {
   }
 
   public static void main(String[] args) {
-    int[] nums = {3, 2, 3, 1, 2, 4, 5, 5, 6};
-    int k = 4;
-    int res = 4;
+    int[] nums = {3,2,1,5,6,4};
+    int k = 2;
+    int res = 5;
     Solution1 solution = new Solution1();
     System.out.println(solution.findKthLargest(nums, k) == res);
   }
