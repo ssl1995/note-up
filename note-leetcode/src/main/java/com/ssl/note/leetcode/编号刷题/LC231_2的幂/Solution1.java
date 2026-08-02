@@ -9,9 +9,6 @@ public class Solution1 {
    * 解释：20 = 1
    */
   public boolean isPowerOfTwo(int n) {
-    if (n < 0) {
-      return false;
-    }
-    return n == (n & -n);
+    return n > 0 && n == (n & -n);
   }
 }

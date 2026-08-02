@@ -14,7 +14,7 @@ public class Solution1 {
     boolean rowZero = false;
     boolean colZero = false;
 
-    // 1、首行首列是否有空
+    // 1、两个变量，记录首行有0、首列是否有0
     for (int i = 0; i < n; i++) {
       // 首行
       if (matrix[0][i] == 0) {
@@ -30,7 +30,7 @@ public class Solution1 {
       }
     }
 
-    // 2、从[1,1]开始扫描是否有0，用首行首列标记
+    // 2、从[1,1]开始扫描，复用该行的首行、该列的首列记录是否0
     for (int i = 1; i < m; i++) {
       for (int j = 1; j < n; j++) {
         if (matrix[i][j] == 0) {
