@@ -5,7 +5,7 @@ package com.ssl.note.leetcode.编号刷题.LC461_汉明距离;
  * @date 2022/2/26 11:22 PM
  * @description
  */
-public class Solution {
+public class Solution1 {
 
   /**
    * 汉明距离
@@ -18,19 +18,17 @@ public class Solution {
   public int hammingDistance(int x, int y) {
     // 二进制不同位置 = 将所有位置的1放在同一个数上 = 异或
     int num = x ^ y;
-    int res = 0;
 
+    int res = 0;
     while (num != 0) {
-      // 统计num中有多少个二进制1 = 末尾是1，res+1
-      res += (num & 1) == 1 ? 1 : 0;
-      // 然后右移1位
-      num >>= 1;
+      num &= num - 1;
+      res++;
     }
     return res;
   }
 
   public static void main(String[] args) {
-    Solution solution = new Solution();
+    Solution1 solution = new Solution1();
     int x = 1;
     int y = 4;
     System.out.println(solution.hammingDistance(x, y));
