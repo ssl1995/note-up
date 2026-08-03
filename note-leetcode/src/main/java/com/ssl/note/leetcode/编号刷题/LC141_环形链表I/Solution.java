@@ -8,12 +8,13 @@ public class Solution {
    * 判断链表是否有环，返回值是布尔值
    */
   public boolean hasCycle(ListNode head) {
-    if (head == null || head.next == null) {
+    if (head == null) {
       return false;
     }
+    // 环形题，快慢指针同起点
     ListNode slow = head;
     ListNode fast = head;
-    // 快慢指针
+
     while (fast != null && fast.next != null) {
       slow = slow.next;
       fast = fast.next.next;
@@ -21,6 +22,7 @@ public class Solution {
         return true;
       }
     }
+
     return false;
   }
 

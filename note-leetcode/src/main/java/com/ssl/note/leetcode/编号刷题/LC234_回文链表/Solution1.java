@@ -20,14 +20,16 @@ public class Solution1 {
       return true;
     }
     // 1、快慢指针，找中间节点
+    // 奇数节点：slow指向正中间
+    // 偶数节点：slow指向中间前一个数
     ListNode slow = head;
+    // 如果要偶数节点，slow停在右边，fast=head
     ListNode fast = head.next;
+    // fast 要跳两步，落脚前经过的节点都得判空
     while (fast != null && fast.next != null) {
       slow = slow.next;
       fast = fast.next.next;
     }
-    // 奇数节点：slow指向正中间
-    // 偶数节点：slow指向中间前一个数
     // -> slow的next就是后半部分的头节点
     ListNode midHead = slow.next;
     // 2、翻转头节点
@@ -46,15 +48,14 @@ public class Solution1 {
     }
 
     // (备选)如果不为了改变原链表，可以再翻转回去
-//    midHead = reverse(midHead);
-//    slow.next = midHead;
-
+    midHead = reverse(midHead);
+    slow.next = midHead;
     return res;
   }
 
   private ListNode reverse(ListNode head) {
     if (head == null) {
-      return head;
+      return null;
     }
     ListNode pre = null;
     ListNode cur = head;
