@@ -3,16 +3,16 @@ package com.ssl.note.leetcode.编号刷题.LC146_LRU缓存;
 import java.util.HashMap;
 import java.util.Map;
 
-
 class LRUCache {
 
   // 底层Node数据结构
   static class Node {
-    Node pre;
-    Node next;
+    // 双指针是public状态
+    public Node pre;
+    public Node next;
 
-    int key;
-    int value;
+    private final int key;
+    private int value;
 
     public Node(int key, int value) {
       this.key = key;
@@ -24,6 +24,7 @@ class LRUCache {
   private final Map<Integer, Node> map;
   private final Node head;
   private final Node tail;
+  // capacity与map.size做满判断
   private final Integer capacity;
 
   /**
@@ -48,6 +49,7 @@ class LRUCache {
     // 存在
     Node node = map.get(key);
     moveToTail(node);
+    // 返回的是值
     return node.value;
   }
 
@@ -65,11 +67,12 @@ class LRUCache {
     }
     // 存在
     Node node = map.get(key);
+    // 存在要更新新的value
     node.value = value;
     moveToTail(node);
   }
 
-  // 原子操作：删除节点
+  // 原子操作：删除=删除某个节点
   private void deleteNode(Node node) {
     if (node == null) {
       return;
@@ -78,7 +81,7 @@ class LRUCache {
     node.next.pre = node.pre;
   }
 
-  // 原子操作：队尾插入节点
+  // 原子操作：插入=队尾插入节点
   private void insertToTail(Node node) {
     if (node == null) {
       return;
@@ -89,7 +92,7 @@ class LRUCache {
     tail.pre = node;
   }
 
-  // 通用操作：移动到队尾（队尾标记最近使用）
+  // 通用操作：LRU特性-移动到队尾（队尾标记最近使用）
   private void moveToTail(Node node) {
     if (node == null) {
       return;
@@ -98,10 +101,11 @@ class LRUCache {
     insertToTail(node);
   }
 
-  // 通用操作：移除队首（队首标记最久未使用）
+  // 通用操作：LRU特性-移除队首（队首标记最久未使用）
   private void removeHead() {
     Node removeHead = head.next;
     deleteNode(removeHead);
+    // map的删除remove(key)，不是removeKey(key)
     map.remove(removeHead.key);
   }
 

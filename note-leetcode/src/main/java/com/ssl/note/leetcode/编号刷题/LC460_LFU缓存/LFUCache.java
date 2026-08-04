@@ -7,12 +7,13 @@ public class LFUCache {
 
   // 底层Node数据结构
   static class Node {
-    Node pre;
-    Node next;
+    public Node pre;
+    public Node next;
 
-    int key;
-    int value;
-    int count;
+    private final int key;
+    private int value;
+    // LFU特性:频次
+    private int count;
 
     public Node(int key, int value) {
       this.key = key;
@@ -21,7 +22,7 @@ public class LFUCache {
     }
   }
 
-  // 双向链表数据结构
+  // 双向链表数据结构，相同频次的LFU：提供3个原子和1个通用操作
   static class DeLinkedList {
     private final Node head;
     private final Node tail;
@@ -33,7 +34,7 @@ public class LFUCache {
       this.tail.pre = this.head;
     }
 
-    // 原子操作：链表是否为空（只有哨兵节点）
+    // 原子操作：链表是否为空（是否只有哨兵节点）
     public boolean isEmpty() {
       return head.next == tail;
     }
@@ -58,7 +59,8 @@ public class LFUCache {
       tail.pre = node;
     }
 
-    // 通用操作：移除队首（队首标记最久未使用）
+    // 通用操作：LFU特性-移除队首（队首标记最久未使用）
+    // 注意：LFU和LRU队满的时候，都需要删除队头（最久未使用）
     public Node removeHead() {
       if (isEmpty()) {
         return null;
@@ -69,9 +71,14 @@ public class LFUCache {
     }
   }
 
+  // 正常的快速查找某个key
+  // node会存自己的频次字段
   private final Map<Integer, Node> keyMap;
   private final Integer capacity;
+
+  // 频次Map：key=频次，value=相同频次的LFU
   private final Map<Integer, DeLinkedList> countMap;
+  // 记录当前最小使用频次，淘汰时直接定位
   private int minCount;
 
   /**
@@ -90,8 +97,9 @@ public class LFUCache {
     if (!keyMap.containsKey(key)) {
       return -1;
     }
-    // 存在：增加使用频次
+    // 存在
     Node node = keyMap.get(key);
+    // 增加频次
     addCount(node);
     return node.value;
   }
@@ -103,48 +111,51 @@ public class LFUCache {
     }
     // 不存在
     if (!keyMap.containsKey(key)) {
-      // 容量已满，淘汰最不经常使用的
+      // 容量已满，淘汰最小频次中最不常用的
       if (capacity == keyMap.size()) {
         removeMinCountNode();
       }
       // 新增节点，频次为1
       Node node = new Node(key, value);
       keyMap.put(key, node);
-      // 新加入的元素频次为1
+      // 加入1频次链表
       countMap.computeIfAbsent(1, k -> new DeLinkedList()).insertToTail(node);
+      // 新增元素，全局最小频次=1
       minCount = 1;
       return;
     }
     // 存在
     Node node = keyMap.get(key);
+    // 更新value
     node.value = value;
+    // 增加频次
     addCount(node);
   }
 
   // 增加节点的使用频次
   private void addCount(Node node) {
+    // 新旧频次
     int oldCount = node.count;
     int newCount = oldCount + 1;
 
-    // 当被移出的那个频次链表变空了，并且这个频次恰好就是当前最小频次时，最小频次+1
+    // 旧频次链表删除node
     DeLinkedList oldList = countMap.get(oldCount);
     oldList.deleteNode(node);
-
-    // 如果旧频次链表被删空了，且这个频次刚好就是当前最小频次
+    // 特殊情况：如果旧频次链表被删空了，且这个频次刚好就是当前最小频次
     if (oldList.isEmpty() && oldCount == minCount) {
       minCount++;
     }
 
-    // 加入新频次链表尾部
+    // 新频次加入新频次链表尾部
     node.count = newCount;
     countMap.computeIfAbsent(newCount, k -> new DeLinkedList()).insertToTail(node);
   }
 
   // 队满时，淘汰最小频次中最久未使用的节点
   private void removeMinCountNode() {
-    DeLinkedList list = countMap.get(minCount);
+    DeLinkedList minList = countMap.get(minCount);
     // 最小频次的列表中，越靠近队首，说明越久没被访问过
-    Node removeNode = list.removeHead();
+    Node removeNode = minList.removeHead();
     if (removeNode != null) {
       keyMap.remove(removeNode.key);
     }
