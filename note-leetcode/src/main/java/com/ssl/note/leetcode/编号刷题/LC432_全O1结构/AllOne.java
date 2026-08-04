@@ -106,6 +106,7 @@ public class AllOne {
     // 存在该桶,key移除当前桶，往后存下一个桶里
     Bucket bucket = map.get(key);
     // 往前存一个桶
+    // 题目要求：如果key的计数在减少后为0，key从数据结构中删除
     if (bucket.cnt == 1) {
       map.remove(key);
     } else {
