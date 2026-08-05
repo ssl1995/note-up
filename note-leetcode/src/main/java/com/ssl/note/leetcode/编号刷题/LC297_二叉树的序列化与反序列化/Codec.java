@@ -9,9 +9,9 @@ import java.util.Queue;
 public class Codec {
 
   // null符：前序遍历，把nul记录下来，一个前序序列就能唯一确定一棵树
-  private final String NULL_VALUE = "#";
+  private final String NULL_STR = "#";
   // 分隔符：反序列化确定队列
-  private final String SPLIT = "!";
+  private final String SPLIT_STR = "!";
 
   /**
    * 序列化-二叉树
@@ -21,10 +21,10 @@ public class Codec {
     if (root == null) {
       // 难点：null节点也需要一个分隔符
       // #!
-      return NULL_VALUE + SPLIT;
+      return NULL_STR + SPLIT_STR;
     }
     // 前序遍历:1!左！右
-    return root.val + SPLIT + serialize(root.left) + serialize(root.right);
+    return root.val + SPLIT_STR + serialize(root.left) + serialize(root.right);
   }
 
   /**
@@ -32,7 +32,7 @@ public class Codec {
    */
   public TreeNode deserialize(String data) {
     // data:1!2!#!#!2!#!#!，然后按照分隔符拆分
-    String[] split = data.split(SPLIT);
+    String[] split = data.split(SPLIT_STR);
     // 12##3##：前序遍历
     Deque<String> queue = new ArrayDeque<>();
     for (String str : split) {
@@ -47,7 +47,7 @@ public class Codec {
     }
     // 12##3##
     String poll = queue.poll();
-    if (poll.equals(NULL_VALUE)) {
+    if (poll.equals(NULL_STR)) {
       return null;
     }
     TreeNode node = new TreeNode(Integer.parseInt(poll));
