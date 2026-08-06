@@ -5,7 +5,7 @@ import com.ssl.note.common.utils.TreeNode;
 public class Solution2 {
 
   /**
-   * Q:利用Morris方法判断是否是搜索二叉树
+   * LC98_验证二叉搜索树
    * 思路：Morris中序遍历 = O(1)空间的普通中序遍历；BST的中序遍历必严格递增。
    * 在Morris遍历中“真正访问节点”的两个位置做判断即可。
    */
@@ -15,7 +15,7 @@ public class Solution2 {
     }
     TreeNode cur = root;
 
-    // 力扣边界:这里使用int会越界,所以使用Long的最小值
+    // root初始化可能直接就是整形最小值,所以pre初始化<整形最小，选Long的最小值
     long preValue = Long.MIN_VALUE;
 
     while (cur != null) {
@@ -25,6 +25,7 @@ public class Solution2 {
           return false;
         }
         preValue = cur.val;
+
         cur = cur.right;
       } else {
         TreeNode pre = cur.left;
