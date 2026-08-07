@@ -2,7 +2,7 @@ package com.ssl.note.leetcode.编号刷题.LC31_下一个排列;
 
 import java.util.Arrays;
 
-public class Solution {
+public class Test {
 
   /**
    * 下一个排列
@@ -32,12 +32,11 @@ public class Solution {
     }
     // 2、如果i存在，从右往左，找第一个比i大的数
     if (i >= 0) {
-      // i位置存在,后面一定有1个数比它大，不用加上j>i等判断
       int j = n - 1;
       while (nums[j] <= nums[i]) {
         j--;
       }
-      swap(nums, i, j);
+      swap(nums,i,j);
     }
     // 3、i位置无论是否存在，i+1位置后反转=下一个排列数
     reverse(nums, i + 1, n - 1);
@@ -71,7 +70,7 @@ public class Solution {
   }
 
   public static void main(String[] args) {
-    Solution solution = new Solution();
+    Test solution = new Test();
 
     // 测试用例1：正常情况
     int[] nums1 = {4, 5, 2, 6, 3, 1};

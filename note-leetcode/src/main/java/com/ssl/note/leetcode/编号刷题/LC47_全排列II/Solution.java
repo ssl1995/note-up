@@ -42,7 +42,7 @@ public class Solution {
       // 重复剪枝：used[i - 1]和 !used[i - 1]都行，但是后者的效率更高
       // !used[i - 1]:同一组重复元素必须按顺序使用，前一个没用就不用当前
       // used[i - 1]:同一层里相同元素只选一次
-      if (i > 0 && nums[i - 1] == nums[i] && !used[i - 1]) {
+      if (i > 0 && nums[i - 1] == nums[i] && used[i - 1]) {
         continue;
       }
 

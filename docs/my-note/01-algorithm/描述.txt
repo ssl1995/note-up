@@ -2,3 +2,9 @@
 二叉搜索树的最近公共祖先：com.ssl.note.leetcode.编号刷题.LC235_二叉搜索树的最近公共祖先.Solution.lowestCommonAncestor
 
 第一道题我已经完成并理解，请分析第二道题如何思考理解？并输出一份md总结文档，我复制进飞书
+
+组合总数题型：
+com.ssl.note.leetcode.编号刷题.LC39_组合总和.Solution2.combinationSum、
+com.ssl.note.leetcode.编号刷题.LC40_组合总和II.Solution.combinationSum2、
+com.ssl.note.leetcode.编号刷题.LC216_组合总和III.Solution.combinationSum3，
+前2道题，我做了很久明白了以后开始做第三道题，第一次写就对了，分析下这3道题的时间复杂如何分析？以及第三道题是否还有更优解？

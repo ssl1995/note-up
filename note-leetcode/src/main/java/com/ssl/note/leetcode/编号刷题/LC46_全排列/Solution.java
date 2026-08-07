@@ -38,11 +38,12 @@ public class Solution {
       if (used[i]) {
         continue;
       }
+      // 选择
       path.add(nums[i]);
       used[i] = true;
-
+      // 递归
       backtrack(nums, used, path, res);
-
+      // 撤销
       path.remove(path.size() - 1);
       used[i] = false;
     }

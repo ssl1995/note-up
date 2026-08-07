@@ -1,7 +1,6 @@
 package com.ssl.note.leetcode.编号刷题.LC39_组合总和;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,14 +21,11 @@ public class Solution1 {
     List<List<Integer>> res = new ArrayList<>();
     List<Integer> temp = new ArrayList<>();
 
-    // 剪枝优化：先排序
-    Arrays.sort(candidates);
-
     backtrack(candidates, 0, target, temp, res);
     return res;
   }
 
-  // 回溯1：通用模板
+  // 通用模板
   private void backtrack(int[] candidates, int start, int target, List<Integer> temp, List<List<Integer>> res) {
     if (target < 0) {
       return;
@@ -38,14 +34,15 @@ public class Solution1 {
       res.add(new ArrayList<>(temp));
       return;
     }
+    // i = start,组合是整体选过的数字不能再选
     for (int i = start; i < candidates.length; i++) {
-      // 剪枝优化：排序完后，当前值已经大于剩余target，后续的值都更大，直接break
+      // 剪枝：不用先整体排序，如果当前数>target，就跳过
       if (candidates[i] > target) {
-        break;
+        continue;
       }
 
       temp.add(candidates[i]);
-      // 每个数字可以重复出现：i
+      // i：当前位置的数可以重新选
       backtrack(candidates, i, target - candidates[i], temp, res);
       temp.remove(temp.size() - 1);
     }

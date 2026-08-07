@@ -34,16 +34,16 @@ public class Solution2 {
     if (target == 0) {
       // 注意：结果集加的是new list(temp)
       res.add(new LinkedList<>(temp));
-    } else if (i <= nums.length - 1 && target > 0) {
-
+      return;
+    }
+    if (i <= nums.length - 1 && target > 0) {
       // 1.选择i位置加入：temp加入nums[i]，i指针不移动，target修改
       temp.add(nums[i]);
       process(nums, target - nums[i], i, temp, res);
-
+      temp.remove(temp.size() - 1);
 
       // 2.不选择i位置加入：i指针后移即可
       // i位置访问完毕，回溯返回之前状态
-      temp.remove(temp.size() - 1);
       process(nums, target, i + 1, temp, res);
     }
   }

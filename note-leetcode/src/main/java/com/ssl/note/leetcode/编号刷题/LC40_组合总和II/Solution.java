@@ -43,13 +43,15 @@ public class Solution {
     }
     // 还是从start开始
     for (int i = start; i < candidates.length; i++) {
-      // 排序后，如果后面的数和前面的相同，要跳过
-      if (i != start && candidates[i] == candidates[i - 1]) {
-        continue;
-      }
       // 排序，剪枝优化
       if (candidates[i] > target) {
         break;
+      }
+
+      // i != start，本轮for中后面的数和前面的相同，要跳过
+      // 但是不会影响下一个递归中相同的数字
+      if (i != start && candidates[i] == candidates[i - 1]) {
+        continue;
       }
 
       temp.add(candidates[i]);
@@ -61,10 +63,8 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    int[] nums = {2, 5, 3, 2};
-    int target = 5;
-    // 组合总数I： [[2, 3], [5], [3, 2]]
-    // 组合总数II：[[2, 3], [5]]
+    int[] nums = {10, 1, 2, 7, 6, 1, 5};
+    int target = 8;
     System.out.println(solution.combinationSum2(nums, target));
   }
 }
