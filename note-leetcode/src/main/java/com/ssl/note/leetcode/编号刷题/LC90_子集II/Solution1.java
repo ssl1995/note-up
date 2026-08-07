@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Solution {
+public class Solution1 {
 
   /**
    * LC90_子集II
@@ -13,45 +13,46 @@ public class Solution {
    * 示例 1：
    * 输入：nums = [1,2,2]
    * 输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]
-   *
-   * LC78子集通用模板写法：每个节点都收集 + for从start开始
-   * 相比LC78只多一步：同层去重（和LC40组合总和II的去重方式完全一样）
    */
   public List<List<Integer>> subsetsWithDup(int[] nums) {
     if (nums == null || nums.length == 0) {
       return new ArrayList<>();
     }
-    // 排序让相同元素相邻，是去重的前提
+    // 子集按任何顺序排列=需要排序
     Arrays.sort(nums);
 
-    List<Integer> path = new ArrayList<>();
+    int[] path = new int[nums.length];
     List<List<Integer>> res = new ArrayList<>();
-
-    backtrack(nums, 0, path, res);
+    dfs(nums, 0, path, 0, res);
 
     return res;
   }
 
-  private void backtrack(int[] nums, int start, List<Integer> path, List<List<Integer>> res) {
-    // 子集问题：一进来就收集（每个递归节点都是一个合法子集，包括空集[]）
-    res.add(new ArrayList<>(path));
-
-    for (int i = start; i < nums.length; i++) {
-      // 同层去重：i != start 说明是本轮for中后面的数，和前面相同则跳过
-      // 不影响下一层递归中选相同的数（如[1,2,2]中两个2都进子集）
-      if (i != start && nums[i] == nums[i - 1]) {
-        continue;
+  private void dfs(int[] nums, int i, int[] path, int size, List<List<Integer>> res) {
+    if (i == nums.length) {
+      List<Integer> temp = new ArrayList<>();
+      for (int j = 0; j < size; j++) {
+        temp.add(path[j]);
       }
-
-      path.add(nums[i]);
-      // 每个元素最多用一次：i+1
-      backtrack(nums, i + 1, path, res);
-      path.remove(path.size() - 1);
+      res.add(temp);
+      return;
+    }
+    // 下一组数的第一个
+    int j = i + 1;
+    while (j < nums.length && nums[j] == nums[j - 1]) {
+      j++;
+    }
+    // nums[i...j..]在[i,j)中选0个加入
+    dfs(nums, j, path, size, res);
+    // nums[i...j..]在[i,j)中选任意个加入
+    for (int k = 0; k < j - i; k++) {
+      path[size++] = nums[i + k];
+      dfs(nums, j, path, size, res);
     }
   }
 
   public static void main(String[] args) {
-    Solution solution = new Solution();
+    Solution1 solution = new Solution1();
     int[] nums = {1, 2, 2};
     List<List<Integer>> res = solution.subsetsWithDup(nums);
     res.sort((a, b) -> {
