@@ -1,5 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC377_组合总和IV;
 
+import java.util.Arrays;
+
 public class Solution1 {
 
   /**
@@ -20,33 +22,31 @@ public class Solution1 {
    * (3, 1)
    * 请注意，顺序不同的序列被视作不同的组合。
    */
-  private int res;
-
   public int combinationSum4(int[] nums, int target) {
-    if (nums == null || nums.length == 0) {
-      return 0;
-    }
-    res = 0;
-    dfs(nums, target);
-    return res;
+    // memo[t] 表示凑出 t 的排列个数，-1 表示还没算过
+    int[] memo = new int[target + 1];
+    Arrays.fill(memo, -1);
+    // 边界：凑出0只有空序列这1种
+    memo[0] = 1;
+
+    return dfs(nums, target, memo);
   }
 
-  // 如果target较大，比如1000，递归层数很多，会超时
-  private void dfs(int[] nums, int target) {
-    if (target < 0) {
-      return;
+  private int dfs(int[] nums, int t, int[] memo) {
+    // 算过的直接查缓存，避免重复展开递归树
+    if (memo[t] != -1) {
+      return memo[t];
     }
-    if (target == 0) {
-      res++;
-      return;
-    }
+    int sum = 0;
+    // 枚举序列的最后一个数num，累加凑出 t-num 的所有方案数
     for (int num : nums) {
-      if (num > target) {
-        continue;
+      if (t >= num) {
+        sum += dfs(nums, t - num, memo);
       }
-
-      dfs(nums, target - num);
     }
+    // 结果落缓存后再返回
+    memo[t] = sum;
+    return sum;
   }
 
   public static void main(String[] args) {
@@ -56,7 +56,6 @@ public class Solution1 {
     long start = System.currentTimeMillis();
     System.out.println(solution.combinationSum4(nums, target));
     long end = System.currentTimeMillis();
-    // 画2s，会超时
-    System.out.println("耗时，time=" + (end - start) / 1000 + "s");
+    System.out.println("耗时，time=" + (end - start) + "ms");
   }
 }
