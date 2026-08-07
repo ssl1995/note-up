@@ -31,7 +31,8 @@ public class Solution {
     return res;
   }
 
-  // 如果target较大，比如1000，递归层数很多，会超时
+  // 题目示例:(1,3)和(3,1)都要，说明每次遍历都是从下标0开始
+  // 这就导致target很大时，超时
   private void dfs(int[] nums, int target) {
     if (target < 0) {
       return;
