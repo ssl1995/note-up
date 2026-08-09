@@ -45,14 +45,11 @@ public class Solution {
       return;
     }
     for (int col = 0; col < n; col++) {
-      if (!isValid(board, row, col, n)) {
-        continue;
+      if (isValid(board, row, col, n)) {
+        board[row][col] = 'Q';
+        backtrack(board, row + 1, n, res);
+        board[row][col] = '.';
       }
-      board[row][col] = 'Q';
-
-      backtrack(board, row + 1, n, res);
-
-      board[row][col] = '.';
     }
   }
 

@@ -24,20 +24,23 @@ public class Solution1 {
    * 解释：如上图所示，4 皇后问题存在两个不同的解法。
    */
   public List<List<String>> solveNQueens(int n) {
-
+    if (n < 0) {
+      return new ArrayList<>();
+    }
     char[][] board = new char[n][n];
     for (char[] row : board) {
       Arrays.fill(row, '.');
     }
 
+    // path路径法:判断左右对角线方便
     int[] path = new int[n];
     List<List<String>> res = new ArrayList<>();
-    dfs(0, path, n, board, res);
+    dfs(board, 0, n, path, res);
 
     return res;
   }
 
-  private void dfs(int i, int[] path, int n, char[][] board, List<List<String>> res) {
+  private void dfs(char[][] board, int i, int n, int[] path, List<List<String>> res) {
     if (i == n) {
       addRes(board, res);
       return;
@@ -47,7 +50,7 @@ public class Solution1 {
         path[i] = j;
 
         board[i][j] = 'Q';
-        dfs(i + 1, path, n, board, res);
+        dfs(board, i + 1, n, path, res);
         board[i][j] = '.';
       }
     }
@@ -55,7 +58,9 @@ public class Solution1 {
 
   private boolean check(int[] path, int i, int j) {
     for (int k = 0; k < i; k++) {
-      if (j == path[k] || Math.abs(i - k) == Math.abs(j - path[j])) {
+      // 列是否存在相同：j == path[k]
+      // 两个对角线是否存在相同：现在行-之前行 绝对值 == 现在列-之前列 绝对值
+      if (j == path[k] || Math.abs(i - k) == Math.abs(j - path[k])) {
         return false;
       }
     }
