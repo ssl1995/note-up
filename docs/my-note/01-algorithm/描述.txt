@@ -3,8 +3,22 @@
 
 第一道题我已经完成并理解，请分析第二道题如何思考理解？并输出一份md总结文档，我复制进飞书
 
-组合总数题型：
-com.ssl.note.leetcode.编号刷题.LC39_组合总和.Solution2.combinationSum、
-com.ssl.note.leetcode.编号刷题.LC40_组合总和II.Solution.combinationSum2、
-com.ssl.note.leetcode.编号刷题.LC216_组合总和III.Solution.combinationSum3，
-前2道题，我做了很久明白了以后开始做第三道题，第一次写就对了，分析下这3道题的时间复杂如何分析？以及第三道题是否还有更优解？
+计算器题型：
+com.ssl.note.leetcode.编号刷题.LC224_基本计数器.Solution.calculate、
+com.ssl.note.leetcode.编号刷题.LC227_基本计算器II.Solution.calculate、
+com.ssl.note.leetcode.编号刷题.LC772_基本计算器III.Solution.calculate;
+
+以上三道题是基本计算器的三道力扣题型，我想学习如下嵌套类递归解题思路：
+1. 定义全局变量 int where。
+2. 递归函数 f(i)：从 s[i..] 位置出发开始解析，遇到「字符串终止」或「嵌套条件终止符」就返回。返回值就是 f(i) 负责的这一段的结果。
+3. f(i) 在返回前更新全局变量 where，让上级函数通过 where 知道解析到了什么位置，进而继续。
+执行细节：
+- 如果 f(i) 遇到「嵌套条件开始符」（如 (、[），就调用下级递归去处理嵌套部分，下级负责嵌套部分的计算结果。
+- 下级处理完成后，f(i) 通过下级更新的全局变量 where，知道该从什么位置继续解析（i = where + 1）。
+
+相应的解题方法示例已经实现类：com.ssl.note.leetcode.编号刷题.LC772_基本计算器III.Solution.calculate。
+请输出一份MD文档，名叫“基本计算器-嵌套递归总结”，包含题解和题型区别分析，我需要复制进飞书，不要用空行
+
+实现以下代码：备注好注释和示例
+com.ssl.note.leetcode.编号刷题.LC224_基本计数器.Solution.calculate、
+com.ssl.note.leetcode.编号刷题.LC227_基本计算器II.Solution.calculate、
