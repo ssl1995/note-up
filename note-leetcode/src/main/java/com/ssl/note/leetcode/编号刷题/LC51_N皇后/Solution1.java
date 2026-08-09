@@ -29,55 +29,44 @@ public class Solution1 {
     for (char[] row : board) {
       Arrays.fill(row, '.');
     }
-    // 列是否使用过
-    boolean[] colUsed = new boolean[n];
-    // 主对角线是否使用过：左上到右下
-    // (0,0), (1,1), (2,2), (3,3) → 0-0=0, 1-1=0, 2-2=0, 3-3=0
-    //  特点：行 - 列 = 常数，范围[0,2n-1]
-    boolean[] diag1 = new boolean[2 * n - 1];
-    // 副对角线是否使用过：右上到左下
-    // (0,3), (1,2), (2,1), (3,0) → 0+3=3, 1+2=3, 2+1=3, 3+0=3
-    // 行 + 列 = 常数，范围[0,2n-1]
-    boolean[] diag2 = new boolean[2 * n - 1];
 
+    int[] path = new int[n];
     List<List<String>> res = new ArrayList<>();
-    dfs(board, 0, n, colUsed, diag1, diag2, res);
+    dfs(0, path, n, board, res);
 
     return res;
   }
 
-  private void dfs(char[][] board, int row, int n, boolean[] colUsed, boolean[] diag1, boolean[] diag2, List<List<String>> res) {
-    if (row == n) {
-      addToRes(board, res);
+  private void dfs(int i, int[] path, int n, char[][] board, List<List<String>> res) {
+    if (i == n) {
+      addRes(board, res);
       return;
     }
-    for (int col = 0; col < n; col++) {
-      // 主对角线：行减列，可能为负，加 n-1
-      // 主对角线范围：[-(n-1),n-1]，有负数，不能当数组下标，向前加n-1
-      int d1 = row - col + n - 1;
-      // 副对角线：行加列，天然非负，直接用。
-      int d2 = row + col;
-      if (colUsed[col] || diag1[d1] || diag2[d2]) {
-        continue;
+    for (int j = 0; j < n; j++) {
+      if (check(path, i, j)) {
+        path[i] = j;
+
+        board[i][j] = 'Q';
+        dfs(i + 1, path, n, board, res);
+        board[i][j] = '.';
       }
-      board[row][col] = 'Q';
-      colUsed[col] = true;
-      diag1[d1] = true;
-      diag2[d2] = true;
-
-      dfs(board, row + 1, n, colUsed, diag1, diag2, res);
-
-      board[row][col] = '.';
-      colUsed[col] = false;
-      diag1[d1] = false;
-      diag2[d2] = false;
     }
   }
 
-  private void addToRes(char[][] board, List<List<String>> res) {
+  private boolean check(int[] path, int i, int j) {
+    for (int k = 0; k < i; k++) {
+      if (j == path[k] || Math.abs(i - k) == Math.abs(j - path[j])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private void addRes(char[][] board, List<List<String>> res) {
     List<String> temp = new ArrayList<>();
-    for (char[] cs : board) {
-      temp.add(String.copyValueOf(cs));
+    for (char[] row : board) {
+      String rowStr = new String(row);
+      temp.add(rowStr);
     }
     res.add(temp);
   }
