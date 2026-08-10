@@ -33,9 +33,12 @@ public class Solution {
     return res;
   }
 
-
+  /**
+   * 本题用前缀树，剪枝有3种非常好，需要领悟
+   */
   private int dfs(char[][] board, int i, int j, int t, List<String> res) {
-    // 结束条件1：越界||已经访问过了(==0的特殊设置)
+    // 结束条件1：越界
+    // 剪枝手段2导致的剪枝：已经访问过了(==0的特殊设置)
     if (i < 0 || i > board.length - 1 || j < 0 || j > board[0].length - 1
         || board[i][j] == 0) {
       return 0;
@@ -44,7 +47,7 @@ public class Solution {
     // 路径坐标
     int path = temp - 'a';
     t = tree[t][path];
-    // 结束条件2：前缀树没有这个字符
+    // 剪枝手段1导致的剪枝：前缀树要么没有这个字符 or 已经收集过了
     if (pass[t] == 0) {
       return 0;
     }
@@ -53,24 +56,28 @@ public class Solution {
     // 收集自己
     if (end[t] != null) {
       res.add(end[t]);
+      // 剪枝手段2：收集过的
       end[t] = null;
       collect++;
     }
 
     board[i][j] = 0;
+    // 收集4个方向，从前缀树的t位置出发
     collect += dfs(board, i + 1, j, t, res);
     collect += dfs(board, i - 1, j, t, res);
     collect += dfs(board, i, j + 1, t, res);
     collect += dfs(board, i, j - 1, t, res);
-    // 剪枝手段：前缀树曾经收集过的字符pass减1
+    // 剪枝手段1：前缀树曾经收集过的字符pass减1
     pass[t] -= collect;
     board[i][j] = temp;
     return collect;
   }
 
-
-    private final int MAX = 30001;
-//  private final int MAX = 16;
+  // 实现一个前缀树，节点范围由题目提供
+  // 1 <= words.length <= 3 * 10^4
+  // 1 <= words[i].length <= 10
+  private final int MAX = 30001;
+  //  private final int MAX = 16;
   private int[][] tree = new int[MAX][26];
   private int[] pass = new int[MAX];
   private String[] end = new String[MAX];
