@@ -1,11 +1,11 @@
-package com.ssl.note.leetcode.编号刷题.LC208_实现前缀树;
+package com.ssl.note.leetcode.编号刷题.LC1804_实现前缀树II;
 
 public class Trie {
 
-  // 前缀树：类结构实现，工程代码用类信息
-  static class TrieNode {
-    public int pass;// 经过
-    public int end;// 终止
+  // 类结构
+  class TrieNode {
+    public int pass;
+    public int end;
     public TrieNode[] nexts;
 
     public TrieNode() {
@@ -15,14 +15,13 @@ public class Trie {
     }
   }
 
-  // 前缀树的根节点
-  private final TrieNode root;
+  // 根节点
+  private TrieNode root;
 
   public Trie() {
     root = new TrieNode();
   }
 
-  // 插入一个单词
   public void insert(String word) {
     TrieNode node = root;
     node.pass++;
@@ -37,30 +36,47 @@ public class Trie {
     node.end++;
   }
 
-  // 查询前缀树里，word单词存在不
-  public boolean search(String word) {
+  // 查询前缀树里，word单词出现了几次
+  public int countWordsEqualTo(String word) {
     TrieNode node = root;
     for (int i = 0, path; i < word.length(); i++) {
       path = word.charAt(i) - 'a';
       if (node.nexts[path] == null) {
-        return false;
+        return 0;
       }
       node = node.nexts[path];
     }
-    return node.end > 0;
+    return node.end;
   }
 
   // 查询前缀树里，有多少单词以pre做前缀
-  public boolean startsWith(String pre) {
+  public int countWordsStartingWith(String pre) {
     TrieNode node = root;
     for (int i = 0, path; i < pre.length(); i++) {
       path = pre.charAt(i) - 'a';
       if (node.nexts[path] == null) {
-        return false;
+        return 0;
       }
       node = node.nexts[path];
     }
-    return node.pass > 0;
+    return node.pass;
   }
 
+  // 如果之前word插入过前缀树，那么此时删掉一次
+  // 如果之前word没有插入过前缀树，那么什么也不做
+  public void erase(String word) {
+    if (countWordsEqualTo(word) > 0) {
+      TrieNode node = root;
+      node.pass--;
+      for (int i = 0, path; i < word.length(); i++) {
+        path = word.charAt(i) - 'a';
+        if (--node.nexts[path].pass == 0) {
+          node.nexts[path] = null;
+          return;
+        }
+        node = node.nexts[path];
+      }
+      node.end--;
+    }
+  }
 }
