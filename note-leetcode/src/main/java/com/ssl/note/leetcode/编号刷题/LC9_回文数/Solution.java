@@ -7,25 +7,36 @@ package com.ssl.note.leetcode.编号刷题.LC9_回文数;
  */
 public class Solution {
 
-    /**
-     * 回文数
-     * 给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。
-     * 回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
-     * 例如，121 是回文，而 123 不是。
-     */
-    public boolean isPalindrome(int x) {
-        if (x < 0) {
-            return false;
-        }
-        int oldNum = x;
-        int newNum = 0;
-        while (x != 0) {
-            int temp = x % 10;
-            newNum = newNum * 10 + temp;
-            x /= 10;
-        }
-        // 如果最大整数溢出，也没事
-        // 因为int最大的回文数是小于最大整型的，及时溢出了==也是false
-        return oldNum == newNum;
+  /**
+   * 回文数
+   * 给你一个整数 x ，如果 x 是一个回文整数，返回 true ；否则，返回 false 。
+   * 回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+   * 例如，121 是回文，而 123 不是。
+   */
+  public boolean isPalindrome(int x) {
+    // 负数永远不是回文数
+    if (x < 0) {
+      return false;
     }
+    // 1、比如x=121，找到100
+    int offset = 1;
+    // x的最大值是整形最大，为了防止*10会溢出
+    while (x / offset >= 10) {
+      offset *= 10;
+    }
+    // 2、比较每次的高位和最末尾的个位
+    while (x != 0) {
+      int num1 = x / offset;
+      int num2 = x % 10;
+      if (num1 != num2) {
+        return false;
+      }
+
+      x = (x % offset) / 10;
+      // 偏移每次都缩小100
+      offset /= 100;
+    }
+
+    return true;
+  }
 }
