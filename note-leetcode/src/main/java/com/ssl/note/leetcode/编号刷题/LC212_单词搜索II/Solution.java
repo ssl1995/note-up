@@ -45,8 +45,7 @@ public class Solution {
    * i f l v
    */
   private int dfs(char[][] board, int i, int j, int t, List<String> res) {
-    // 结束条件1：越界
-    // 剪枝手段3导致的剪枝：已经访问过了(==0的特殊设置)
+    // 剪枝1：越界 或者 ≠特殊字符0的ASCII码
     // 例：走 oath 时 o(0,0)被置0，从 a(0,1) 就无法再走回 o(0,0)，防止同一格重复使用
     if (i < 0 || i > board.length - 1 || j < 0 || j > board[0].length - 1
         || board[i][j] == 0) {
@@ -56,10 +55,9 @@ public class Solution {
     // 路径坐标
     int path = temp - 'a';
     t = tree[t][path];
-    // 剪枝手段1导致的剪枝：前缀树要么没有这个字符 or 该前缀下的单词已经收集完了
+    // 前缀树要么没有这个字符 or 该前缀下的单词已经收集完了
     // 例1(没有这个字符)：从 (0,3)n 出发，根节点没有 'n' 这条路 -> t=0，pass[0]恒为0，直接剪枝
     // 例2(已经收集完)：eat 被收集后，e->a->t 沿途 pass 各减1；若该子树下再无其他单词，
-    //   之后从其他格子再走到 e->a->t 这条前缀时 pass==0，整棵子树直接跳过
     if (pass[t] == 0) {
       return 0;
     }
@@ -68,9 +66,9 @@ public class Solution {
     // 收集自己：当前前缀正好是一个完整单词
     if (end[t] != null) {
       res.add(end[t]);
-      // 剪枝手段2：收集过的单词置空，防止不同的格子走法重复收集同一个单词
+      // 剪枝2：收集过的单词置空，防止不同的格子走法重复收集同一个单词
       // 例：若单词表有 "aa"，a(0,1)->a(0,2) 和 a(0,2)->a(0,1) 都能走到同一结尾节点，
-      //   第一次收集后置空，第二次走到这里 end[t]==null 就不会再收集
+      // 第一次收集后置空，第二次走到这里 end[t]==null 就不会再收集
       end[t] = null;
       collect++;
     }
@@ -81,8 +79,7 @@ public class Solution {
     collect += dfs(board, i - 1, j, t, res);
     collect += dfs(board, i, j + 1, t, res);
     collect += dfs(board, i, j - 1, t, res);
-    // 剪枝手段1：回溯时把本次收集到的单词数从当前节点的pass中扣掉，
-    // 父调用会逐层累加 collect，实现整条路径上的 pass 都减去相应数量
+    // 剪枝3：回溯时把本次收集到的单词数从当前节点的pass中扣掉，
     pass[t] -= collect;
     board[i][j] = temp;
     return collect;
@@ -91,12 +88,12 @@ public class Solution {
   // 实现一个前缀树，节点范围由题目提供
   // 1 <= words.length <= 3 * 10^4
   // 1 <= words[i].length <= 10
-  private final int MAX = 30001;
+  private static final int MAX = 30001;
   //  private final int MAX = 16;
-  private int[][] tree = new int[MAX][26];
-  private int[] pass = new int[MAX];
-  private String[] end = new String[MAX];
-  private int cnt;
+  private static int[][] tree = new int[MAX][26];
+  private static int[] pass = new int[MAX];
+  private static String[] end = new String[MAX];
+  private static int cnt;
 
   private void buildTrie(String[] words) {
     cnt = 1;
