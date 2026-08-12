@@ -24,12 +24,12 @@ public class Solution2 {
       // i位置左边的最高不包含自己
       right[i] = Math.max(right[i + 1], height[i + 1]);
     }
-    // 计算雨水：列的左右两边最高列中的最小 - 当前列高度
+    // 计算雨水
     for (int i = 0; i <= n - 1; i++) {
       int min = Math.min(left[i], right[i]);
-      int diff = min - height[i];
-      if (diff > 0) {
-        water += diff;
+      // 高度<两边最小才能接雨水
+      if (height[i] < min) {
+        water += min - height[i];
       }
     }
 
@@ -38,7 +38,7 @@ public class Solution2 {
 
   public static void main(String[] args) {
     Solution2 solution = new Solution2();
-    int[] nums = {4, 2, 0, 3, 2, 5};
+    int[] nums = {0,1,0,2,1,0,1,3,2,1,2,1};
     System.out.println(solution.trap(nums));
   }
 }

@@ -22,16 +22,9 @@ public class Solution3 {
       // i位置的左右两边最高值
       leftMax = Math.max(leftMax, height[left]);
       rightMax = Math.max(rightMax, height[right]);
-      // i位置，能接雨水的位置一定在较高的那一侧
-      if (leftMax < rightMax) {
-        System.out.println("右边加水："+leftMax +"-"+height[left]);
-        water += leftMax - height[left];
-        left++;
-      } else {
-        water += rightMax - height[right];
-        System.out.println("左边加水："+rightMax +"-"+height[right]);
-        right--;
-      }
+
+      // 左右两边低位决定接哪边水
+      water += leftMax < rightMax ? leftMax - height[left++] : rightMax - height[right--];
     }
 
     return water;
@@ -39,7 +32,7 @@ public class Solution3 {
 
   public static void main(String[] args) {
     Solution3 solution = new Solution3();
-    int[] nums = {4, 2, 0, 3, 2, 5};
+    int[] nums = {0,1,0,2,1,0,1,3,2,1,2,1};
     System.out.println(solution.trap(nums));
   }
 }
