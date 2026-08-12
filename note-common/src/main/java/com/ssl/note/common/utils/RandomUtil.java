@@ -9,7 +9,7 @@ public class RandomUtil {
    * 蓄水池抽样（Reservoir Sampling）
    * 从n个元素中等概率、不放回抽取k个，且只需要O(k)额外空间。
    */
-  public static List<Integer> pickKByReservoir(List<Integer> nums, int k) {
+  public static <T> List<T> pickKByReservoir(List<T> nums, int k) {
     if (nums == null) {
       throw new IllegalArgumentException("nums is null");
     }
@@ -18,7 +18,7 @@ public class RandomUtil {
       throw new IllegalArgumentException("k must be in [0, n], k=" + k + ", n=" + n);
     }
 
-    List<Integer> reservoir = new ArrayList<>(k);
+    List<T> reservoir = new ArrayList<>(k);
 
     // 1) 先放入前k个
     for (int i = 0; i < k; i++) {
