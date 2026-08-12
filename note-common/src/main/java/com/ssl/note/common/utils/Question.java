@@ -1,7 +1,10 @@
 package com.ssl.note.common.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Question {
 
@@ -67,7 +70,7 @@ public class Question {
     return tag + " " + web + " " + name;
   }
 
-  // 初始化题目：力扣热题Top100（含补充题，共101道）
+  // 力扣热题Top100（共104道）
   public static List<Question> buildLCTop100() {
     List<Question> questions = new ArrayList<>();
     String web = "LC";
@@ -230,8 +233,21 @@ public class Question {
     return questions;
   }
 
+  // 力扣热题Top100-指定某种标签下的题
+  public static List<Question> buildLCTop100ByTags(Set<String> tags) {
+    List<Question> questions = buildLCTop100();
+    return questions.stream().filter(v -> tags.contains(v.getTag())).collect(Collectors.toList());
+  }
+
+  // 力扣热题Top100-难题和错题
+  public static List<Question> buildLCTop100ByError() {
+    Set<String> errorQuesString = new HashSet<>();
+    errorQuesString.add("01-哈希 LC 1 两数之和");
+
+    return buildLCTop100().stream().filter(v -> errorQuesString.contains(v.toString())).collect(Collectors.toList());
+  }
+
   public static void main(String[] args) {
-    Question question1 = new Question("LC", "1 两数之和");
-    System.out.println(question1);
+    System.out.println(buildLCTop100ByError());
   }
 }

@@ -8,11 +8,15 @@ import java.util.List;
 public class Practice {
 
   public static void main(String[] args) {
-    // 题库：力扣热题Top100
+    // 力扣热题Top100
     List<Question> pool = Question.buildLCTop100();
-
-    int k = 3; // 想随机抽取k个（不重复）
+    int k = 3;
     List<Question> picks = RandomUtil.pickKByReservoir(pool, k);
+
+    // 错题和难题
+//    List<Question> pool = Question.buildLCTop100ByError();
+//    int k = 3;
+//    List<Question> picks = RandomUtil.pickKByReservoir(pool, k);
 
     System.out.println("poolSize=" + pool.size());
     System.out.println("k=" + k);
