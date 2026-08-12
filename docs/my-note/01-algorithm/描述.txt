@@ -19,6 +19,11 @@ com.ssl.note.leetcode.编号刷题.LC772_基本计算器III.Solution.calculate;
 相应的解题方法示例已经实现类：com.ssl.note.leetcode.编号刷题.LC772_基本计算器III.Solution.calculate。
 请输出一份MD文档，名叫“基本计算器-嵌套递归总结”，包含题解和题型区别分析，我需要复制进飞书，不要用空行
 
-实现以下代码：备注好注释和示例
-com.ssl.note.leetcode.编号刷题.LC224_基本计数器.Solution.calculate、
-com.ssl.note.leetcode.编号刷题.LC227_基本计算器II.Solution.calculate、
+我现在写完了力扣Top100的所有题，想写一个方法随机获取某些题来练习，
+这是所有题的思维导图：D:\project\java\note-up\note-common\src\main\java\com\ssl\note\common\utils\leetcode\img.png
+题目类：D:\project\java\note-up\note-common\src\main\java\com\ssl\note\common\utils\Question.java
+参考随机题目工具：com.ssl.note.common.utils.RandomQuestion.main
+
+请实现：
+1、题库信息初始化：根据思维导图提取出信息，完善com.ssl.note.common.utils.Question.buildLCTop100题库信息
+2、写一个随机获取获取k道题的demo：com.ssl.note.practice.lc_top_100.Practice.main
