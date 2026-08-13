@@ -1,6 +1,9 @@
 package com.ssl.note.leetcode.编号刷题.LC207_课程表;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * @author SongShengLin
@@ -16,7 +19,7 @@ public class Solution {
    * 输入：numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
    * 输出：true,一个可行的修课序列0->1->2->3
    */
-  public boolean canFinish(int numCourses, int[][] pres) {
+  public boolean canFinish(int numCourses, int[][] prerequisites) {
     // 1、建领接表、入度
     List<List<Integer>> graph = new ArrayList<>();
     for (int i = 0; i < numCourses; i++) {
@@ -25,13 +28,13 @@ public class Solution {
 
     int[] inDegrees = new int[numCourses];
 
-    for (int[] pre : pres) {
+    for (int[] p : prerequisites) {
       // 邻接表：bi -> ai
-      int ai = pre[0];
-      int bi = pre[1];
-      graph.get(bi).add(ai);
+      int cur = p[0];
+      int pre = p[1];
+      graph.get(pre).add(cur);
       // 入度
-      inDegrees[ai]++;
+      inDegrees[cur]++;
     }
 
     // 2、入度为0的入队列
@@ -46,12 +49,14 @@ public class Solution {
     int count = 0;
     while (!queue.isEmpty()) {
       Integer index = queue.poll();
+      // 出队=上过的课
       count++;
+
       // 上完课的入度-1
       List<Integer> nextIndex = graph.get(index);
       for (Integer next : nextIndex) {
-        inDegrees[next]--;
-        if (inDegrees[next] == 0) {
+        // 发生变化的节点才可能再次为0
+        if (--inDegrees[next] == 0) {
           queue.offer(next);
         }
       }
