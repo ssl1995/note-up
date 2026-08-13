@@ -18,9 +18,6 @@ public class PracticeQues {
 //    int k = 3;
 //    List<Question> picks = RandomUtil.pickKByReservoir(pool, k);
 
-    // 1. 02-双指针 LC 42 接雨水
-    // 2. 09-图论 LC 207 课程表
-    // 3. 08-二叉树 LC 114 二叉树展开为链表
     System.out.println("poolSize=" + pool.size());
     System.out.println("k=" + k);
     for (int i = 0; i < picks.size(); i++) {
