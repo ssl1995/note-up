@@ -30,10 +30,12 @@ public class Solution {
     int mask = xor & (-xor);
 
     int a = 0;
+    // b可以省略，结果用xor^a来表示
     int b = 0;
 
     // 第三步：按 mask 分组，分别异或
     for (int num : nums) {
+      // 不能写成==1，因为这是二进制
       if ((num & mask) == 0) {
         // 该位为 0 的组
         a ^= num;
@@ -44,6 +46,29 @@ public class Solution {
     }
 
     return new int[]{a, b};
+  }
+
+  public int[] singleNumber1(int[] nums) {
+    int xor = 0;
+    // 第一步：全部异或，得到 a ^ b
+    for (int num : nums) {
+      xor ^= num;
+    }
+
+    // 第二步：取的是 a 和 b 不同的位中，位置最低的那个1
+    int mask = xor & (-xor);
+
+    int a = 0;
+
+    // 第三步：按 mask 分组，分别异或
+    for (int num : nums) {
+      if ((num & mask) == 0) {
+        // 该位为 0 的组
+        a ^= num;
+      }
+    }
+
+    return new int[]{a, xor ^ a};
   }
 
   public static void main(String[] args) {

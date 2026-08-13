@@ -1,6 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC24_两两交换;
 
 import com.ssl.note.common.utils.ListNode;
+import com.ssl.note.common.utils.ListNodeUtil;
 
 public class Solution1 {
 
@@ -27,6 +28,6 @@ public class Solution1 {
     node1.next = node2;
     node2.next = node3;
     node3.next = node4;
-    ListNode.printListNode(solution.swapPairs(node1));
+    ListNodeUtil.printListNode(solution.swapPairs(node1));
   }
 }

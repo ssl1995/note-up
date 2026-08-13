@@ -22,35 +22,29 @@ public class Solution {
    */
   public double findMedianSortedArrays(int[] nums1, int[] nums2) {
     // 时间复杂度是O(m+n)，不是最优解，但是是最容易理解的
-    int n1 = nums1.length;
-    int n2 = nums2.length;
+    int m = nums1.length;
+    int n = nums2.length;
     // 1、合并成一个nums数组
-    int[] nums = new int[n1 + n2];
+    int[] nums = new int[m + n];
     int i = 0, j = 0, k = 0;
-    while (i < n1 && j < n2) {
-      if (nums1[i] < nums2[j]) {
-        nums[k++] = nums1[i++];
-      } else {
-        nums[k++] = nums2[j++];
-      }
+    while (i < m && j < n) {
+      nums[k++] = nums1[i] < nums2[j] ? nums1[i++] : nums2[j++];
     }
-    while (i < n1) {
+    while (i < m) {
       nums[k++] = nums1[i++];
     }
 
-    while (j < n2) {
+    while (j < n) {
       nums[k++] = nums2[j++];
     }
 
     // 2、找中位数
-    int size = n1 + n2;
-    boolean isEven = (size & 1) == 0;
-    // 偶数
-    if (isEven) {
-      return (double) (nums[(size - 1) / 2] + nums[size / 2]) / 2;
+    int mid = (m + n) / 2;
+    int even = (m + n) % 2;
+    if (even == 0) {
+      return (nums[mid] + nums[mid - 1]) / 2d;
     }
-    // 奇数
-    return (double) nums[size / 2];
+    return nums[mid];
   }
 
   public static void main(String[] args) {

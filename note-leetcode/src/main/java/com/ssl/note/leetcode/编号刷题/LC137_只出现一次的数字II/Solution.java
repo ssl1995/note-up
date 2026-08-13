@@ -14,9 +14,8 @@ public class Solution {
       // 1、统计某个二进制位的和
       int count = 0;
       for (int num : nums) {
-        // >>>:无符号右移，把负数也当做二进制看
-        // (num >>> i) & 1: num的第i位
-        count += (num >>> i) & 1;
+        // (num >> i) & 1: num的第i位
+        count += (num >> i) & 1;
       }
       // 2、出现3次的数，位数和取余3=0
       // 只出现一次的数，它的二进制的1一定会留下
@@ -25,6 +24,23 @@ public class Solution {
         // 注意：左移只有 <<，没有 <<<，因为左移本来就不会涉及符号位
         res |= (1 << i);
       }
+    }
+    return res;
+  }
+
+  public int singleNumber1(int[] nums) {
+    // 我的写法，用32位数组
+    int[] cnt = new int[32];
+    for (int num : nums) {
+      for (int i = 0; i < 32; i++) {
+        int bit = (num >> i) & 1;
+        cnt[i] = (cnt[i] + bit) % 3;
+      }
+    }
+
+    int res = 0;
+    for (int i = 0; i < 32; i++) {
+      res |= cnt[i] << i;
     }
     return res;
   }

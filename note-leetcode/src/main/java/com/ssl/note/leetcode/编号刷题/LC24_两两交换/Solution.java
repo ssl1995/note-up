@@ -1,6 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC24_两两交换;
 
 import com.ssl.note.common.utils.ListNode;
+import com.ssl.note.common.utils.ListNodeUtil;
 
 public class Solution {
 
@@ -16,20 +17,16 @@ public class Solution {
     // dummy → 1 → 2 → 3 → 4 → null
     // dummy → 2 → 1 → 4 → 3 → null
     while (prev.next != null && prev.next.next != null) {
-      ListNode first = prev.next;
-      ListNode second = prev.next.next;
+      ListNode cur = prev.next;
+      ListNode next = prev.next.next;
 
-      // 前：prev → first → second → nextPair
-      // 后：prev → second → first → nextPair
-      // 推：prev.next = second;
-      //    second.next = first;
-      //    first.next = nextPair;
-      prev.next = second;
+      // 交换2个节点有3个指针需要变化
+      // 易错的第一个pre的后续
+      prev.next = next;
+      cur.next = next.next;
+      next.next = cur;
 
-      first.next = second.next;
-      second.next = first;
-
-      prev = first;
+      prev = cur;
     }
 
     return dummy.next;
@@ -58,7 +55,7 @@ public class Solution {
     node1.next = node2;
     node2.next = node3;
     node3.next = node4;
-    ListNode.printListNode(solution.swapPairs(node1));
-    ListNode.printListNode(solution.swapPairsRecursive(node1));
+    ListNodeUtil.printListNode(solution.swapPairs(node1));
+    ListNodeUtil.printListNode(solution.swapPairsRecursive(node1));
   }
 }

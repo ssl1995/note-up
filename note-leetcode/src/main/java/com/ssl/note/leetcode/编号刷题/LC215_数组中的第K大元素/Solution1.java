@@ -42,6 +42,7 @@ public class Solution1 {
     int b = r;
     int i = l;
     // 2、扫描右边界是 b 而不是 r，i > b 时终止
+    // [0,a-1] [a,b] [b+1,r]
     while (i <= b) {
       if (nums[i] < pivot) {
         swap(nums, i++, a++);
