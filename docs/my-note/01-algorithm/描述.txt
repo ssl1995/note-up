@@ -7,4 +7,6 @@ com.ssl.note.leetcode.编号刷题.LC772_基本计算器III.Solution.calculate;
 1、题库信息初始化：根据思维导图提取出信息，完善com.ssl.note.common.utils.Question.buildLCTop100题库信息
 2、写一个随机获取获取k道题的demo：com.ssl.note.practice.lc_top_100.PracticeQues.main
 
-比如我想指定只在某个标签中
+一维前缀和的题：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC1109_航班预定统计\Solution.java
+一维差分数组的题：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC1139_最大的以1为边界的正方形\Solution.java
+请总结相关知识点，生成一份md文档，我复制进飞书
