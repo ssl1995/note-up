@@ -5,16 +5,16 @@ public class Solution {
   /**
    * 编辑距离
    * 返回将word1转换成word2所使用的最少操作数
-   * 输入：word1 = "intention", word2 = "execution"
-   * 输出：5
+   * 输入：word1 = "horse", word2 = "ros"
+   * 输出：3
    * 解释：
-   * intention -> inention (删除 't')
-   * inention -> enention (将 'i' 替换为 'e')
-   * enention -> exention (将 'n' 替换为 'x')
-   * exention -> exection (将 'n' 替换为 'c')
-   * exection -> execution (插入 'u')
+   * horse -> rorse (将 'h' 替换为 'r')
+   * rorse -> rose (删除 'r')
+   * rose -> ros (删除 'e')
    */
   public int minDistance1(String word1, String word2) {
+    // minDistance1是m*n空间的方法，初始化0行0列太麻烦了，理解用
+    // minDistance2面试用
     int m = word1.length();
     int n = word2.length();
     if (m == 0) {
@@ -23,8 +23,7 @@ public class Solution {
     if (n == 0) {
       return m;
     }
-
-    // dp[i][j]表示word1的前i个字符转换成word2的前j个字符所需的最少操作数
+    // dp[i][j]表示word1[0..i]转换成word2[0..j]所需的最少操作数
     int[][] dp = new int[m][n];
     // 初始化
     dp[0][0] = word1.charAt(0) == word2.charAt(0) ? 0 : 1;
@@ -49,12 +48,12 @@ public class Solution {
         }
         // 字母不相同：才有有需要操作
 
-        // 删除：删掉word1[i-1]-> dp[i-1][j] + 1
+        // 最后一次操作必为增/删/改之一，取三种情况最小值：
+        // 删除（上边）：word1多一个字符，删掉word1[i]，剩下word1[0..i-1]->word2[0..j]
         int delete = dp[i - 1][j] + 1;
-        // 新增：往word1末尾插入word2[j-1]-> dp[i][j-1] + 1
-        // 新增最难理解，可以反过来想，word1新增=word2删除
+        // 新增（左边）：word2多一个字符，往word1末尾插入word2[j]，剩下word1[0..i]->word2[0..j-1]
         int insert = dp[i][j - 1] + 1;
-        // 替换：把 word1[i-1] 改成 word2[j-1]-> dp[i-1][j-1] + 1
+        // 替换（左上）：word1[i]与word2[j]配对，把word1[i]改成word2[j]，剩下word1[0..i-1]->word2[0..j-1]
         int update = dp[i - 1][j - 1] + 1;
 
         dp[i][j] = Math.min(Math.min(delete, insert), update);
@@ -90,12 +89,12 @@ public class Solution {
         }
         // 字母不相同：才有有需要操作
 
-        // 删除：删掉word1[i-1]-> dp[i-1][j] + 1
+        // 最后一次操作必为增/删/改之一，取三种情况最小值：
+        // 删除（上边）：word1多一个字符，删掉word1[i-1]，剩下word1前i-1个->word2前j个
         int delete = dp[i - 1][j] + 1;
-        // 新增：往word1末尾插入word2[j-1]-> dp[i][j-1] + 1
-        // 新增最难理解，可以反过来想，word1新增=word2删除
+        // 新增（左边）：word2多一个字符，往word1末尾插入word2[j-1]，剩下word1前i个->word2前j-1个
         int insert = dp[i][j - 1] + 1;
-        // 替换：把 word1[i-1] 改成 word2[j-1]-> dp[i-1][j-1] + 1
+        // 替换（左上）：word1[i-1]与word2[j-1]配对，把word1[i-1]改成word2[j-1]，剩下word1前i-1个->word2前j-1个
         int update = dp[i - 1][j - 1] + 1;
 
         dp[i][j] = Math.min(Math.min(delete, insert), update);
@@ -108,8 +107,8 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    String w1 = "intention";
-    String w2 = "execution";
+    String w1 = "horse";
+    String w2 = "ros";
     System.out.println(solution.minDistance1(w1, w2));
     System.out.println(solution.minDistance2(w1, w2));
   }
