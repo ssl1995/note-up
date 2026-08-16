@@ -23,11 +23,11 @@ public class Solution {
     // 待反转区域四个指针: pre [start、end] next
     ListNode pre = dummy;
     ListNode start;
-    ListNode end = dummy;
+    ListNode end = pre;
     ListNode next;
 
     while (end.next != null) {
-      // 1、end走k步
+      // 1、end从pre走k步，走到需要遍历的结尾
       for (int i = 0; i < k && end != null; i++) {
         end = end.next;
       }
@@ -45,9 +45,9 @@ public class Solution {
       pre.next = reverse(start);// 翻转
       start.next = next;// 连接next
 
-      // 4、归位：将pre和end重置到start位置，开启下一个遍历
-      end = start;
+      // 4、归位：pre,[end,start],next
       pre = start;
+      end = pre;
     }
 
     return dummy.next;
@@ -61,11 +61,12 @@ public class Solution {
     if (head == null) {
       return null;
     }
-    ListNode cur = head;
     ListNode pre = null;
+    ListNode cur = head;
     while (cur != null) {
       ListNode next = cur.next;
       cur.next = pre;
+      // 从左到右移动指针
       pre = cur;
       cur = next;
     }

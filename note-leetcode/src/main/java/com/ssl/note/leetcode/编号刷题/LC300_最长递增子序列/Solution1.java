@@ -17,29 +17,62 @@ public class Solution1 {
     // 贪心思路：相同长度的递增子序列，末尾元素越小越好。因为越小的元素越容易追加递增的数
     // 维护一个递增序列 tail，其中 tail[i] 表示长度为 i+1 的最长递增子序列的最小末尾元素
     int[] tail = new int[nums.length];
-    // tail本身不一定是真实子序列，但len是正确的。
+    // len是最长递增子序列长度，[0,len-1]表示已经放好了,len位置表示待放
     int len = 0;
 
     for (int num : nums) {
-      int left = 0, right = len;
-      // 对于每个新元素 num，在 tail 中找到第一个大于等于 num 的位置，替换为 num。
-      while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (tail[mid] < num) {
-          left = mid + 1;
-        } else {
-          right = mid;
-        }
+      // 查找第一个>=v的坐标，[l,r]范围，返回-1需要特判
+      int index = binarySearch(nums, 0, len, num);
+      if (index == -1) {
+        index = len;
       }
+      // 查找第一个>=v的坐标，[l,r)范围，不需要特判
+//      int index = binarySearch1(nums, 0, len, num);
 
-      tail[left] = num;
+      tail[index] = num;
+
       // 比所有尾数都大，len++
-      if (left == len) {
+      if (index == len) {
         len++;
       }
     }
 
     return len;
+  }
+
+  // 查找第一个>=v的坐标，[l,r]范围，返回-1需要特判
+  private int binarySearch(int[] nums, int l, int r, int v) {
+    int left = l;
+    int right = r;
+
+    int res = -1;
+    while (left <= right) {
+      int mid = left + (right - left) / 2;
+      if (nums[mid] >= v) {
+        res = mid;
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    }
+    return res;
+  }
+
+  // 查找第一个>=v的坐标，[l,r)范围，不需要特判
+  private int binarySearch1(int[] tail, int l, int r, int v) {
+    int left = l;
+    int right = r;
+
+    while (left < right) {
+      int mid = left + (right - left) / 2;
+      if (tail[mid] < v) {
+        left = mid + 1;
+      } else {
+        right = mid;
+      }
+    }
+
+    return left;
   }
 
 

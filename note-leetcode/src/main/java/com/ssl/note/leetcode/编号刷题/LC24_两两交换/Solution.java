@@ -13,20 +13,20 @@ public class Solution {
     ListNode dummy = new ListNode(-1);
     dummy.next = head;
 
-    ListNode prev = dummy;
+    ListNode pre = dummy;
     // dummy → 1 → 2 → 3 → 4 → null
     // dummy → 2 → 1 → 4 → 3 → null
-    while (prev.next != null && prev.next.next != null) {
-      ListNode cur = prev.next;
-      ListNode next = prev.next.next;
+    while (pre.next != null && pre.next.next != null) {
+      ListNode first = pre.next;
+      ListNode second = pre.next.next;
 
-      // 交换2个节点有3个指针需要变化
-      // 易错的第一个pre的后续
-      prev.next = next;
-      cur.next = next.next;
-      next.next = cur;
+      // 从左到右移动指针
+      pre.next = second;
+      first.next = second.next;
+      second.next = first;
 
-      prev = cur;
+      // pre[first,second]next 变 pre[second,first]next
+      pre = first;
     }
 
     return dummy.next;
