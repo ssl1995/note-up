@@ -1,60 +1,61 @@
 package com.ssl.note.practice.lc_top_100;
 
 
-import com.ssl.note.common.utils.TreeNode;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Practice {
 
   /**
-   * 1. 15-动态规划 LC 300 最长递增子序列
-   * 2. 08-二叉树 LC 114 二叉树展开为链表
-   * 3. 09-图论 LC 207 课程表
+   * 1. 16-多维动态规划 LC 62 不同路径
+   * 2. 15-动态规划 LC 152 乘积最大子数组
    */
-  private Map<Integer, Integer> map;
-
-  public TreeNode buildTree(int[] pre, int[] in) {
-    map = new HashMap<>();
-    for (int i = 0; i < in.length; i++) {
-      map.put(in[i], i);
+  public List<List<Integer>> threeSum(int[] nums) {
+    if (nums == null || nums.length == 0) {
+      return new ArrayList<>();
     }
-//    return dfs(pre, 0, pre.length - 1, 0, in.length - 1);
-    return dfs1(pre, 0, pre.length - 1, map,0, in.length - 1);
-  }
+    Arrays.sort(nums);
+    int n = nums.length;
+    List<List<Integer>> res = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+      if (nums[i] > 0) {
+        break;
+      }
+      if (i > 0 && nums[i - 1] == nums[i]) {
+        continue;
+      }
+      int left = i + 1;
+      int right = n - 1;
+      while (left < right) {
+        int sum = nums[i] + nums[left] + nums[right];
+        if (sum < 0) {
+          left++;
+        } else if (sum > 0) {
+          right--;
+        } else {
+          res.add(Arrays.asList(nums[i], nums[left], nums[right]));
 
-  private TreeNode dfs(int[] pre, int preStart, int preEnd, int inStart, int inEnd) {
-    if (preStart > preEnd || inStart > inEnd) {
-      return null;
+          while (left + 1 < n && nums[left + 1] == nums[left]) {
+            left++;
+          }
+
+          while (right - 1 >= 0 && nums[right - 1] == nums[right]) {
+            right--;
+          }
+
+          left++;
+          right--;
+        }
+      }
     }
-    int index = map.get(pre[preStart]);
-    int leftCount = index - inStart;
 
-    TreeNode node = new TreeNode(pre[preStart]);
-    node.left = dfs(pre, preStart + 1, preStart + leftCount, inStart, index - 1);
-    node.right = dfs(pre, preStart + leftCount + 1, preEnd, index + 1, inEnd);
-
-    return node;
-  }
-
-  private TreeNode dfs1(int[] pre, int preStart, int preEnd,
-                        Map<Integer, Integer> map, int inStart, int inEnd) {
-    if (inStart > inEnd || preStart > preEnd) {
-      return null;
-    }
-    int index = map.get(pre[preStart]);
-    int leftCount = index - inStart;
-
-    TreeNode node = new TreeNode(pre[preStart]);
-    node.left = dfs1(pre, preStart + 1, preStart + leftCount, map, inStart, index - 1);
-    node.right = dfs1(pre, preStart + leftCount + 1, preEnd, map, index + 1, inEnd);
-    return node;
+    return res;
   }
 
 
   public static void main(String[] args) {
     Practice practice = new Practice();
-    int[] nums1 = {4, 10, 4, 3, 8, 9};
+
   }
 }

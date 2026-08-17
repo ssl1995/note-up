@@ -33,7 +33,7 @@ public class Solution1 {
       // 4.双指针
       int left = i + 1;
       int right = n - 1;
-      // 本题left和right不能相同
+      // 易错：本题left和right不能相同
       while (left < right) {
         int sum = nums[i] + nums[left] + nums[right];
         if (sum < 0) {
@@ -46,10 +46,10 @@ public class Solution1 {
           // 要求：答案中不可以包含重复的三元组。
           // 6.非加速，但需要跳过重复值
           // 例如；[0,0,0,0] 固定第一个0后，双指针返回第一个(0,0,0)后，不要再重复返回了
-          while (left < right && nums[left] == nums[left + 1]) {
+          while (left + 1 < n && nums[left] == nums[left + 1]) {
             left++;
           }
-          while (left < right && nums[right] == nums[right - 1]) {
+          while (right - 1 >= 0 && nums[right] == nums[right - 1]) {
             right--;
           }
           // 同时移动双指针

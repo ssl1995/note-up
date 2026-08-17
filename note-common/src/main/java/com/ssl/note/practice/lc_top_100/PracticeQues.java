@@ -20,8 +20,8 @@ public class PracticeQues {
 
     System.out.println("poolSize=" + pool.size());
     System.out.println("k=" + k);
-    for (int i = 0; i < picks.size(); i++) {
-      System.out.println((i + 1) + ". " + picks.get(i));
+    for (Question pick : picks) {
+      System.out.println(pick);
     }
   }
 

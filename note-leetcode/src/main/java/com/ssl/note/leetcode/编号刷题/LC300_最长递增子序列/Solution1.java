@@ -11,27 +11,14 @@ public class Solution1 {
    * 时间复杂度：O(nlogn)
    */
   public int lengthOfLIS(int[] nums) {
-    if (nums == null || nums.length == 0) {
-      return 0;
-    }
-    // 贪心思路：相同长度的递增子序列，末尾元素越小越好。因为越小的元素越容易追加递增的数
-    // 维护一个递增序列 tail，其中 tail[i] 表示长度为 i+1 的最长递增子序列的最小末尾元素
-    int[] tail = new int[nums.length];
-    // len是最长递增子序列长度，[0,len-1]表示已经放好了,len位置表示待放
+    int m = nums.length;
+    int[] tail = new int[m];
     int len = 0;
 
     for (int num : nums) {
-      // 查找第一个>=v的坐标，[l,r]范围，返回-1需要特判
-      int index = binarySearch(nums, 0, len, num);
-      if (index == -1) {
-        index = len;
-      }
-      // 查找第一个>=v的坐标，[l,r)范围，不需要特判
-//      int index = binarySearch1(nums, 0, len, num);
-
+      int index = find(tail, 0, len, num);
       tail[index] = num;
 
-      // 比所有尾数都大，len++
       if (index == len) {
         len++;
       }
@@ -40,8 +27,22 @@ public class Solution1 {
     return len;
   }
 
+  // 查找第一个>=v的坐标，[l,r)范围，找不到的时候，返回right，不需要特判
+  private int find(int[] tail, int left, int right, int v) {
+    while (left < right) {
+      int mid = left + (right - left) / 2;
+      if (tail[mid] < v) {
+        left = mid + 1;
+      } else {
+        right = mid;
+      }
+    }
+
+    return left;
+  }
+
   // 查找第一个>=v的坐标，[l,r]范围，返回-1需要特判
-  private int binarySearch(int[] nums, int l, int r, int v) {
+  private int find1(int[] nums, int l, int r, int v) {
     int left = l;
     int right = r;
 
@@ -57,24 +58,6 @@ public class Solution1 {
     }
     return res;
   }
-
-  // 查找第一个>=v的坐标，[l,r)范围，不需要特判
-  private int binarySearch1(int[] tail, int l, int r, int v) {
-    int left = l;
-    int right = r;
-
-    while (left < right) {
-      int mid = left + (right - left) / 2;
-      if (tail[mid] < v) {
-        left = mid + 1;
-      } else {
-        right = mid;
-      }
-    }
-
-    return left;
-  }
-
 
   public static void main(String[] args) {
     Solution1 solution = new Solution1();

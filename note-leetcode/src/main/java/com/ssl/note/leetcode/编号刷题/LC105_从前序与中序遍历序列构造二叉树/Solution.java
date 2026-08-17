@@ -31,31 +31,16 @@ public class Solution {
     if (inStart > inEnd || preStart > preEnd) {
       return null;
     }
-    int index = map.get(pre[preStart]);
+    int rootVal = pre[preStart];
+
+    int index = map.get(rootVal);
     int leftCount = index - inStart;
 
     // 前序：preStart,[preStart+1,preStart+leftCount],[preStart+leftCount+1,preEnd]
     // 中序：[inStart,index-1],index,[index+1,inEnd]
-    TreeNode node = new TreeNode(pre[preStart]);
+    TreeNode node = new TreeNode(rootVal);
     node.left = dfs1(pre, preStart + 1, preStart + leftCount, map, inStart, index - 1);
     node.right = dfs1(pre, preStart + leftCount + 1, preEnd, map, index + 1, inEnd);
-    return node;
-  }
-
-  // 前序和中序遍历，前序指针可以省略preEnd
-  private TreeNode dfs2(int[] pre, int preStart,
-                       Map<Integer, Integer> map, int inStart, int inEnd) {
-    if (inStart > inEnd) {
-      return null;
-    }
-    int index = map.get(pre[preStart]);
-    int leftCount = index - inStart;
-
-    // 前序：preStart,[preStart+1,preStart+leftCount],[preStart+leftCount+1,preEnd]
-    // 中序：[inStart,index-1],index,[index+1,inEnd]
-    TreeNode node = new TreeNode(pre[preStart]);
-    node.left = dfs2(pre, preStart + 1, map, inStart, index - 1);
-    node.right = dfs2(pre, preStart + leftCount + 1, map, index + 1, inEnd);
     return node;
   }
 

@@ -34,13 +34,13 @@ public class Solution2 {
   }
 
   // 三路快排
-  private int[] partition(int[] nums, int l, int r) {
-    int random = new Random().nextInt(r - l + 1) + l;
+  private int[] partition(int[] nums, int left, int right) {
     // 1、先保存基准值，不能用 nums[random]，否则交换后基准值会跟着变
+    int random = new Random().nextInt(right - left + 1) + left;
     int pivot = nums[random];
-    int a = l;
-    int b = r;
-    int i = l;
+
+    int a = left, b = right;
+    int i = left;
     // 2、扫描右边界是 b 而不是 r，i > b 时终止
     // [0,a-1] [a,b] [b+1,r]
     while (i <= b) {
