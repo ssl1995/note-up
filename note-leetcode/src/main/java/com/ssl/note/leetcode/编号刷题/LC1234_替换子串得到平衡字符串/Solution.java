@@ -9,16 +9,16 @@ public class Solution {
    * 输入：s = "QQWE"
    * 输出：1
    * 解释：我们需要把一个 'Q' 替换成 'R'，这样得到的 "RQWE" (或 "QRWE") 是平衡的。
-   *
+   * <p>
    * 思路：替换一个子串后，子串外的字符必须已经平衡（每种 ≤ n/4）。
    * 问题转化为：找最短子串，使其包含所有“超出 n/4 的富余字符” → 套 LC76 最小覆盖子串模板。
-   *
+   * <p>
    * 经验总结：
    * 1. “替换/删除一段使整体满足某种计数要求”→ 转化为“窗口外已满足，窗口内覆盖富余”，想到滑动窗口。
    * 2. 欠债模型：超出的字符记负数（欠多少个），窗口纳入时 ++，从负数加回 0 才算还了一份债；
-   *    不够的字符记 0（不用还），debt 记录总债务，debt == 0 时窗口有效。
+   * 不够的字符记 0（不用还），debt 记录总债务，debt == 0 时窗口有效。
    * 3. 收缩循环用“先判断后操作”（cnts[sArr[l]] > 0 才移除），不要把 -- 写进条件，
-   *    否则条件失败时计数会被偷减一次，与窗口不一致。
+   * 否则条件失败时计数会被偷减一次，与窗口不一致。
    */
   public int balancedString(String s) {
     int n = s.length();
@@ -50,7 +50,7 @@ public class Solution {
       return 0;
     }
 
-    int len = Integer.MAX_VALUE;
+    int res = Integer.MAX_VALUE;
     for (int r = 0, l = 0; r < n; r++) {
       // 右端字符进窗口：计数 ++；从负数加回来说明还上了一份债
       if (cnts[sArr[r]]++ < 0) {
@@ -61,13 +61,11 @@ public class Solution {
         while (cnts[sArr[l]] > 0) {
           cnts[sArr[l++]]--;
         }
-        if (r - l + 1 < len) {
-          len = r - l + 1;
-        }
+        res = Math.min(res, r - l + 1);
       }
     }
 
-    return len == Integer.MAX_VALUE ? 0 : len;
+    return res == Integer.MAX_VALUE ? 0 : res;
   }
 
   public static void main(String[] args) {

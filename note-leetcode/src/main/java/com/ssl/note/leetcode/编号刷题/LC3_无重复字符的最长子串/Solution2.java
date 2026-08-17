@@ -20,9 +20,9 @@ public class Solution2 {
     for (int right = 0, left = 0; right < cs.length; right++) {
       // 左窗口：重复字符上次出现位置在窗口内时，左边界右移；在窗口外时left不能往回退
       left = Math.max(left, map[cs[right]] + 1);
+      map[cs[right]] = right;
 
       res = Math.max(res, right - left + 1);
-      map[cs[right]] = right;
     }
 
     return res;

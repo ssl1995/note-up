@@ -1,4 +1,4 @@
-package com.ssl.note.leetcode.编号刷题.LC999_k个不同整数的子数组;
+package com.ssl.note.leetcode.编号刷题.LC992_k个不同整数的子数组;
 
 import java.util.Arrays;
 

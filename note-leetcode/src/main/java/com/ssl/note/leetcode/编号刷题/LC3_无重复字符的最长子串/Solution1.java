@@ -21,9 +21,9 @@ public class Solution1 {
       if (map.containsKey(cs[right])) {
         left = Math.max(left, map.get(cs[right]) + 1);
       }
+      map.put(cs[right], right);
 
       res = Math.max(res, right - left + 1);
-      map.put(cs[right], right);
     }
 
     return res;
