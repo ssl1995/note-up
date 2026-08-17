@@ -1,9 +1,5 @@
 package com.ssl.note.leetcode.编号刷题.LC76_最小覆盖子串;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-
 /**
  * @author SongShengLin
  * @date 2022/1/28 8:33 AM
@@ -16,62 +12,44 @@ public class Solution {
    * 输入：s = "ADOBECODEBANC", t = "ABC"
    * 输出："BANC"
    */
-  public String minWindow(String s, String t) {
-    if (s.length() < t.length()) {
-      return "";
+  public String minWindow(String str, String tar) {
+    char[] cs = str.toCharArray();
+    char[] ct = tar.toCharArray();
+
+    // 需要的
+    int[] cnts = new int[256];
+    for (char c : ct) {
+      cnts[c]--;
     }
+    // 总的债务
+    int debt = ct.length;
 
-    int m = s.length();
-    int n = t.length();
-
-    // 记录窗口内匹配的字符种类
-    Map<Character, Integer> window = new HashMap<>();
-    // 统计t中字符的种类
-    Map<Character, Integer> need = new HashMap<>();
-
-    for (int i = 0; i <= n - 1; i++) {
-      char curChar = t.charAt(i);
-      need.put(curChar, need.getOrDefault(curChar, 0) + 1);
-    }
-
+    // 求子串，考虑初始坐标和长度
     int start = 0;
-    int minLen = Integer.MAX_VALUE;
+    int len = Integer.MAX_VALUE;
 
-    int valid = 0;
-    int left = 0;
-    for (int i = 0; i <= m - 1; i++) {
-      char c = s.charAt(i);
-
-      // 窗口内字符匹配上了
-      if (need.containsKey(c)) {
-        window.put(c, window.getOrDefault(c, 0) + 1);
-        if (window.get(c).equals(need.get(c))) {
-          valid++;
-        }
+    for (int right = 0, left = 0; right < cs.length; right++) {
+      // ++/-- 写进条件里，条件成功or失败都会执行
+      // 这里是必须发生的，所以加1后还<0,说明还需要
+      // 也可以写成：++cnts[cs[right]] <= 0
+      if (cnts[cs[right]]++ < 0) {
+        debt--;
       }
 
-      // 缩小窗口
-      while (valid == need.size()) {
-        // 记录长度
-        if (i - left + 1 < minLen) {
+      if (debt == 0) {
+        // ++/-- 写进条件里，条件成功or失败都会执行
+        // 这里不是必须发生的，所以不能写成cnts[cs[left]]-->0
+        while (cnts[cs[left]] > 0) {
+          cnts[cs[left++]]--;
+        }
+
+        if (right - left + 1 < len) {
+          len = right - left + 1;
           start = left;
-          minLen = i - left + 1;
         }
-
-        c = s.charAt(left);
-        if (need.containsKey(c)) {
-          if (window.get(c).equals(need.get(c))) {
-            // 窗口内字符匹配数减1,所以是while
-            valid--;
-          }
-          window.put(c, window.get(c) - 1);
-        }
-
-        left++;
       }
     }
-
-    return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
+    return len == Integer.MAX_VALUE ? "" : str.substring(start, start + len);
   }
 
 
