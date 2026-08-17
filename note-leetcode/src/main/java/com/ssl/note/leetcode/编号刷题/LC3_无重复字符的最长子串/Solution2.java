@@ -11,29 +11,21 @@ public class Solution2 {
    * 概念：1.子串 = 连续的 2.子序列 = 不连续的
    */
   public int lengthOfLongestSubstring(String s) {
-    if (s.isEmpty()) {
-      return 0;
-    }
-    int maxLen = 0; // 最大长度
-    int left = 0;// 窗口内无重复字符的左边界
-    // 题目：s 由英文字母、数字、符号和空格组成
     int[] map = new int[256];
     Arrays.fill(map, -1);
 
-    for (int i = 0; i < s.length(); i++) {
-      char c = s.charAt(i);
+    char[] cs = s.toCharArray();
 
-      // 重复字符在窗口内，left 跳跃
-      if (map[c] >= left) {
-        left = map[c] + 1;
-      }
+    int res = 0;
+    for (int right = 0, left = 0; right < cs.length; right++) {
+      // 左窗口：重复字符上次出现位置在窗口内时，左边界右移；在窗口外时left不能往回退
+      left = Math.max(left, map[cs[right]] + 1);
 
-      // 记录字符位置
-      map[c] = i;
-      // 更新最大长度
-      maxLen = Math.max(maxLen, i - left + 1);
+      res = Math.max(res, right - left + 1);
+      map[cs[right]] = right;
     }
-    return maxLen;
+
+    return res;
   }
 
   public static void main(String[] args) {

@@ -1,9 +1,7 @@
 package com.ssl.note.practice.lc_top_100;
 
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Practice {
 
@@ -11,43 +9,19 @@ public class Practice {
    * 1. 16-多维动态规划 LC 62 不同路径
    * 2. 15-动态规划 LC 152 乘积最大子数组
    */
-  public List<List<Integer>> threeSum(int[] nums) {
-    if (nums == null || nums.length == 0) {
-      return new ArrayList<>();
-    }
-    Arrays.sort(nums);
-    int n = nums.length;
-    List<List<Integer>> res = new ArrayList<>();
-    for (int i = 0; i < n; i++) {
-      if (nums[i] > 0) {
-        break;
-      }
-      if (i > 0 && nums[i - 1] == nums[i]) {
-        continue;
-      }
-      int left = i + 1;
-      int right = n - 1;
-      while (left < right) {
-        int sum = nums[i] + nums[left] + nums[right];
-        if (sum < 0) {
-          left++;
-        } else if (sum > 0) {
-          right--;
-        } else {
-          res.add(Arrays.asList(nums[i], nums[left], nums[right]));
+  public int lengthOfLongestSubstring(String s) {
+    int[] map = new int[256];
+    Arrays.fill(map, -1);
 
-          while (left + 1 < n && nums[left + 1] == nums[left]) {
-            left++;
-          }
+    char[] cs = s.toCharArray();
 
-          while (right - 1 >= 0 && nums[right - 1] == nums[right]) {
-            right--;
-          }
+    int res = 0;
+    for (int right = 0, left = 0; right < cs.length; right++) {
+      // 左窗口：重复字符上次出现位置在窗口内时，左边界右移；在窗口外时left不能往回退
+      left = Math.max(left, map[cs[right]] + 1);
 
-          left++;
-          right--;
-        }
-      }
+      res = Math.max(res, right - left + 1);
+      map[cs[right]] = right;
     }
 
     return res;
@@ -56,6 +30,11 @@ public class Practice {
 
   public static void main(String[] args) {
     Practice practice = new Practice();
+    System.out.println(practice.lengthOfLongestSubstring("abcabcbb")); // 3
+    System.out.println(practice.lengthOfLongestSubstring("bbbbb"));    // 1
+    System.out.println(practice.lengthOfLongestSubstring("pwwkew"));   // 3
+    System.out.println(practice.lengthOfLongestSubstring("abba"));     // 2
+    System.out.println(practice.lengthOfLongestSubstring(""));         // 0
 
   }
 }

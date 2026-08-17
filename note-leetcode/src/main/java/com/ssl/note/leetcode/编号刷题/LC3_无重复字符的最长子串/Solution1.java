@@ -1,6 +1,5 @@
 package com.ssl.note.leetcode.编号刷题.LC3_无重复字符的最长子串;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,27 +12,21 @@ public class Solution1 {
    * 概念：1.子串 = 连续的 2.子序列 = 不连续的
    */
   public int lengthOfLongestSubstring(String s) {
-    if (s.isEmpty()) {
-      return 0;
-    }
-    int maxLen = 0; // 最大长度
-    int left = 0;// 窗口内无重复字符的左边界
     Map<Character, Integer> map = new HashMap<>();
+    char[] cs = s.toCharArray();
 
-    for (int i = 0; i < s.length(); i++) {
-      char c = s.charAt(i);
-
-      // map：记录本
-      // map+left的比较：保证上一次出现的位置在窗口内
-      if (map.containsKey(c) && map.get(c) >= left) {
-        left = map.get(c) + 1;
+    int res = 0;
+    for (int right = 0, left = 0; right < cs.length; right++) {
+      // 左窗口：重复字符上次出现位置在窗口内时，左边界右移；在窗口外时left不能往回退
+      if (map.containsKey(cs[right])) {
+        left = Math.max(left, map.get(cs[right]) + 1);
       }
 
-      map.put(c, i);
-      maxLen = Math.max(maxLen, i - left + 1);
+      res = Math.max(res, right - left + 1);
+      map.put(cs[right], right);
     }
 
-    return maxLen;
+    return res;
   }
 
   public static void main(String[] args) {
