@@ -10,7 +10,7 @@ public class PracticeQues {
   public static void main(String[] args) {
     // 力扣热题Top100
     List<Question> pool = Question.buildLCTop100();
-    int k = 2;
+    int k = 3;
     List<Question> picks = RandomUtil.pickKByReservoir(pool, k);
 
     // 错题和难题

@@ -7,7 +7,7 @@ import java.util.Arrays;
  * @date 2022/1/15 12:10 PM
  * @description
  */
-public class Solution1 {
+public class Solution2_error {
 
   /**
    * 给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
@@ -18,52 +18,57 @@ public class Solution1 {
     if (nums == null || nums.length == 0) {
       return new int[]{-1, -1};
     }
+    if (nums.length == 1 && target == nums[0]) {
+      return new int[]{0, 0};
+    }
     int index1 = getFirst(nums, target);
     int index2 = getLast(nums, target);
     return new int[]{index1, index2};
   }
 
-  // =t的第一个位置
   private int getFirst(int[] nums, int target) {
     int left = 0;
-    int right = nums.length;
-    while (left < right) {
+    int right = nums.length - 1;
+    int res = -1;
+    while (left <= right) {
       int mid = left + (right - left) / 2;
       if (nums[mid] >= target) {
-        right = mid;
+        res = mid;
+        right = mid - 1;
       } else {
         left = mid + 1;
       }
     }
-    // left指针越界 或者 第一个>=t的数可能不是t
-    if (left == nums.length || nums[left] != target) {
+    if (res == -1 || nums[res] != target) {
       return -1;
     }
-    return left;
+    return res;
   }
 
-  // =t的最后一个位置 转 <=t的最后一个位置
+  // <=t的最后一个位置 转成 >t的第一个位置
   private int getLast(int[] nums, int target) {
     int left = 0;
-    int right = nums.length;
-    while (left < right) {
+    int right = nums.length - 1;
+    int res = -1;
+    while (left <= right) {
       int mid = left + (right - left) / 2;
       // <=t的最后一个位置，反过来>t的前一个位置
       if (nums[mid] > target) {
-        right = mid;
+        res = mid;
+        right = mid - 1;
       } else {
         left = mid + 1;
       }
     }
-    // left指针越界 或者最后一个>=t的数可能不是t
-    if (left == 0 || nums[left - 1] != target) {
+    // 错误：如果nums全是=t的，找>t+1的第一个位置，res的写法返回-1，无法区分是返回0还是-1
+    if (res == -1 || res == 0 || nums[res - 1] != target) {
       return -1;
     }
-    return left - 1;
+    return res - 1;
   }
 
   public static void main(String[] args) {
-    Solution1 solution = new Solution1();
+    Solution2_error solution = new Solution2_error();
     int[] nums = {1};
     int t = 1;
     System.out.println(Arrays.toString(solution.searchRange(nums, t)));
