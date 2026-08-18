@@ -9,7 +9,9 @@ public class Solution1 {
    * 解法一暴力法：每次遍历都找左右两边最高列的最小 + 本次列计算雨水的面积，逐步累加
    */
   public int trap(int[] height) {
-
+    if (height == null || height.length <= 1) {
+      return 0;
+    }
     int water = 0;
     for (int i = 1; i < height.length - 1; i++) {
       // 会超时，就是因为左右两边最高的列都是每次都遍历一遍，会超时

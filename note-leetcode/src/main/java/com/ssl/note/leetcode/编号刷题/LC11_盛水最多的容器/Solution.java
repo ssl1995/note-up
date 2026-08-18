@@ -16,10 +16,11 @@ public class Solution {
     int right = height.length - 1;
     int maxArea = 0;
     while (left <= right) {
-      // 面积 = 长 * 高
+      // 先算面积，再移动指针
       int temp = (right - left) * Math.min(height[left], height[right]);
       maxArea = Math.max(maxArea, temp);
-      // 判断高度，选择矮的移动
+
+      // 单调性(贪心)：面积变大，只能移动矮的才有可能变大
       if (height[left] < height[right]) {
         left++;
       } else {

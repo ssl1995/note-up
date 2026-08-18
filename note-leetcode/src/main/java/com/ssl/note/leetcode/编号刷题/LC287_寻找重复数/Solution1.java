@@ -18,9 +18,7 @@ public class Solution1 {
     // 初始化慢指针和快指针
     // 数组和链表LC142题不一样，同点出发，先走再判=也可以换成do-while
     int slow = nums[0];
-    int fast = nums[0];
-    slow = nums[slow];
-    fast = nums[nums[fast]];
+    int fast = nums[nums[0]];
 
     // 第一阶段：找相遇点
     while (slow != fast) {
@@ -30,12 +28,12 @@ public class Solution1 {
 
     // 第二次相遇后
     // 快指针从第一个节点开始
-    fast = nums[0];
+    fast = 0;
     while (slow != fast) {
       slow = nums[slow];
       fast = nums[fast];
     }
-
+    // 返回重复的数，这里slow都是数啦
     return slow;
   }
 

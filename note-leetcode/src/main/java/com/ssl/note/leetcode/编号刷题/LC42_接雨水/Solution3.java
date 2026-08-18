@@ -9,6 +9,9 @@ public class Solution3 {
    * 解法四：双指针，最优解
    */
   public int trap(int[] height) {
+    if (height == null || height.length <= 1) {
+      return 0;
+    }
     // 记录i位置左右两边最高
     int leftMax = 0;
     int rightMax = 0;
@@ -16,10 +19,10 @@ public class Solution3 {
     // 双指针
     int left = 0;
     int right = height.length - 1;
-
     int water = 0;
-    while (left < right) {
-      // i位置的左右两边最高值
+
+    while (left <= right) {
+      // i位置的左右两边最高值,包含自己
       leftMax = Math.max(leftMax, height[left]);
       rightMax = Math.max(rightMax, height[right]);
 

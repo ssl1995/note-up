@@ -9,7 +9,9 @@ public class Solution2 {
    * 规避 每次遍历都找左右两边最高列的最小 + 本次列计算雨水的面积，逐步累加
    */
   public int trap(int[] height) {
-
+    if (height == null || height.length <= 1) {
+      return 0;
+    }
     int water = 0;
     int n = height.length;
     // 计算i左边最高列
@@ -38,7 +40,7 @@ public class Solution2 {
 
   public static void main(String[] args) {
     Solution2 solution = new Solution2();
-    int[] nums = {0,1,0,2,1,0,1,3,2,1,2,1};
+    int[] nums = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
     System.out.println(solution.trap(nums));
   }
 }
