@@ -15,25 +15,23 @@ public class Solution {
     if (root == null) {
       return true;
     }
-    // 中序遍历是用栈
     Deque<TreeNode> stack = new ArrayDeque<>();
-    // root初始化可能直接就是整形最小值,所以pre初始化<整形最小，选Long的最小值
-    long pre = Long.MIN_VALUE;
+    // 中序遍历前一个节点
+    TreeNode pre = null;
 
-    while (!stack.isEmpty() || root != null) {
+    while (root != null || !stack.isEmpty()) {
       if (root != null) {
         stack.push(root);
         root = root.left;
       } else {
         TreeNode pop = stack.pop();
+        root = pop.right;
 
-        // 中序遍历是严格递增，一旦>=就违规
-        if (pre >= pop.val) {
+        // 中序遍历，当前和前一个比大小
+        if (pre != null && pre.val >= pop.val) {
           return false;
         }
-
-        pre = pop.val;
-        root = pop.right;
+        pre = pop;
       }
     }
 

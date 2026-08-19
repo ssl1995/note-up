@@ -31,8 +31,12 @@ public class Solution {
       return root;
     }
 
-    // 左右孩子没遍历到，就返回右左孩子
     // 两者都是空，就返回空
+    if (left == null && right == null) {
+      return null;
+    }
+
+    // 那个不为空，就往哪里遍历
     return left == null ? right : left;
   }
 }

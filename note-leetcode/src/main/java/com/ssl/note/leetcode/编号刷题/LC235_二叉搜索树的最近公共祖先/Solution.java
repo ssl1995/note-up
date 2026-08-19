@@ -42,4 +42,21 @@ public class Solution {
     return null;
   }
 
+  /**
+   * 更适合迭代写法：利用 BST 左小右大的性质，O(H) 时间，O(1) 空间
+   */
+  public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+    TreeNode cur = root;
+    while (cur != null) {
+      if ((p.val <= cur.val && cur.val <= q.val) || (q.val <= cur.val && cur.val <= p.val)) {
+        return cur;
+      } else if (p.val > cur.val) {
+        cur = cur.right;
+      } else {
+        cur = cur.left;
+      }
+    }
+    return null;
+  }
+
 }
