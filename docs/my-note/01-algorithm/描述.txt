@@ -10,3 +10,6 @@ com.ssl.note.leetcode.编号刷题.LC772_基本计算器III.Solution.calculate;
 一维前缀和的题：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC1109_航班预定统计\Solution.java
 一维差分数组的题：D:\project\java\note-up\note-leetcode\src\main\java\com\ssl\note\leetcode\编号刷题\LC1139_最大的以1为边界的正方形\Solution.java
 请总结相关知识点，生成一份md文档，我复制进飞书
+
+给你一个数组 time ，其中 time[i] 表示第 i 辆公交车完成 一趟旅途 所需要花费的时间。
+给你一个整数 totalTrips ，表示所有公交车 总共 需要完成的旅途数目。请你返回完成 至少 totalTrips 趟旅途需要花费的 最少 时间。
