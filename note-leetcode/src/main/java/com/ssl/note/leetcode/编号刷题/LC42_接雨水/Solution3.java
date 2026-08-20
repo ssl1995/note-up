@@ -17,17 +17,21 @@ public class Solution3 {
     int rightMax = 0;
 
     // 双指针
-    int left = 0;
-    int right = height.length - 1;
+    int l = 0;
+    int r = height.length - 1;
     int water = 0;
 
-    while (left <= right) {
+    while (l <= r) {
       // i位置的左右两边最高值,包含自己
-      leftMax = Math.max(leftMax, height[left]);
-      rightMax = Math.max(rightMax, height[right]);
+      leftMax = Math.max(leftMax, height[l]);
+      rightMax = Math.max(rightMax, height[r]);
 
       // 左右两边低位决定接哪边水
-      water += leftMax < rightMax ? leftMax - height[left++] : rightMax - height[right--];
+      int min = Math.min(leftMax, rightMax);
+      int h = height[l] < height[r] ? height[l++] : height[r--];
+      water += Math.max(min - h, 0);
+      // 统一：
+      //water += leftMax < rightMax ? leftMax - height[l++] : rightMax - height[r--];
     }
 
     return water;
@@ -35,7 +39,7 @@ public class Solution3 {
 
   public static void main(String[] args) {
     Solution3 solution = new Solution3();
-    int[] nums = {0,1,0,2,1,0,1,3,2,1,2,1};
+    int[] nums = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};
     System.out.println(solution.trap(nums));
   }
 }

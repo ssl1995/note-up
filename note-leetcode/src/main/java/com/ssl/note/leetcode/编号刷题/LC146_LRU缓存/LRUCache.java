@@ -64,6 +64,7 @@ class LRUCache {
       insertToTail(node);
       // 更新map
       map.put(key, node);
+      return;
     }
     // 存在
     Node node = map.get(key);
@@ -72,7 +73,7 @@ class LRUCache {
     moveToTail(node);
   }
 
-  // 原子操作：删除=删除某个节点
+  // 原子操作1：删除=删除某个节点
   private void deleteNode(Node node) {
     if (node == null) {
       return;
@@ -81,7 +82,7 @@ class LRUCache {
     node.next.pre = node.pre;
   }
 
-  // 原子操作：插入=队尾插入节点
+  // 原子操作2：插入=队尾插入节点
   private void insertToTail(Node node) {
     if (node == null) {
       return;

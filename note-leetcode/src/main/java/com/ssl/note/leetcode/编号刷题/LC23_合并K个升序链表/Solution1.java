@@ -18,18 +18,14 @@ public class Solution1 {
    * 输出：[1,1,2,3,4,4,5,6]
    */
   public ListNode mergeKLists(ListNode[] lists) {
-    int n = lists.length;
-    if (n == 0) {
+    if (lists == null || lists.length == 0) {
       return null;
-    }
-    if (n == 1) {
-      return lists[0];
     }
     // 1、小根堆，排序比较器用val字段
     PriorityQueue<ListNode> minHeap = new PriorityQueue<>(Comparator.comparingInt(a -> a.val));
-
     // 2、将每个链表的头节点放进堆中
     for (ListNode node : lists) {
+      // 链表数组，可能头是空
       if (node != null) {
         minHeap.offer(node);
       }
@@ -45,9 +41,8 @@ public class Solution1 {
       cur = cur.next;
 
       // 新的头入小根堆
-      node = node.next;
-      if (node != null) {
-        minHeap.offer(node);
+      if (node.next != null) {
+        minHeap.offer(node.next);
       }
     }
 

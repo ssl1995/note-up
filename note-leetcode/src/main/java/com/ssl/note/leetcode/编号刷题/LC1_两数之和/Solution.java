@@ -22,16 +22,11 @@ public class Solution {
       return new int[]{-1, -1};
     }
     Map<Integer, Integer> map = new HashMap<>();
-    for (int i = 0; i <= nums.length - 1; i++) {
-      int otherNum = target - nums[i];
-      // 单词：containsKey
-      if (!map.containsKey(otherNum)) {
-        map.put(nums[i], i);
-        // 单词：continue
-        continue;
+    for (int i = 0; i < nums.length; i++) {
+      if (map.containsKey(target - nums[i])) {
+        return new int[]{i, map.get(target - nums[i])};
       }
-      int otherIndex = map.get(otherNum);
-      return new int[]{otherIndex, i};
+      map.put(nums[i], i);
     }
     return new int[]{-1, -1};
   }

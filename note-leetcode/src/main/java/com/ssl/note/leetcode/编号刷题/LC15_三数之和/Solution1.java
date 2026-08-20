@@ -26,35 +26,35 @@ public class Solution1 {
       if (nums[i] > 0) {
         break;
       }
-      // 3.加速2：去重：跳过重复的第一个数
+      // 3.易错/加速2：重复的第一个数保留，下面会计算，后续重复的跳过
       if (i > 0 && nums[i] == nums[i - 1]) {
         continue;
       }
       // 4.双指针
-      int left = i + 1;
-      int right = n - 1;
+      int l = i + 1;
+      int r = n - 1;
       // 易错：本题left和right不能相同
-      while (left < right) {
-        int sum = nums[i] + nums[left] + nums[right];
+      while (l < r) {
+        int sum = nums[i] + nums[l] + nums[r];
         if (sum < 0) {
-          left++;
+          l++;
         } else if (sum > 0) {
-          right--;
+          r--;
         } else {
           // 5.找到答案
-          res.add(Arrays.asList(nums[i], nums[left], nums[right]));
+          res.add(Arrays.asList(nums[i], nums[l], nums[r]));
           // 要求：答案中不可以包含重复的三元组。
           // 6.非加速，但需要跳过重复值
           // 例如；[0,0,0,0] 固定第一个0后，双指针返回第一个(0,0,0)后，不要再重复返回了
-          while (left + 1 < n && nums[left] == nums[left + 1]) {
-            left++;
+          while (l + 1 < n && nums[l] == nums[l + 1]) {
+            l++;
           }
-          while (right - 1 >= 0 && nums[right] == nums[right - 1]) {
-            right--;
+          while (r - 1 >= 0 && nums[r] == nums[r - 1]) {
+            r--;
           }
-          // 同时移动双指针
-          left++;
-          right--;
+          // 易错:还需要再次移动双指针
+          l++;
+          r--;
         }
       }
     }

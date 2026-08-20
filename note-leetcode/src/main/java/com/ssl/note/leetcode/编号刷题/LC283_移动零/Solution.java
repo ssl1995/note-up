@@ -15,20 +15,23 @@ public class Solution {
    * 输出: [1,3,12,0,0]
    */
   public void moveZeroes(int[] nums) {
-    int slow = 0;
-    for (int fast = 0; fast < nums.length; fast++) {
-      if (nums[fast] == 0) {
-        continue;
+    if (nums == null || nums.length == 0) {
+      return;
+    }
+    // [0,l]放非0
+    int l = 0;
+    // [r,n-1]放0
+    int r = 0;
+    int n = nums.length;
+    while (r < n) {
+      if (nums[r] != 0) {
+        swap(nums, l++, r);
       }
-      // 非零时才交换
-      swap(nums, slow++, fast);
+      r++;
     }
   }
 
   private void swap(int[] nums, int i, int j) {
-    if (i == j) {
-      return;
-    }
     int temp = nums[i];
     nums[i] = nums[j];
     nums[j] = temp;

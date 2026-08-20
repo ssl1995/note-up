@@ -1,8 +1,6 @@
 package com.ssl.note.leetcode.编号刷题.LC128_最长连续序列;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,26 +26,27 @@ public class Solution {
     for (int num : nums) {
       set.add(num);
     }
-    int maxLen = 0;
+    int res = 0;
+    int len = 1;
     // 不能遍历nums，因为可能有很多重复元素
     // 直接遍历set
     for (int num : set) {
-      // 当前数-1已经在set中，说明当前数不是起点，跳过
+      // 超时优化：跳过起点存在的
       if (set.contains(num - 1)) {
         continue;
       }
+      // 只统计自己是起点的，
+      len = 1;
+      int temp = num;
 
-      int curLen = 1;
-      int curNum = num;
-
-      while (set.contains(curNum + 1)) {
-        curLen++;
-        curNum++;
+      while (set.contains(temp + 1)) {
+        len++;
+        temp++;
       }
-      maxLen = Math.max(maxLen, curLen);
+      res = Math.max(res, len);
     }
 
-    return maxLen;
+    return res;
   }
 
   public static void main(String[] args) {

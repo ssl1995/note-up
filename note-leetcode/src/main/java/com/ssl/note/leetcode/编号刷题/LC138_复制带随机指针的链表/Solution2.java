@@ -11,11 +11,16 @@ public class Solution2 {
    * 复制一个带有随机指针的链表
    */
   public Node copyRandomList(Node head) {
-    // 1、每个节点后面复制节点
+    // 不能||head.next==null，因为只要有1个节点都要重新复制
+    if (head == null) {
+      return null;
+    }
+    // 1、新建节点，不动random
     Node cur = head;
     while (cur != null) {
       Node next = cur.next;
       Node copy = new Node(cur.val);
+
       cur.next = copy;
       copy.next = next;
 
@@ -26,14 +31,16 @@ public class Solution2 {
     cur = head;
     while (cur != null) {
       Node copy = cur.next;
+      Node next = copy.next;
+
       copy.random = cur.random == null ? null : cur.random.next;
 
-      cur = copy.next;
+      cur = next;
     }
 
     // 3、分离=修改复制节点的next
     cur = head;
-    Node newHead = cur == null ? null : cur.next;
+    Node newHead = cur.next;
     while (cur != null) {
       Node copy = cur.next;
       Node next = copy.next;

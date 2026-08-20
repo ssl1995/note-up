@@ -1,7 +1,9 @@
 package com.ssl.note.leetcode.编号刷题.LC49_字母异位词分组;
 
-import java.sql.SQLOutput;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Solution {
 
@@ -27,7 +29,7 @@ public class Solution {
   }
 
   /*
-   * 使用次数 + 特殊字符，组成一个唯一键
+   * 固定格式唯一key：字符 + 次数，只追加非零项
    */
   private String getCountKey(String str) {
     if (str == null) {
@@ -40,9 +42,11 @@ public class Solution {
     }
 
     StringBuilder sb = new StringBuilder();
-    for (int num : count) {
-      // 加#防止：1和11无法区分真实的次数
-      sb.append(num).append("#");
+    for (int i = 0; i < 26; i++) {
+      // 只追加非0，减少append次数
+      if (count[i] > 0) {
+        sb.append((char) ('a' + i)).append(count[i]);
+      }
     }
 
     return sb.toString();

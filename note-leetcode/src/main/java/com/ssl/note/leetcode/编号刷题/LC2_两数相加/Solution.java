@@ -15,18 +15,19 @@ public class Solution {
     ListNode cur = dummyNode;
 
     int carry = 0;
+    int sum;
+    int value;
     // 只要有一个链表还有节点，就继续
     while (l1 != null || l2 != null) {
       // 当前数的合，末尾必须加上上一位的进位carry
-      int sum = (l1 != null ? l1.val : 0)
+      sum = (l1 != null ? l1.val : 0)
           + (l2 != null ? l2.val : 0)
           + carry;
-
-      // sum=11，取1
-      int value = sum % 10;
       // sum=11，判断是否进位
       carry = sum / 10;
-
+      // sum=11，取1
+      value = sum % 10;
+      // 移动l1和l2
       l1 = l1 != null ? l1.next : null;
       l2 = l2 != null ? l2.next : null;
 
