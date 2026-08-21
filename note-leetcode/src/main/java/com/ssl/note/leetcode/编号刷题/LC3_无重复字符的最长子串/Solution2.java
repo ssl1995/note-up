@@ -17,12 +17,18 @@ public class Solution2 {
     char[] cs = s.toCharArray();
 
     int res = 0;
-    for (int right = 0, left = 0; right < cs.length; right++) {
-      // 左窗口：重复字符上次出现位置在窗口内时，左边界右移；在窗口外时left不能往回退
-      left = Math.max(left, map[cs[right]] + 1);
-      map[cs[right]] = right;
+    for (int r = 0, l = 0; r < cs.length; r++) {
+      // 滑动窗口r和l不能回退,l来到过的位置不能再回去了
+//      if (map[cs[r]] == -1) {
+//        l = l;
+//      } else {
+//        l = map[cs[r]] + 1 < l ? l : map[cs[r]] + 1;
+//      }
+      // 以上写法很容易写错,统一为Math.max的写法
+      l = Math.max(l, map[cs[r]] + 1);
+      map[cs[r]] = r;
 
-      res = Math.max(res, right - left + 1);
+      res = Math.max(res, r - l + 1);
     }
 
     return res;
