@@ -1,35 +1,57 @@
 package com.ssl.note.practice.lc_top_100;
 
+import java.util.*;
+
 public class Practice {
 
   /**
    * 1. 16-多维动态规划 LC 62 不同路径
    * 2. 15-动态规划 LC 152 乘积最大子数组
    */
-  public int maxArea(int[] height) {
-    if (height == null || height.length == 0) {
-      return 0;
+  public String minWindow(String s, String t) {
+    if (s.length() < t.length()) {
+      return "";
     }
-    int l = 0;
-    int r = height.length - 1;
-    int res = 0;
-    while (l < r) {
-      int temp = (r - l) * Math.min(height[l], height[r]);
-      res = Math.max(res, temp);
-
-      if (height[l] < height[r]) {
-        l++;
-      } else {
-        r--;
+    if (s.length() == t.length()) {
+      return s;
+    }
+    int m = s.length();
+    int n = t.length();
+    char[] cs = s.toCharArray();
+    char[] ts = s.toCharArray();
+    int debt = 0;
+    int[] map = new int[256];
+    for (int i = 0; i < n; i++) {
+      if (map[ts[i]]-- == 0) {
+        debt++;
       }
     }
-
-    return res;
+    int start = 0;
+    int len = Integer.MAX_VALUE;
+    for (int l = 0, r = 0; r < m; r++) {
+      if (++map[cs[r]] == 0) {
+        debt--;
+      }
+      if (debt == 0) {
+        while (map[cs[l]] > 0) {
+          map[cs[l]]--;
+          l++;
+        }
+        if (len > r - l + 1) {
+          start = l;
+          len = r - l + 1;
+        }
+      }
+    }
+    return len == Integer.MAX_VALUE ? "" : s.substring(start, start + len);
   }
 
   public static void main(String[] args) {
     Practice solution = new Practice();
-    int[] nums = {1, 8, 6, 2, 5, 4, 8, 3, 7};
-    System.out.println(solution.maxArea(nums));
+    String s = "ADOBECODEBANC";
+    String t = "ABC";
+    String res = "BANC";
+    System.out.println(res.equals(solution.minWindow(s, t)));
+    System.out.println(solution.minWindow(s, t));
   }
 }

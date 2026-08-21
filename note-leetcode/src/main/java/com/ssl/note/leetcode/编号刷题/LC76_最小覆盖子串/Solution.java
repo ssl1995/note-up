@@ -9,7 +9,7 @@ public class Solution {
   /**
    * 最小覆盖子串
    * 返回 s 中涵盖 t 所有字符的最小子串
-   * 输入：s = "ADOBECODEBANC", t = "ABC"
+   * 输入：s = "ADOBECODEBANC", t = "ABBC"
    * 输出："BANC"
    */
   public String minWindow(String str, String tar) {
@@ -28,24 +28,24 @@ public class Solution {
     int start = 0;
     int len = Integer.MAX_VALUE;
 
-    for (int right = 0, left = 0; right < cs.length; right++) {
+    for (int r = 0, l = 0; r < cs.length; r++) {
       // ++/-- 写进条件里，条件成功or失败都会执行
       // 这里是必须发生的，所以加1后还<0,说明还需要
       // 也可以写成：++cnts[cs[right]] <= 0
-      if (cnts[cs[right]]++ < 0) {
+      if (cnts[cs[r]]++ < 0) {
         debt--;
       }
 
       if (debt == 0) {
         // ++/-- 写进条件里，条件成功or失败都会执行
         // 这里不是必须发生的，所以不能写成cnts[cs[left]]-->0
-        while (cnts[cs[left]] > 0) {
-          cnts[cs[left++]]--;
+        while (cnts[cs[l]] > 0) {
+          cnts[cs[l++]]--;
         }
 
-        if (right - left + 1 < len) {
-          len = right - left + 1;
-          start = left;
+        if (r - l + 1 < len) {
+          len = r - l + 1;
+          start = l;
         }
       }
     }
@@ -55,8 +55,8 @@ public class Solution {
 
   public static void main(String[] args) {
     Solution solution = new Solution();
-    String s = "aa";
-    String t = "aa";
+    String s = "aaAABC";
+    String t = "aaA";
     System.out.println(solution.minWindow(s, t));
   }
 }

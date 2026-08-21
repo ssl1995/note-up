@@ -12,27 +12,29 @@ public class Solution {
 
   /**
    * 滑动窗口最大值
+   * 使用堆结构，时间复杂度会超时，可以明确思路
    */
   public int[] maxSlidingWindow(int[] nums, int k) {
-
-    PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
-    for (int i = 0; i < k; i++) {
-      maxHeap.offer(nums[i]);
-    }
     int n = nums.length;
     int[] res = new int[n - k + 1];
-    // i位置表示前k个位置的最大值，末尾或者第一个数需要单独处理
-    res[0] = maxHeap.peek();
+    int index = 0;
+    // 使用堆结构，时间复杂度会超时，可以明确思路
+    PriorityQueue<Integer> heap = new PriorityQueue<>((a, b) -> b - a);
 
-    for (int i = k; i < n; i++) {
-      maxHeap.offer(nums[i]);
-      // AC会超时,remove+offer操作时间复杂度O(2logK)
-      maxHeap.remove(nums[i - k]);
+    for (int l, r = 0; r < nums.length; r++) {
+      if (r < k) {
+        heap.offer(nums[r]);
+        continue;
+      }
 
-      res[i - k + 1] = maxHeap.peek();
+      res[index++] = heap.peek();
+
+      l = r - k;
+      // n*2logn会超时
+      heap.remove(nums[l]);
+      heap.offer(nums[r]);
     }
-    // 如果没有初始化res[0]，这里就得单独赋值末尾元素
-//    res[n-k]=maxHeap.peek();
+    res[index] = heap.peek();
     return res;
   }
 

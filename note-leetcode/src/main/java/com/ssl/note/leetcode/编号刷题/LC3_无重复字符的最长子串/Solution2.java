@@ -19,12 +19,10 @@ public class Solution2 {
     int res = 0;
     for (int r = 0, l = 0; r < cs.length; r++) {
       // 滑动窗口r和l不能回退,l来到过的位置不能再回去了
-//      if (map[cs[r]] == -1) {
-//        l = l;
-//      } else {
-//        l = map[cs[r]] + 1 < l ? l : map[cs[r]] + 1;
+      // "aabbaa",来到倒数第2个a时，以下代码l会回到第一个b
+//      if (map[cs[r]] != -1) {
+//        l = map[cs[r]] + 1;
 //      }
-      // 以上写法很容易写错,统一为Math.max的写法
       l = Math.max(l, map[cs[r]] + 1);
       map[cs[r]] = r;
 
@@ -36,7 +34,7 @@ public class Solution2 {
 
   public static void main(String[] args) {
     Solution2 solution = new Solution2();
-    String s = "abcabcbb";// 3
+    String s = "aabbaa";// 2
     System.out.println(solution.lengthOfLongestSubstring(s));
   }
 }

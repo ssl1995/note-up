@@ -16,62 +16,23 @@ public class Solution {
    * 输出：2
    */
   public int subarraySum(int[] nums, int k) {
-    // key:前缀和,value:题目为次数=次数
-    Map<Integer, Integer> map = new HashMap<>();
-    // 特判：前缀和为0，出现了1次
-    map.put(0, 1);
-
-    int sum = 0;
-    int res = 0;
-    for (int num : nums) {
-      sum += num;
-
-      // pre[L,R] = sum[R] - sum[L-1] = k
-      // sum[L-1] = k - sum[R],sum[L-1]就是曾经的某个出现的前缀和
-      if (map.containsKey(sum - k)) {
-        res += map.get(sum - k);
-      }
-      // 简化：res += map.getOrDefault(sum - k, 0);
-
-      // 因为是次数，必须更新次数
-      if (!map.containsKey(sum)) {
-        map.put(sum, 1);
-      } else {
-        map.put(sum, map.get(sum) + 1);
-      }
-      // 简化：map.put(sum, map.getOrDefault(sum, 0) + 1);
+    int n = nums.length;
+    // 数组记录前缀和
+    int[] sum = new int[n + 1];
+    for (int i = 1; i <= n; i++) {
+      sum[i] += sum[i - 1] + nums[i - 1];
     }
 
-    return res;
-  }
-
-  public int subarraySum1(int[] nums, int k) {
-    // key:前缀和,value:题目为次数=次数
-    Map<Integer, Integer> map = new HashMap<>();
-    // 特判：前缀和为0，出现了1次
-    map.put(0, 1);
-
-    int sum = 0;
     int res = 0;
-    for (int num : nums) {
-      sum += num;
-
-      // 因为是次数，必须更新次数
-      if (!map.containsKey(sum)) {
-        map.put(sum, 1);
-      } else {
-        map.put(sum, map.get(sum) + 1);
+    // n^2的遍历，不友好
+    for (int i = 1; i <= n; i++) {
+      for (int j = 0; j < i; j++) {
+        int temp = sum[i] - sum[j];
+        if (temp == k) {
+          res += 1;
+        }
       }
-      // 简化：map.put(sum, map.getOrDefault(sum, 0) + 1);
-
-      // pre[L,R] = sum[R] - sum[L-1] = k
-      // sum[L-1] = k - sum[R],sum[L-1]就是曾经的某个出现的前缀和
-      if (map.containsKey(sum - k)) {
-        res += map.get(sum - k);
-      }
-      // 简化：res += map.getOrDefault(sum - k, 0);
     }
-
     return res;
   }
 
