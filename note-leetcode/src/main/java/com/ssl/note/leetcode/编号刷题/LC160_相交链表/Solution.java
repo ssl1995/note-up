@@ -9,45 +9,39 @@ import com.ssl.note.common.utils.ListNode;
  */
 public class Solution {
 
-    /**
-     * 相交链表
-     */
-    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null) {
-            return headA == null ? headB : headA;
-        }
-
-        ListNode cur1 = headA;
-        ListNode cur2 = headB;
-
-        int n = 0;
-        while (cur1 != null) {
-            cur1 = cur1.next;
-            n++;
-        }
-        while (cur2 != null) {
-            cur2 = cur2.next;
-            n--;
-        }
-
-        // 特殊判断
-        if (cur1 != cur2) {
-            return null;
-        }
-
-        cur1 = n > 0 ? headA : headB;
-        cur2 = cur1 == headA ? headB : headA;
-        n = Math.abs(n);
-
-        while (n > 0) {
-            cur1 = cur1.next;
-            n--;
-        }
-
-        while (cur1 != cur2) {
-            cur1 = cur1.next;
-            cur2 = cur2.next;
-        }
-        return cur1;
+  /**
+   * 相交链表
+   */
+  public ListNode getIntersectionNode(ListNode l1, ListNode l2) {
+    int n1 = getLen(l1);
+    int n2 = getLen(l2);
+    ListNode cur1 = l1;// 指向长的
+    ListNode cur2 = l2;
+    if (n1 < n2) {
+      cur1 = l2;
+      cur2 = l1;
     }
+
+    int diff = Math.abs(n1 - n2);
+    while (diff-- > 0) {
+      cur1 = cur1.next;
+    }
+
+    while (cur1 != cur2) {
+      cur1 = cur1.next;
+      cur2 = cur2.next;
+    }
+
+    return cur1;
+  }
+
+  private int getLen(ListNode node) {
+    int n1 = 0;
+    ListNode cur1 = node;
+    while (cur1 != null) {
+      cur1 = cur1.next;
+      n1++;
+    }
+    return n1;
+  }
 }

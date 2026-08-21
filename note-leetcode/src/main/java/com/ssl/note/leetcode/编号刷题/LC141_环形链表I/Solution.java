@@ -19,11 +19,11 @@ public class Solution {
       slow = slow.next;
       fast = fast.next.next;
       if (slow == fast) {
-        return true;
+        break;
       }
     }
 
-    return false;
+    return fast != null && fast.next != null;
   }
 
 }
