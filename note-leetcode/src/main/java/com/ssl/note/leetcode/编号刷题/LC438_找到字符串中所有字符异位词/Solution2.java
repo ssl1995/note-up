@@ -19,47 +19,52 @@ public class Solution2 {
    * 起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
    */
   public List<Integer> findAnagrams(String s, String p) {
+    // p 比 s 还长，不可能存在异位词子串
+    if (s.length() < p.length()) {
+      return new ArrayList<>();
+    }
     int m = s.length();
     int n = p.length();
-
+    // 异位词:统计词频+字母种类数
     int[] sMap = new int[26];
     int[] pMap = new int[26];
 
-    int needCount = 0;
     // 记录p所需要字符种类和数量
+    int pClassify = 0;
     for (int i = 0; i < n; i++) {
       int index = p.charAt(i) - 'a';
       if (pMap[index] == 0) {
-        needCount++;
+        pClassify++;
       }
       pMap[index]++;
     }
 
     List<Integer> res = new ArrayList<>();
-    int valid = 0;
-    int left = 0;
-    for (int i = 0; i < m; i++) {
-      int index = s.charAt(i) - 'a';
+    int sClassify = 0;
+    for (int r = 0, l = 0; r < m; r++) {
+      // 窗口右边:先+1,再判断种类
+      int index = s.charAt(r) - 'a';
       sMap[index]++;
-
-      // 数量对上，种类+1
       if (sMap[index] == pMap[index]) {
-        valid++;
+        sClassify++;
       }
-      // 缩小：窗口过长
-      while (i - left + 1 > n) {
-        int leftIndex = s.charAt(left) - 'a';
-        // 前面加过，缩小时候也要减少种类
+
+      // 窗口超过p长度,缩小左边界
+      // 每轮 r 只前进 1 步，窗口最多比 n 大 1，缩一次即可，无需 while
+      if (r - l + 1 > n) {
+        // 窗口左边:先判断种类,再-1
+        int leftIndex = s.charAt(l) - 'a';
         if (sMap[leftIndex] == pMap[leftIndex]) {
-          valid--;
+          sClassify--;
         }
         sMap[leftIndex]--;
         // 缩小，移动左指针
-        left++;
+        l++;
       }
-      // 记录结果
-      if (needCount == valid) {
-        res.add(left);
+
+      // 窗口长度恰好等于n且字符种类全部匹配
+      if (r - l + 1 == n && pClassify == sClassify) {
+        res.add(l);
       }
     }
 
