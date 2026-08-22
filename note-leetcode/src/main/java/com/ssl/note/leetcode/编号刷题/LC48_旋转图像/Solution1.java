@@ -18,31 +18,27 @@ public class Solution1 {
       return;
     }
     // 左上角和右下角坐标
-    int tR = 0, tC = 0;
-    int dR = matrix.length - 1, dC = matrix[0].length - 1;
-
-    while (tR < dR) {
-      rotateEdge(matrix, tR++, tC++, dR--, dC--);
+    int a = 0, b = 0;
+    int c = matrix.length - 1, d = matrix[0].length - 1;
+    // 正方形，行判断就够，=加不加都行
+    while (a <= c) {
+      rotateEdge(matrix, a++, b++, c--, d--);
     }
   }
 
-  /**
-   * 1 2 3    7 4 1
-   * 4 5 6 -> 8 5 2
-   * 7 8 9    9 6 3
-   * 四个点：
-   * A(tR,tC) D(tR,dC)
-   * B(dR,tC) C(dR,dC)
-   * 逆时针：temp=A → A=B → B=C → C=D → D=temp
-   */
-  private void rotateEdge(int[][] matrix, int tR, int tC, int dR, int dC) {
-    int times = dR - tR;
-    for (int i = 0; i < times; i++) {
-      int temp = matrix[tR][tC + i];
-      matrix[tR][tC + i] = matrix[dR - i][tC];
-      matrix[dR - i][tC] = matrix[dR][dC - i];
-      matrix[dR][dC - i] = matrix[tR + i][dC];
-      matrix[tR + i][dC] = temp;
+  private void rotateEdge(int[][] nums, int a, int b, int c, int d) {
+    int times = c - a;
+    int offset = 0;
+    while (times-- > 0) {
+      // a,b  a,d
+      // c,b  c,d
+      int temp = nums[a][b + offset];
+      nums[a][b + offset] = nums[c - offset][b];
+      nums[c - offset][b] = nums[c][d - offset];
+      nums[c][d - offset] = nums[a + offset][d];
+      nums[a + offset][d] = temp;
+
+      offset++;
     }
   }
 

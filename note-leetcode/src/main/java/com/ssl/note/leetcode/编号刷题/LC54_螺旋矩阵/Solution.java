@@ -8,49 +8,40 @@ public class Solution {
   /**
    * 给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
    */
+  private List<Integer> res;
   public List<Integer> spiralOrder(int[][] matrix) {
     int m = matrix.length;
     int n = matrix[0].length;
 
-    int top = 0, bottom = m - 1;
-    int left = 0, right = n - 1;
+    int a = 0, b = 0;
+    int c = m - 1, d = n - 1;
 
-    List<Integer> res = new ArrayList<>();
+    res = new ArrayList<>();
 
-    while (top <= bottom && left <= right) {
-      // 向右和向下是打头阵，必须有，不用判断
-      // 向右
-      for (int i = left; i <= right; i++) {
-        res.add(matrix[top][i]);
-      }
-      top++;
-
-      // 向下
-      for (int i = top; i <= bottom; i++) {
-        res.add(matrix[i][right]);
-      }
-      right--;
-
-
-      // 向左和向上是后走的
-      // 向左，考虑单行矩阵: [[1,2,3]]，需要判断
-      if (top <= bottom) {
-        for (int i = right; i >= left; i--) {
-          res.add(matrix[bottom][i]);
-        }
-        bottom--;
-      }
-
-      // 向上，考虑单列矩阵: [[1],[2],[3]]，需要判断
-      if (left <= right) {
-        for (int i = bottom; i >= top; i--) {
-          res.add(matrix[i][left]);
-        }
-        left++;
-      }
+    while (a <= c && b <= d) {
+      f(matrix, a++, b++, c--, d--);
     }
 
     return res;
+  }
+
+  private void f(int[][] nums, int a, int b, int c, int d) {
+    for (int j = b; j <= d; j++) {
+      res.add(nums[a][j]);
+    }
+    for (int i = a + 1; i <= c; i++) {
+      res.add(nums[i][d]);
+    }
+    if (a < c) {
+      for (int j = d - 1; j >= b; j--) {
+        res.add(nums[c][j]);
+      }
+    }
+    if (b < d) {
+      for (int i = c - 1; i > a; i--) {
+        res.add(nums[i][b]);
+      }
+    }
   }
 
   public static void main(String[] args) {
