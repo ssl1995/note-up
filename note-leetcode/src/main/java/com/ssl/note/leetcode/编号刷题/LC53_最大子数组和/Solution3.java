@@ -26,6 +26,7 @@ public class Solution3 {
     return Math.max(Math.max(leftMax, rightMax), crossMax);
   }
 
+  // 从mid位置往左和往右的前缀和最大值
   private int crossMax(int[] nums, int left, int mid, int right) {
     // 从mid向左扩展
     int leftSum = Integer.MIN_VALUE;
