@@ -10,6 +10,9 @@ public class Solution {
    * 核心：dummy + prev 指针，每轮改三条边
    */
   public ListNode swapPairs(ListNode head) {
+    if (head == null || head.next == null) {
+      return head;
+    }
     ListNode dummy = new ListNode(-1);
     dummy.next = head;
 
@@ -32,20 +35,6 @@ public class Solution {
     return dummy.next;
   }
 
-  /**
-   * 两两交换链表中的节点（递归）
-   */
-  public ListNode swapPairsRecursive(ListNode head) {
-    if (head == null || head.next == null) {
-      return head;
-    }
-    ListNode first = head;
-    ListNode second = head.next;
-    first.next = swapPairsRecursive(second.next);
-    second.next = first;
-    return second;
-  }
-
   public static void main(String[] args) {
     Solution solution = new Solution();
     ListNode node1 = new ListNode(1);
@@ -56,6 +45,5 @@ public class Solution {
     node2.next = node3;
     node3.next = node4;
     ListNodeUtil.printListNode(solution.swapPairs(node1));
-    ListNodeUtil.printListNode(solution.swapPairsRecursive(node1));
   }
 }

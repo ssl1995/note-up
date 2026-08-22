@@ -28,8 +28,8 @@ public class Solution3 {
 
       // 左右两边低位决定接哪边水
       int min = Math.min(leftMax, rightMax);
-      int h = height[l] < height[r] ? height[l++] : height[r--];
-      water += Math.max(min - h, 0);
+      int diff = height[l] < height[r] ? min - height[l++] : min - height[r--];
+      water += Math.max(diff, 0);
       // 统一：
       //water += leftMax < rightMax ? leftMax - height[l++] : rightMax - height[r--];
     }
