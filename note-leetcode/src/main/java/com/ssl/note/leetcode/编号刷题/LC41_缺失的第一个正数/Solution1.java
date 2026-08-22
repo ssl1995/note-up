@@ -44,7 +44,7 @@ public class Solution1 {
 
   public static void main(String[] args) {
     Solution1 solution = new Solution1();
-    int[] nums = {1, 1};
+    int[] nums = {3, 4,-1,1};
     System.out.println(solution.firstMissingPositive(nums));
   }
 

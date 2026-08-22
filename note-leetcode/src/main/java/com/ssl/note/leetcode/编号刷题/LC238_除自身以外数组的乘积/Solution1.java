@@ -21,16 +21,16 @@ public class Solution1 {
     }
     int n = nums.length;
     int[] res = new int[n];
-
-    res[0] = 1;
-    for (int i = 1; i < n; i++) {
-      res[i] = res[i - 1] * nums[i - 1];
+    // 从左到右
+    for (int i = 0, sum = 1; i < n; i++) {
+      sum *= nums[i];
+      res[i] = sum;
     }
-
-    int right = 1;
-    for (int i = n - 2; i >= 0; i--) {
-      right *= nums[i + 1];
-      res[i] *= right;
+    // 从右到左，i==0特判
+    for (int i = n - 1, sum = 1; i >= 0; i--) {
+      int left = i == 0 ? 1 : res[i - 1];
+      res[i] = left * sum;
+      sum *= nums[i];
     }
 
     return res;
