@@ -1,0 +1,10 @@
+题目：D:\project\note-up\note-sql\src\main\java\com\ssl\sql\lc\context\img.png
+要求
+1、题目名称:570 至少有5名直接下属的经理
+2、分析这道题的SQL考点和解法有哪些，这道题我忘记了group by +having的效果了，需要举例和画图我理解下
+    例如：
+        select * from Employee e ,Employee sub order by e.id;
+        select * from Employee e ,Employee sub on e.id = sub.managerId order by e.id;
+
+3、以下目录下输出一篇分析md文档，文档名称：题目名称.md，要求是不要有空行，我需要复制进飞书
+    D:\project\note-up\note-sql\src\main\java\com\ssl\sql\lc\

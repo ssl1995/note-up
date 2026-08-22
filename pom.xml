@@ -31,6 +31,8 @@
         <module>note-common</module>
         <module>note-leetcode</module>
         <module>note-zuo</module>
+        <module>note-sql</module>
+        <module>note-sql</module>
     </modules>
 
     <dependencyManagement>
