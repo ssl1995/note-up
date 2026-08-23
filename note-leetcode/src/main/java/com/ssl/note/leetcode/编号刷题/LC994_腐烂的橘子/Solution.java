@@ -1,8 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC994_腐烂的橘子;
 
 import java.util.ArrayDeque;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Deque;
 
 public class Solution {
 
@@ -17,6 +16,8 @@ public class Solution {
    * 输入：grid = [[2,1,1],[1,1,0],[0,1,1]]
    * 输出：4
    */
+  private int fresh;
+
   public int orangesRotting(int[][] grid) {
     if (grid == null) {
       return 0;
@@ -24,8 +25,8 @@ public class Solution {
     int m = grid.length;
     int n = grid[0].length;
     // 1、多路BFS，腐烂橘子入队列，同时计算新鲜橘子数量
-    int fresh = 0;
-    Queue<int[]> queue = new LinkedList<>();
+    fresh = 0;
+    Deque<int[]> queue = new ArrayDeque<>();
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
         if (grid[i][j] == 1) {
@@ -39,31 +40,35 @@ public class Solution {
     if (fresh == 0) {
       return 0;
     }
-    // 4叉树的高度，根节点需要-1分钟，第二层节点需要0分钟
+    // 初始化的腐烂橘子不算时间
     int times = -1;
-    // 遍历四个方向
-    int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
     // 3、层次遍历队列
     while (!queue.isEmpty()) {
       int size = queue.size();
-      // 4叉树的高度 = 层数，就是需要的时间数
-      times++;
-
       while (size-- > 0) {
-        int[] position = queue.poll();
-        for (int i = 0; i < 4; i++) {
-          int[] dir = dirs[i];
-          int x = position[0] + dir[0];
-          int y = position[1] + dir[1];
-          if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1) {
-            grid[x][y] = 2;
-            fresh--;
-            queue.offer(new int[]{x, y});
-          }
-        }
+        int[] poll = queue.poll();
+        int i = poll[0];
+        int j = poll[1];
+        f(grid, queue, i - 1, j);
+        f(grid, queue, i + 1, j);
+        f(grid, queue, i, j - 1);
+        f(grid, queue, i, j + 1);
       }
+      // 每完整处理完一层，时间 +1
+      times++;
     }
 
     return fresh == 0 ? times : -1;
+  }
+
+  private void f(int[][] grid, Deque<int[]> queue, int i, int j) {
+    if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length) {
+      return;
+    }
+    if (grid[i][j] == 1) {
+      queue.offer(new int[]{i, j});
+      grid[i][j] = 2;
+      fresh--;
+    }
   }
 }
