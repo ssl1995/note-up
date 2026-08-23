@@ -24,43 +24,43 @@ public class Trie {
 
   // 插入一个单词
   public void insert(String word) {
-    TrieNode node = root;
-    node.pass++;
+    TrieNode cur = root;
+    cur.pass++;
     for (int i = 0, path; i < word.length(); i++) { // 从左往右遍历字符
       path = word.charAt(i) - 'a'; // 由字符，对应成走向哪条路
-      if (node.nexts[path] == null) {
-        node.nexts[path] = new TrieNode();
+      if (cur.nexts[path] == null) {
+        cur.nexts[path] = new TrieNode();
       }
-      node = node.nexts[path];
-      node.pass++;
+      cur = cur.nexts[path];
+      cur.pass++;
     }
-    node.end++;
+    cur.end++;
   }
 
   // 查询前缀树里，word单词存在不
   public boolean search(String word) {
-    TrieNode node = root;
+    TrieNode cur = root;
     for (int i = 0, path; i < word.length(); i++) {
       path = word.charAt(i) - 'a';
-      if (node.nexts[path] == null) {
+      if (cur.nexts[path] == null) {
         return false;
       }
-      node = node.nexts[path];
+      cur = cur.nexts[path];
     }
-    return node.end > 0;
+    return cur.end > 0;
   }
 
   // 查询前缀树里，有多少单词以pre做前缀
   public boolean startsWith(String pre) {
-    TrieNode node = root;
+    TrieNode cur = root;
     for (int i = 0, path; i < pre.length(); i++) {
       path = pre.charAt(i) - 'a';
-      if (node.nexts[path] == null) {
+      if (cur.nexts[path] == null) {
         return false;
       }
-      node = node.nexts[path];
+      cur = cur.nexts[path];
     }
-    return node.pass > 0;
+    return cur.pass > 0;
   }
 
 }

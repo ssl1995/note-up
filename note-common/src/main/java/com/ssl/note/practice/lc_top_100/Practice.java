@@ -1,68 +1,55 @@
 package com.ssl.note.practice.lc_top_100;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
 
 public class Practice {
 
   private int fresh;
 
-  public int orangesRotting(int[][] grid) {
-    int m = grid.length;
-    int n = grid[0].length;
+  public int[] findOrder(int numCourses, int[][] pre) {
+    List<List<Integer>> graph = new ArrayList<>();
+    for (int i = 0; i < numCourses; i++) {
+      graph.add(new ArrayList<>());
+    }
 
-    Deque<int[]> queue = new ArrayDeque<>();
-    fresh = 0;
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        if (grid[i][j] == 2) {
-          queue.offer(new int[]{i, j});
-        } else if (grid[i][j] == 1) {
-          fresh++;
+    int[] in = new int[numCourses];
+
+    for (int[] cur : pre) {
+      int a = cur[0];
+      int b = cur[1];
+      graph.get(b).add(a);
+      in[a]++;
+    }
+
+    Deque<Integer> queue = new ArrayDeque<>();
+    for (int i = 0; i < numCourses; i++) {
+      if (in[i] == 0) {
+        queue.offer(i);
+      }
+    }
+
+    int count = 0;
+    int[] res = new int[numCourses];
+    while (!queue.isEmpty()) {
+      int poll = queue.poll();
+      res[count++] = poll;
+
+      List<Integer> next = graph.get(poll);
+      for (int num : next) {
+        if (--in[num] == 0) {
+          queue.offer(num);
         }
       }
     }
 
-    if (fresh == 0) {
-      return 0;
-    }
-
-    int res = 0;
-    while (!queue.isEmpty()) {
-      int size = queue.size();
-      while (size-- > 0) {
-        int[] poll = queue.poll();
-        int i = poll[0];
-        int j = poll[1];
-        f(grid, queue, i - 1, j);
-        f(grid, queue, i + 1, j);
-        f(grid, queue, i, j - 1);
-        f(grid, queue, i, j + 1);
-      }
-      res++;
-      if (fresh == 0) {
-        return res;
-      }
-    }
-
-    return -1;
-  }
-
-  private void f(int[][] grid, Deque<int[]> queue, int i, int j) {
-    if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length) {
-      return;
-    }
-    if (grid[i][j] == 1) {
-      queue.offer(new int[]{i, j});
-      grid[i][j] = 2;
-      fresh--;
-    }
+    return count == numCourses ? res : new int[]{};
   }
 
   public static void main(String[] args) {
     Practice practice = new Practice();
-    int[][] grid = {{2, 1, 1}, {1, 1, 0}, {0, 1, 1}};
-    System.out.println(practice.orangesRotting(grid));
+    int[][] pre = {};
+    int n = 1;
+    System.out.println(Arrays.toString(practice.findOrder(n, pre)));
   }
 
 }
