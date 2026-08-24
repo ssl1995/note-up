@@ -1,55 +1,54 @@
 package com.ssl.note.practice.lc_top_100;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Practice {
 
   private int fresh;
 
-  public int[] findOrder(int numCourses, int[][] pre) {
-    List<List<Integer>> graph = new ArrayList<>();
-    for (int i = 0; i < numCourses; i++) {
-      graph.add(new ArrayList<>());
+  public List<List<String>> partition(String s) {
+    if (s == null) {
+      return new ArrayList<>();
+    }
+    List<String> path = new ArrayList<>();
+    List<List<String>> res = new ArrayList<>();
+    dfs(s, 0, path, res);
+
+    return res;
+  }
+
+  private void dfs(String s, int i, List<String> path, List<List<String>> res) {
+    if (i == s.length()) {
+      res.add(new ArrayList<>(path));
+      return;
     }
 
-    int[] in = new int[numCourses];
-
-    for (int[] cur : pre) {
-      int a = cur[0];
-      int b = cur[1];
-      graph.get(b).add(a);
-      in[a]++;
-    }
-
-    Deque<Integer> queue = new ArrayDeque<>();
-    for (int i = 0; i < numCourses; i++) {
-      if (in[i] == 0) {
-        queue.offer(i);
+    for (int j = i; j < s.length(); j++) {
+      if (!check(s, i, j)) {
+        continue;
       }
+      path.add(s.substring(i, j + 1));
+      dfs(s, j + 1, path, res);
+      path.remove(path.size() - 1);
     }
+  }
 
-    int count = 0;
-    int[] res = new int[numCourses];
-    while (!queue.isEmpty()) {
-      int poll = queue.poll();
-      res[count++] = poll;
-
-      List<Integer> next = graph.get(poll);
-      for (int num : next) {
-        if (--in[num] == 0) {
-          queue.offer(num);
-        }
+  private boolean check(String s, int i, int j) {
+    while (i < j) {
+      if (s.charAt(i) != s.charAt(j)) {
+        return false;
       }
+      i++;
+      j--;
     }
-
-    return count == numCourses ? res : new int[]{};
+    return true;
   }
 
   public static void main(String[] args) {
     Practice practice = new Practice();
-    int[][] pre = {};
-    int n = 1;
-    System.out.println(Arrays.toString(practice.findOrder(n, pre)));
+    String s = "aab";
+    System.out.println(practice.partition(s));
   }
 
 }
