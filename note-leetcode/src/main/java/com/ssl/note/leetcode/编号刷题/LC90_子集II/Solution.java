@@ -27,25 +27,25 @@ public class Solution {
     List<Integer> path = new ArrayList<>();
     List<List<Integer>> res = new ArrayList<>();
 
-    backtrack(nums, 0, path, res);
+    dfs(nums, 0, path, res);
 
     return res;
   }
 
-  private void backtrack(int[] nums, int start, List<Integer> path, List<List<Integer>> res) {
+  private void dfs(int[] nums, int i, List<Integer> path, List<List<Integer>> res) {
     // 子集问题：一进来就收集（每个递归节点都是一个合法子集，包括空集[]）
     res.add(new ArrayList<>(path));
 
-    for (int i = start; i < nums.length; i++) {
+    for (int j = i; j < nums.length; j++) {
       // 同层去重：i != start 说明是本轮for中后面的数，和前面相同则跳过
       // 不影响下一层递归中选相同的数（如[1,2,2]中两个2都进子集）
-      if (i != start && nums[i] == nums[i - 1]) {
+      if (j != i && nums[j] == nums[j - 1]) {
         continue;
       }
 
-      path.add(nums[i]);
+      path.add(nums[j]);
       // 每个元素最多用一次：i+1
-      backtrack(nums, i + 1, path, res);
+      dfs(nums, j + 1, path, res);
       path.remove(path.size() - 1);
     }
   }
