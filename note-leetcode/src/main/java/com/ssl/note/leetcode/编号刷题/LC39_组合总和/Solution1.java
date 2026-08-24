@@ -21,12 +21,12 @@ public class Solution1 {
     List<List<Integer>> res = new ArrayList<>();
     List<Integer> temp = new ArrayList<>();
 
-    backtrack(candidates, 0, target, temp, res);
+    dfs(candidates, 0, target, temp, res);
     return res;
   }
 
   // 通用模板
-  private void backtrack(int[] candidates, int i, int target, List<Integer> temp, List<List<Integer>> res) {
+  private void dfs(int[] candidates, int i, int target, List<Integer> temp, List<List<Integer>> res) {
     if (target < 0) {
       return;
     }
@@ -42,8 +42,8 @@ public class Solution1 {
       }
 
       temp.add(candidates[j]);
-      // i：当前位置的数可以重新选
-      backtrack(candidates, j, target - candidates[j], temp, res);
+      // j：当前位置的数可以重新选
+      dfs(candidates, j, target - candidates[j], temp, res);
       temp.remove(temp.size() - 1);
     }
   }

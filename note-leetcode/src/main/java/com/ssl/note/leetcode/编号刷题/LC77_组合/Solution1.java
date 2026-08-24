@@ -56,8 +56,8 @@ public class Solution1 {
 
   public static void main(String[] args) {
     Solution1 solution = new Solution1();
-    int n = 4;
-    int k = 2;
+    int n = 3;
+    int k = 3;
     List<List<Integer>> combine = solution.combine(n, k);
     System.out.println(combine);
   }

@@ -26,25 +26,25 @@ public class Solution {
     map.put('8', "tuv");
     map.put('9', "wxyz");
     List<String> res = new ArrayList<>();
-    backtrack(digits, 0, new StringBuilder(), res, map);
+    dfs(digits, 0, map, new StringBuilder(), res);
     return res;
   }
 
-  // 回溯
-  private void backtrack(String digits, int index, StringBuilder temp, List<String> res, Map<Character, String> map) {
-    if (index == digits.length()) {
+  private void dfs(String digits, int i, Map<Character, String> map,
+                   StringBuilder path,
+                   List<String> res) {
+    if (i == digits.length()) {
       // 加入结果集
-      res.add(temp.toString());
+      res.add(path.toString());
       return;
     }
     // 2 -> abc
-    String lett = map.get(digits.charAt(index));
+    String lett = map.get(digits.charAt(i));
     for (Character c : lett.toCharArray()) {
-      temp.append(c);
-
-      backtrack(digits, index + 1, temp, res, map);
-
-      temp.deleteCharAt(temp.length() - 1);
+      path.append(c);
+      // 从i+1开始，而不是j+1，因为遍历的中心是digits
+      dfs(digits, i + 1, map, path, res);
+      path.deleteCharAt(path.length() - 1);
     }
   }
 

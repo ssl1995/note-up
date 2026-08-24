@@ -12,33 +12,51 @@ public class Solution {
   public List<String> generateParenthesis(int n) {
     List<String> res = new ArrayList<>();
     StringBuilder path = new StringBuilder();
-    backtrack(n, n, path, res);
+    dfs1(0, 0, n, path, res);
+//    dfs2(n, n, path, res);
     return res;
   }
 
   /**
+   * left和right从0开始
    * 左右括号有效的条件：
-   * 1、左右括号数量对等
-   * 2、任何前缀中左括号 >= 右括号
+   * 1、左右括号到n停止
+   * 2、left < n就放左括号
+   * 3、left > right就放右括号
    */
-  private void backtrack(int leftNeed, int rightNeed, StringBuilder path, List<String> res) {
-    // 1. 递归出口：leftNeed和rightNeed都为0时，说明左右括号都用完了
-    if (leftNeed == 0 && rightNeed == 0) {
+  private void dfs1(int left, int right, int n, StringBuilder path, List<String> res) {
+    if (left == n && right == n) {
       res.add(path.toString());
       return;
     }
-    // 2. 递归体：leftNeed大于0时，说明还可以添加左括号
-    if (leftNeed > 0) {
+    if (left < n) {
       path.append("(");
-      backtrack(leftNeed - 1, rightNeed, path, res);
-      // 当问题要求枚举所有可行解，并且你用同一个可变变量记录当前路径、在递归返回后还要尝试其他分支时，就必须回溯。
+      dfs1(left + 1, right, n, path, res);
       path.deleteCharAt(path.length() - 1);
     }
-    // 3. 递归体：leftNeed小于rightNeed时，说明还可以添加右括号
-    if (leftNeed < rightNeed) {
+    if (left > right) {
       path.append(")");
-      backtrack(leftNeed, rightNeed - 1, path, res);
-      // 当问题要求枚举所有可行解，并且你用同一个可变变量记录当前路径、在递归返回后还要尝试其他分支时，就必须回溯。
+      dfs1(left, right + 1, n, path, res);
+      path.deleteCharAt(path.length() - 1);
+    }
+  }
+
+  /**
+   * left和right从n开始
+   */
+  private void dfs2(int left, int right, StringBuilder path, List<String> res) {
+    if (left == 0 && right == 0) {
+      res.add(path.toString());
+      return;
+    }
+    if (left > 0) {
+      path.append("(");
+      dfs2(left - 1, right, path, res);
+      path.deleteCharAt(path.length() - 1);
+    }
+    if (left < right) {
+      path.append(")");
+      dfs2(left, right - 1, path, res);
       path.deleteCharAt(path.length() - 1);
     }
   }

@@ -27,13 +27,14 @@ public class Solution {
     }
     List<List<Integer>> res = new ArrayList<>();
     List<Integer> temp = new ArrayList<>();
+
     // 对原始数组进行排序
     Arrays.sort(candidates);
-    backtrack(candidates, 0, target, temp, res);
+    dfs(candidates, 0, target, temp, res);
     return res;
   }
 
-  private void backtrack(int[] candidates, int i, int target, List<Integer> temp, List<List<Integer>> res) {
+  private void dfs(int[] candidates, int i, int target, List<Integer> temp, List<List<Integer>> res) {
     if (target < 0) {
       return;
     }
@@ -56,7 +57,7 @@ public class Solution {
 
       temp.add(candidates[j]);
       // 每个数字只能出现一次：i+1
-      backtrack(candidates, j + 1, target - candidates[j], temp, res);
+      dfs(candidates, j + 1, target - candidates[j], temp, res);
       temp.remove(temp.size() - 1);
     }
   }
