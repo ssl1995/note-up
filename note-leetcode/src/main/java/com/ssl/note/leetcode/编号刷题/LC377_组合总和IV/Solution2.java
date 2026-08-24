@@ -21,18 +21,18 @@ public class Solution2 {
    * 请注意，顺序不同的序列被视作不同的组合。
    */
   public int combinationSum4(int[] nums, int target) {
-    // 正确解法：完全背包求排列数
-    // 定义dp[t]=总和为 t 的排列数
+    // 正确解法：完全背包求排列数,正向遍历
+    // 定义dp[t]=总和为t的排列数
+    // 比如nums={1,2,3},t=4
+    // dp[4]=dp[3]+dp[2]+dp[1]
     int[] dp = new int[target + 1];
     // 边界：凑出0只有空序列这1种
     dp[0] = 1;
 
     // 外层必须遍历target（背包），这样每个t都允许任意数结尾，数出来的才是排列
-    for (int i = 0; i < target + 1; i++) {
-      // 内层遍历nums（物品），枚举序列最后一个数
+    for (int i = 1; i < target + 1; i++) {
       for (int num : nums) {
-        if (i - num >= 0) {
-          // 完全背包公式:dp[i] = Math.max(dp[i], dp[i - num] + dp[i]);
+        if (i >= num) {
           dp[i] += dp[i - num];
         }
       }

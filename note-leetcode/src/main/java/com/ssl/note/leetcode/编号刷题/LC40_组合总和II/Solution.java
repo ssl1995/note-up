@@ -33,7 +33,7 @@ public class Solution {
     return res;
   }
 
-  private void backtrack(int[] candidates, int start, int target, List<Integer> temp, List<List<Integer>> res) {
+  private void backtrack(int[] candidates, int i, int target, List<Integer> temp, List<List<Integer>> res) {
     if (target < 0) {
       return;
     }
@@ -41,22 +41,22 @@ public class Solution {
       res.add(new ArrayList<>(temp));
       return;
     }
-    // 还是从start开始
-    for (int i = start; i < candidates.length; i++) {
+    // 还是从j开始
+    for (int j = i; j < candidates.length; j++) {
       // 排序，剪枝优化
-      if (candidates[i] > target) {
+      if (candidates[j] > target) {
         break;
       }
 
-      // i != start，本轮for中后面的数和前面的相同，要跳过
+      // 本轮for中后面的数和前面的相同，要跳过
       // 但是不会影响下一个递归中相同的数字
-      if (i != start && candidates[i] == candidates[i - 1]) {
+      if (i != j && candidates[j] == candidates[j - 1]) {
         continue;
       }
 
-      temp.add(candidates[i]);
+      temp.add(candidates[j]);
       // 每个数字只能出现一次：i+1
-      backtrack(candidates, i + 1, target - candidates[i], temp, res);
+      backtrack(candidates, j + 1, target - candidates[j], temp, res);
       temp.remove(temp.size() - 1);
     }
   }

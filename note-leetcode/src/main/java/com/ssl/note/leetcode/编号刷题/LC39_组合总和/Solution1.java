@@ -26,7 +26,7 @@ public class Solution1 {
   }
 
   // 通用模板
-  private void backtrack(int[] candidates, int start, int target, List<Integer> temp, List<List<Integer>> res) {
+  private void backtrack(int[] candidates, int i, int target, List<Integer> temp, List<List<Integer>> res) {
     if (target < 0) {
       return;
     }
@@ -34,16 +34,16 @@ public class Solution1 {
       res.add(new ArrayList<>(temp));
       return;
     }
-    // i = start,组合是整体选过的数字不能再选
-    for (int i = start; i < candidates.length; i++) {
+    // j=i,组合是整体选过的数字不能再选
+    for (int j = i; j < candidates.length; j++) {
       // 剪枝：不用先整体排序，如果当前数>target，就跳过
-      if (candidates[i] > target) {
+      if (candidates[j] > target) {
         continue;
       }
 
-      temp.add(candidates[i]);
+      temp.add(candidates[j]);
       // i：当前位置的数可以重新选
-      backtrack(candidates, i, target - candidates[i], temp, res);
+      backtrack(candidates, j, target - candidates[j], temp, res);
       temp.remove(temp.size() - 1);
     }
   }

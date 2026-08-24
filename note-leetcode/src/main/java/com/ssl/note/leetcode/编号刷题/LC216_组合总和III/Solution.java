@@ -21,37 +21,32 @@ public class Solution {
       return new ArrayList<>();
     }
     int[] nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    int start = 0;
     List<Integer> path = new ArrayList<>();
     List<List<Integer>> res = new ArrayList<>();
 
-    dfs(k, n, nums, start, path, res);
+    dfs(nums, 0, n, k, path, res);
 
     return res;
   }
 
-  private void dfs(int k, int n, int[] nums, int start, List<Integer> path, List<List<Integer>> res) {
-    if (k < 0 || n < 0) {
+  private void dfs(int[] nums, int i, int n, int k, List<Integer> path, List<List<Integer>> res) {
+    if (n < 0) {
       return;
     }
-    if (k == 0 && n == 0) {
+    if (n == 0 && k == 0) {
       res.add(new ArrayList<>(path));
       return;
     }
-    // i = start:组合，前面选过的不能选了
-    for (int i = start; i < nums.length; i++) {
-      // 剪枝1:自己+剩下的数不够k个
-      if (nums.length - i < k) {
-        break;
-      }
-      // 剪枝2：当前数字和>n
-      if (nums[i] > n) {
+    for (int j = i; j < nums.length; j++) {
+      // 剪枝1：当前数字和>n
+      // 剪枝2:自己+剩下的数不够k个
+      if (nums[j] > n || nums.length - j < k) {
         continue;
       }
 
-      path.add(nums[i]);
-      // i+1:每个数字最多使用一次
-      dfs(k - 1, n - nums[i], nums, i + 1, path, res);
+      path.add(nums[j]);
+
+      dfs(nums, j + 1, n - nums[j], k - 1, path, res);
 
       path.remove(path.size() - 1);
     }
