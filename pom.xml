@@ -33,6 +33,7 @@
         <module>note-zuo</module>
         <module>note-sql</module>
         <module>note-sql</module>
+        <module>note-know</module>
     </modules>
 
     <dependencyManagement>
