@@ -18,14 +18,6 @@ public class Solution1 {
     return dfs(limit, 0, 0, 0);
   }
 
-  /**
-   * 位运算法
-   *
-   * @param limit n位置的限制，比如n=4，二进制001000，1前面的2个0必须都为0
-   * @param col   列位置
-   * @param left  右上到左下位置
-   * @param right 左上到右下位置
-   */
   private int dfs(int limit, int col, int left, int right) {
     if (col == limit) {
       return 1;

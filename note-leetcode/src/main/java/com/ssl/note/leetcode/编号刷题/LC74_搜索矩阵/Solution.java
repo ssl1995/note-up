@@ -18,8 +18,7 @@ public class Solution {
     while (left <= right) {
       int mid = left + (right - left) / 2;
       // 转成二维坐标
-      // 用电影院找座位来理解：除法定行，取余定列
-      int row = mid / n;
+      int row = mid / n;// 不是 mid /m
       int col = mid % n;
       if (matrix[row][col] < target) {
         left = mid + 1;

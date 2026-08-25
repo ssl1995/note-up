@@ -1,54 +1,30 @@
 package com.ssl.note.practice.lc_top_100;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Practice {
 
-  private int fresh;
+  public int findMin(int[] nums) {
+    int left = 0;
+    int right = nums.length - 1;
+    while (left <= right) {
 
-  public List<List<String>> partition(String s) {
-    if (s == null) {
-      return new ArrayList<>();
-    }
-    List<String> path = new ArrayList<>();
-    List<List<String>> res = new ArrayList<>();
-    dfs(s, 0, path, res);
+      int mid = left + (right - left) / 2;
+      int target = nums[0];
 
-    return res;
-  }
-
-  private void dfs(String s, int i, List<String> path, List<List<String>> res) {
-    if (i == s.length()) {
-      res.add(new ArrayList<>(path));
-      return;
-    }
-
-    for (int j = i; j < s.length(); j++) {
-      if (!check(s, i, j)) {
-        continue;
+      if (nums[mid] < target) {
+        right = mid;
+      } else if (nums[mid] > target) {
+        left = mid + 1;
+      } else {
+        right--;
       }
-      path.add(s.substring(i, j + 1));
-      dfs(s, j + 1, path, res);
-      path.remove(path.size() - 1);
     }
-  }
-
-  private boolean check(String s, int i, int j) {
-    while (i < j) {
-      if (s.charAt(i) != s.charAt(j)) {
-        return false;
-      }
-      i++;
-      j--;
-    }
-    return true;
+    return nums[left];
   }
 
   public static void main(String[] args) {
     Practice practice = new Practice();
-    String s = "aab";
-    System.out.println(practice.partition(s));
+    int[] nums = {5, 7, 7, 8, 8, 10};
+    int t = 8;
   }
 
 }

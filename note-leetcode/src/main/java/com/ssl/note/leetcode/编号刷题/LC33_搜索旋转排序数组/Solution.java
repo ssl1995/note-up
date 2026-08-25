@@ -13,34 +13,31 @@ public class Solution {
    * 输出：4
    */
   public int search(int[] nums, int target) {
-    if (nums.length == 0) {
-      return -1;
-    }
-    int left = 0;
-    // 左闭右闭
-    int right = nums.length - 1;
-    // <=
-    while (left <= right) {
-      int mid = left + (right - left) / 2;
-      if (nums[mid] == target) {
-        return mid;
-      }
-      // 左侧有序
-      if (nums[0] <= nums[mid]) {
-        // 前面已经判断nums[mid] == t,故 <= t <
-        if (nums[0] <= target && target < nums[mid]) {
-          right = mid - 1;
-        } else {
-          left = mid + 1;
-        }
+    int n = nums.length;
+    int l = 0;
+    int r = n - 1;
+
+    while (l <= r) {
+      int m = l + (r - l) / 2;
+      if (nums[m] == target) {
+        return m;
       } else {
-        //  右侧有序
-        // 前面已经判断nums[mid] == t,故 < t <=
-        if (nums[mid] < target && target <= nums[nums.length - 1]) {
-          left = mid + 1;
+        // 左侧有序，就二分
+        if (nums[0] <= nums[m]) {
+          if (nums[0] <= target && target < nums[m]) {
+            r = m - 1;
+          } else {
+            l = m + 1;
+          }
         } else {
-          right = right - 1;
+          // 右侧有序，就二分
+          if (nums[m] < target && target <= nums[n - 1]) {
+            l = m + 1;
+          } else {
+            r = m - 1;
+          }
         }
+
       }
     }
     return -1;

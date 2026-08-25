@@ -24,10 +24,10 @@ public class Solution1 {
       int mid = left + (right - left) / 2;
       int t = nums[right];
       if (nums[mid] < t) {
-        // mid 有嫌疑，保留
+        // <,最小值可能是nums[mid]
         right = mid;
       } else {
-        // mid 清白，丢掉
+        // >,最小值不可能是nums[mid]
         left = mid + 1;
       }
     }

@@ -2,70 +2,68 @@ package com.ssl.note.leetcode.编号刷题.LC34_在排序数组中查找第一�
 
 import java.util.Arrays;
 
-/**
- * @author SongShengLin
- * @date 2022/1/15 12:10 PM
- * @description
- */
 public class Solution1 {
 
-  /**
-   * 给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
-   * 如果数组中不存在目标值 target，返回 [-1, -1]。
-   * 你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
-   */
-  public int[] searchRange(int[] nums, int target) {
-    if (nums == null || nums.length == 0) {
-      return new int[]{-1, -1};
+    /**
+     * 给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
+     * 如果数组中不存在目标值 target，返回 [-1, -1]。
+     * 你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
+     */
+    public int[] searchRange(int[] nums, int target) {
+        return new int[]{getOne(nums, target), getLast(nums, target)};
     }
-    int index1 = getFirst(nums, target);
-    int index2 = getLast(nums, target);
-    return new int[]{index1, index2};
-  }
 
-  // =t的第一个位置
-  private int getFirst(int[] nums, int target) {
-    int left = 0;
-    int right = nums.length;
-    while (left < right) {
-      int mid = left + (right - left) / 2;
-      if (nums[mid] >= target) {
-        right = mid;
-      } else {
-        left = mid + 1;
-      }
-    }
-    // left指针越界 或者 第一个>=t的数可能不是t
-    if (left == nums.length || nums[left] != target) {
-      return -1;
-    }
-    return left;
-  }
+    /**
+     * >=的第一个数
+     * 特判：l是否越界 或者 这个位置不是它
+     */
+    private int getOne(int[] nums, int t) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+        int l = 0, r = nums.length;
+        while (l < r) {
+            int m = l + (r - l) / 2;
+            if (nums[m] >= t) {
+                r = m;
+            } else {
+                l = m + 1;
+            }
+        }
+        if (l == nums.length || nums[l] != t) {
+            return -1;
+        }
 
-  // =t的最后一个位置 转 <=t的最后一个位置
-  private int getLast(int[] nums, int target) {
-    int left = 0;
-    int right = nums.length;
-    while (left < right) {
-      int mid = left + (right - left) / 2;
-      // <=t的最后一个位置，反过来>t的前一个位置
-      if (nums[mid] > target) {
-        right = mid;
-      } else {
-        left = mid + 1;
-      }
+        return l;
     }
-    // left指针越界 或者最后一个>=t的数可能不是t
-    if (left == 0 || nums[left - 1] != target) {
-      return -1;
-    }
-    return left - 1;
-  }
 
-  public static void main(String[] args) {
-    Solution1 solution = new Solution1();
-    int[] nums = {1};
-    int t = 1;
-    System.out.println(Arrays.toString(solution.searchRange(nums, t)));
-  }
+    /**
+     * <=t的最后一个数
+     * 特判：l是否越界 或者 这个位置不是它
+     */
+    private int getLast(int[] nums, int t) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+        int l = 0, r = nums.length;
+        while (l < r) {
+            int m = l + (r - l) / 2;
+            if (nums[m] > t) {
+                r = m;
+            } else {
+                l = m + 1;
+            }
+        }
+        if (l - 1 < 0 || nums[l - 1] != t) {
+            return -1;
+        }
+        return l - 1;
+    }
+
+    public static void main(String[] args) {
+        Solution1 solution = new Solution1();
+        int[] nums = {1};
+        int t = 1;
+        System.out.println(Arrays.toString(solution.searchRange(nums, t)));
+    }
 }

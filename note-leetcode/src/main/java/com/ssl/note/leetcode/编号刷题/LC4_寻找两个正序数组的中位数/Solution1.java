@@ -23,11 +23,13 @@ public class Solution1 {
       return findMedianSortedArrays(nums2, nums1);
     }
 
-    boolean isEven = (m + n) % 2 == 0;
-
-    // i ∈ [0, m]，存在型二分，闭区间 [left, right]
+    /**
+     * 将两个数组合并后的全局左半和全局右半分开，满足2个条件
+     * 1、左半所有元素<=右半所有元素 ，判断a <= d && c >= d
+     * 2、左半的元素个数=(m+n+1)/2，二分划分i,j
+     * 这样的天然就能快速算出中位数
+     */
     int left = 0, right = m;
-    // m>=0的，所以是left<=right，而不是left<right
     while (left <= right) {
       // nums1:  [4]
       // nums2:  [1,2,3,5]
@@ -38,29 +40,30 @@ public class Solution1 {
       int j = (m + n + 1) / 2 - i;
 
       // 3、防止越界.期望公式：nums1[i-1] ≤ nums2[j] 且 nums2[j-1] ≤ nums1[i]
-      int a = getMin(nums1, i - 1);
-      int b = getMax(nums1, i);
-      int c = getMin(nums2, j - 1);
-      int d = getMax(nums2, j);
+      int a = getNum(nums1, i - 1);
+      int b = getNum(nums1, i);
+      int c = getNum(nums2, j - 1);
+      int d = getNum(nums2, j);
 
-      // 4、交叉合法就收工
-      // nums1: [ | 4 ]        贡献左半 {}，右半 {4}
-      // nums2: [ 1, 2, 3 | 5 ] 贡献左半 {1,2,3}，右半 {5}
-      // 全局左半 = {1,2,3}（3 个 = (5+1)/2 ✓ 人数对，公式预付）
-      // 全局右半 = {4,5}
-      // nums1LeftMax=-∞,nums1RightMin=4;nums2LeftMax=3,nums2RightMin=5
-      // -∞<= 5,3<=4
-      if (a <= d && b >= c) {
-        // 划分正确：左半永远满载，奇数答案在左，偶数跨线取均
+      /**
+       * 4、交叉合法就收工
+       * nums1: [... a | b ...]    a = nums1左半最大值，b = nums1右半最小值
+       * nums2: [... c | d ...]    c = nums2左半最大值，d = nums2右半最小值
+       * 全局左半 = nums1左半 ∪ nums2左半
+       * 全局右半 = nums1右半 ∪ nums2右半
+       */
+      if (a <= d && c <= b) {
+        boolean isEven = (m + n) % 2 == 0;
         if (isEven) {// 偶数
+          // 偶数：左边取最小，右边取最大，除2返回
           int num1 = Math.max(a, c);
           int num2 = Math.min(b, d);
           return (num1 + num2) / 2d;
         } else {
-          // 奇数
+          // 奇数:左边是满载的，左边最小就是中位数
           return Math.max(a, c);
         }
-      }// 5、谁大谁向左靠，以下2个分支调整切口 i 的位置
+      }// 5、谁大谁向左靠，以下2个分支调整切口i的位置
       else if (a > d) {
         // nums1 左边拿多了（有元素比 nums2 右边还大），把它从左边挪回右边，i 左移
         right = i - 1;
@@ -72,16 +75,12 @@ public class Solution1 {
     return -1d;
   }
 
-  private int getMax(int[] nums, int index) {
-    if (index > nums.length - 1) {
-      return Integer.MAX_VALUE;
-    }
-    return nums[index];
-  }
-
-  private int getMin(int[] nums, int index) {
+  private int getNum(int[] nums, int index) {
     if (index < 0) {
       return Integer.MIN_VALUE;
+    }
+    if (index > nums.length - 1) {
+      return Integer.MAX_VALUE;
     }
     return nums[index];
   }
