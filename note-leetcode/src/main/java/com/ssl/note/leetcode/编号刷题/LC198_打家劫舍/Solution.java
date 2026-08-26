@@ -22,17 +22,18 @@ public class Solution {
       return nums[0];
     }
     int n = nums.length;
-    int[] dp = new int[n];
-    // 初始化
-    dp[0] = nums[0];// 一个房间最大值
-    dp[1] = Math.max(nums[0], nums[1]);// 两个房间挑大的取值
+    int[][] dp = new int[n][2];
+    dp[0][0] = nums[0];
+    dp[0][1] = 0;
 
-    for (int i = 2; i < n; i++) {
-      // 状态转移方程：不偷第i间房屋 vs 偷第i间房屋
-      dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+    for (int i = 1; i < n; i++) {
+      // 偷,第i-1间必须不偷
+      dp[i][0] = dp[i - 1][1] + nums[i];
+      // 不偷,第i-1间可偷可不偷
+      dp[i][1] = Math.max(dp[i-1][0],dp[i-1][1]);
     }
 
-    return dp[n - 1];
+    return Math.max(dp[n - 1][0], dp[n - 1][1]);
   }
 
   public static void main(String[] args) {
