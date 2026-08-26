@@ -18,13 +18,8 @@ public class Solution {
       return false;
     }
     int n = nums.length;
-    if (n == 1) {
-      return true;
-    }
     int max = 0;
-
-    for (int i = 0; i < n; i++) {
-      // 当前位置没有跳跃到过，返回false
+    for (int i = 0; i < n-1; i++) {
       if (i > max) {
         return false;
       }

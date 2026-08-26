@@ -19,34 +19,28 @@ public class Solution {
       return 0;
     }
     int n = nums.length;
-    // 初始位置在下标0，不能跳，比如[0],返回0
-    if (n == 1) {
-      return 0;
-    }
-    // 当前能够达到的最远位置
-    int max = 0;
-    // 走到边界需要再走一次
-    int minCount = 0;
-    // 当前跳跃的最远边界
+    int allMax = 0;
     int end = 0;
-    for (int i = 0; i < n; i++) {
-      max = Math.max(max, i + nums[i]);
-      // 贪心：每一跳都扩到最远，走到边界再跳一次
+    int res = 0;
+    // 优化：遍历到 n-2 即可，因为到达 n-1 时不需要再跳
+    // 这样自然处理了 n==1 的情况（循环不执行，直接返回0）
+    for (int i = 0; i < n - 1; i++) {
+      allMax = Math.max(allMax, i + nums[i]);
+      // 贪心：每一步只有走到边界才能跳
       if (i == end) {
-        end = max;
-        minCount++;
+        end = allMax;
+        res++;
       }
-      // end曾经超过终点，直接返回
+      // end 已经能到达或超过终点
       if (end >= n - 1) {
-        return minCount;
+        return res;
       }
     }
-    return minCount;
+    return res;
   }
 
   public static void main(String[] args) {
     Solution solution = new Solution();
     int[] nums = {2, 3, 1, 1, 4};
-    System.out.println(solution.jump(nums));
   }
 }
