@@ -32,26 +32,25 @@ public class Solution {
     }
     int n = s.length();
     // 1、更新每个字母的最后出现位置
-    int[] lastIndex = new int[26];
+    int[] map = new int[26];
     for (int i = 0; i < n; i++) {
-      lastIndex[s.charAt(i) - 'a'] = i;
+      map[s.charAt(i) - 'a'] = i;
     }
 
     // 结果需要的是每一个分段的长度，需要start和end
     List<Integer> res = new LinkedList<>();
-    // 当前片段的起始位置
     int start = 0;
-    // 当前片段的结束位置
     int end = 0;
 
     // 贪心：区间的右边界一旦确定，越早切越好
     for (int i = 0; i < n; i++) {
       // 每遇到一个字符，就把当前片段的右边界扩展到这个字符的最后出现位置
-      end = Math.max(end, lastIndex[s.charAt(i) - 'a']);
+      end = Math.max(end, map[s.charAt(i) - 'a']);
       // 当扫描位置i=当前位置的最远边界时，就划分
       if (i == end) {
         res.add(end - start + 1);
         start = end + 1;
+//        end = start;
       }
     }
 
