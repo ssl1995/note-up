@@ -27,23 +27,25 @@ public class Solution {
     map.put('[', ']');
     map.put('{', '}');
 
-
     for (char c : s.toCharArray()) {
-      // 入栈
-      if (map.containsKey(c)) {
+      // 栈空
+      if (stack.isEmpty()) {
         stack.push(c);
         continue;
       }
-      // 出栈
-      if (stack.isEmpty()) {
+      // 栈顶不是左括号，就失败
+      if (!map.containsKey(stack.peek())) {
         return false;
       }
-      if (map.get(stack.peek()) != c) {
-        return false;
+      // 不匹配，就入栈，下一轮栈顶判断就返回失败
+      if (c != map.get(stack.peek())) {
+        stack.push(c);
+      } else {
+        // 匹配就出栈
+        stack.pop();
       }
-      stack.pop();
     }
-    // s='{'时，栈还有元素
+    // s='{]'时，栈还有元素
     return stack.isEmpty();
   }
 
