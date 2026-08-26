@@ -20,17 +20,13 @@ public class Solution2 {
     }
     int a = 1;
     int b = 2;
-    // 动态规划优化成迭代：从3阶台阶开始遍历
-    for (int i = 3; i <= n; i++) {
-      int c = a + b;
+
+    int times = n - 2;
+    while (times-- > 0) {
+      int sum = a + b;
       a = b;
-      b = c;
-      // 下面这种写法也行
-//      int c = b;
-//      b = a + b;
-//      a = c;
+      b = sum;
     }
-    // 返回b
     return b;
   }
 
