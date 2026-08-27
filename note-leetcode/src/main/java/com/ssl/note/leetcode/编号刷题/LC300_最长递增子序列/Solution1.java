@@ -12,11 +12,13 @@ public class Solution1 {
    */
   public int lengthOfLIS(int[] nums) {
     int m = nums.length;
+    // 贪心思维:让短序列的末尾尽可能小，才能给长序列腾出生长空间
+    // tail[i]表示长度i+1的递增序列最小末尾元素
     int[] tail = new int[m];
     int len = 0;
 
     for (int num : nums) {
-      int index = find(tail, 0, len, num);
+      int index = getMin(tail, 0, len, num);
       tail[index] = num;
 
       if (index == len) {
@@ -27,36 +29,18 @@ public class Solution1 {
     return len;
   }
 
-  // 查找第一个>=v的坐标，[l,r)范围，找不到的时候，返回right，不需要特判
-  private int find(int[] tail, int left, int right, int v) {
-    while (left < right) {
-      int mid = left + (right - left) / 2;
-      if (tail[mid] < v) {
-        left = mid + 1;
+  // 查找第一个>=v的坐标，[l,r)范围
+  // 也可以理解为插入t的位置下标,不存在插入右边界r
+  private int getMin(int[] nums, int l, int r, int t) {
+    while (l < r) {
+      int mid = l + (r - l) / 2;
+      if (nums[mid] >= t) {
+        r = mid;
       } else {
-        right = mid;
+        l = mid + 1;
       }
     }
-
-    return left;
-  }
-
-  // 查找第一个>=v的坐标，[l,r]范围，返回-1需要特判
-  private int find1(int[] nums, int l, int r, int v) {
-    int left = l;
-    int right = r;
-
-    int res = -1;
-    while (left <= right) {
-      int mid = left + (right - left) / 2;
-      if (nums[mid] >= v) {
-        res = mid;
-        right = mid - 1;
-      } else {
-        left = mid + 1;
-      }
-    }
-    return res;
+    return l;
   }
 
   public static void main(String[] args) {
