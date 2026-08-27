@@ -67,7 +67,7 @@ public class Solution4 {
    * 将str转换成带#号的字符数组:解决奇数、偶数中心往外扩的差异性
    * 偶数位放#，奇数位放原字符，总长度2n+1=奇数
    */
-  public static char[] manacherString(String s, int n) {
+  public char[] manacherString(String s, int n) {
     char[] charArr = s.toCharArray();
     int index = 0;// index遍历charArr
 

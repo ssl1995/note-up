@@ -69,8 +69,8 @@ public class Solution {
     int n = word2.length();
     // dp[i][j]表示word1的前i个字符转换成word2的前j个字符所需的最少操作数
     int[][] dp = new int[m + 1][n + 1];
-    // 初始化
-    dp[0][0] = 0;
+
+    // 本题即使是m+1和n+1的初始化，也需要处理首行首列
     // word2为空，只能把word1的字符一个个删除
     for (int i = 0; i < m + 1; i++) {
       dp[i][0] = i;
@@ -84,6 +84,7 @@ public class Solution {
       for (int j = 1; j < n + 1; j++) {
         // 字母相同：不做操作
         if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+          // dp沿用上一个数据
           dp[i][j] = dp[i - 1][j - 1];
           continue;
         }
@@ -91,13 +92,13 @@ public class Solution {
 
         // 最后一次操作必为增/删/改之一，取三种情况最小值：
         // 删除（上边）：word1多一个字符，删掉word1[i-1]，剩下word1前i-1个->word2前j个
-        int delete = dp[i - 1][j] + 1;
+        int delete = dp[i - 1][j];
         // 新增（左边）：word2多一个字符，往word1末尾插入word2[j-1]，剩下word1前i个->word2前j-1个
-        int insert = dp[i][j - 1] + 1;
+        int insert = dp[i][j - 1];
         // 替换（左上）：word1[i-1]与word2[j-1]配对，把word1[i-1]改成word2[j-1]，剩下word1前i-1个->word2前j-1个
-        int update = dp[i - 1][j - 1] + 1;
+        int update = dp[i - 1][j - 1];
 
-        dp[i][j] = Math.min(Math.min(delete, insert), update);
+        dp[i][j] = Math.min(Math.min(delete, insert), update) + 1;
       }
     }
 
