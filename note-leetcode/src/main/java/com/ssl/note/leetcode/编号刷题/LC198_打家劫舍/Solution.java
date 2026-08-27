@@ -30,10 +30,32 @@ public class Solution {
       // 偷,第i-1间必须不偷
       dp[i][0] = dp[i - 1][1] + nums[i];
       // 不偷,第i-1间可偷可不偷
-      dp[i][1] = Math.max(dp[i-1][0],dp[i-1][1]);
+      dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][1]);
     }
 
     return Math.max(dp[n - 1][0], dp[n - 1][1]);
+  }
+
+  // 不初始化的第0行的话，数组长度初始化为n+1
+  public int rob1(int[] nums) {
+    if (nums == null || nums.length == 0) {
+      return -1;
+    }
+    if (nums.length == 1) {
+      return nums[0];
+    }
+    int n = nums.length;
+    int[][] dp = new int[n + 1][2];
+    // 不想
+
+    for (int i = 1; i <= n; i++) {
+      // 偷,第i-1间必须不偷
+      dp[i][0] = dp[i - 1][1] + nums[i];
+      // 不偷,第i-1间可偷可不偷
+      dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+    }
+
+    return Math.max(dp[n][0], dp[n][1]);
   }
 
   public static void main(String[] args) {
