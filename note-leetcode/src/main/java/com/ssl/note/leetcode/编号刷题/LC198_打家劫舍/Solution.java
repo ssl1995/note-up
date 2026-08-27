@@ -46,7 +46,7 @@ public class Solution {
     }
     int n = nums.length;
     int[][] dp = new int[n + 1][2];
-    // 不想
+    // 不想初始化，就数组长度+1
 
     for (int i = 1; i <= n; i++) {
       // 偷,第i-1间必须不偷
