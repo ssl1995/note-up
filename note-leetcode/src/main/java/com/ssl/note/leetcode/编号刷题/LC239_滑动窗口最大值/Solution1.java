@@ -20,8 +20,7 @@ public class Solution1 {
     }
     int n = nums.length;
     int[] res = new int[n - k + 1];
-    // 双端队列，存下标，方便判断左边界是否过期
-    // 规定：队头维持窗口最大值
+    // 双端队列：存下标，队尾要移除使用双端队列
     Deque<Integer> deque = new ArrayDeque<>();
 
     for (int i = 0; i < n; i++) {
@@ -30,18 +29,17 @@ public class Solution1 {
         deque.pollLast();
       }
       // 2、队尾加入新元素
-      deque.offerLast(i);
-
-      // 3、维持窗口左边界，当i来到某个位置，左边界是i-k+1
-      int l = i - k + 1;
-      // 队首最大值下标<左边界，需要移除
-      if (deque.peekFirst() < l) {
-        deque.pollFirst();
-      }
-
-      // 4、记录结果
+      deque.offer(i);
+      // 3、记录结果
       if (i >= k - 1) {
-        res[i - k + 1] = nums[deque.peekFirst()];
+        // 4、更新左边界,再记录答案
+        // 合法：i - k + 1 <= queue.peek() && queue.peek() <= i
+        // 不合法：i-k+1 > queue.peek()
+        if (i - k + 1 > deque.peek()) {
+          deque.peek();
+        }
+        // 结果存的是值，不是下标
+        res[i - k + 1] = nums[deque.peek()];
       }
     }
     return res;
@@ -49,8 +47,8 @@ public class Solution1 {
 
   public static void main(String[] args) {
     Solution1 solution = new Solution1();
-    int[] nums = {1, 3, -1, -3, 5, 3, 6, 7};
-    int k = 3;
+    int[] nums = {7, 2, 4};
+    int k = 2;
     // [3, 3, 5, 5, 6, 7]
     System.out.println(Arrays.toString(solution.maxSlidingWindow(nums, k)));
   }

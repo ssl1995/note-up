@@ -12,16 +12,16 @@ public class Solution {
    * 输入：s = "ADOBECODEBANC", t = "ABBC"
    * 输出："BANC"
    */
-  public String minWindow(String str, String tar) {
-    char[] cs = str.toCharArray();
-    char[] ct = tar.toCharArray();
+  public String minWindow(String s, String t) {
+    char[] cs = s.toCharArray();
+    char[] ct = t.toCharArray();
 
     // 需要的
     int[] cnts = new int[256];
     for (char c : ct) {
       cnts[c]--;
     }
-    // 总的债务
+    // 总的债务:t的个数
     int debt = ct.length;
 
     // 求子串，考虑初始坐标和长度
@@ -44,14 +44,13 @@ public class Solution {
         }
 
         if (r - l + 1 < len) {
-          len = r - l + 1;
           start = l;
+          len = r - l + 1;
         }
       }
     }
-    return len == Integer.MAX_VALUE ? "" : str.substring(start, start + len);
+    return len == Integer.MAX_VALUE ? "" : s.substring(start, start + len);
   }
-
 
   public static void main(String[] args) {
     Solution solution = new Solution();

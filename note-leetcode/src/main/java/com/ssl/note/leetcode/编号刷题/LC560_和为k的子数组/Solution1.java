@@ -18,19 +18,16 @@ public class Solution1 {
   public int subarraySum(int[] nums, int k) {
     // key:前缀和,value:题目为次数=次数
     Map<Integer, Integer> map = new HashMap<>();
-    // 特判：前缀和为0，出现了1次
+    // value是次数，思考key=0时特判值是1
     map.put(0, 1);
 
     int sum = 0;
     int res = 0;
     for (int num : nums) {
+      // 计算前缀和
       sum += num;
-      // 先put再res，是不对的，因为k=0，导致sum-k=sum，
-//      map.put(sum, map.getOrDefault(sum, 0) + 1);
-
-      // sum[L-1] = k - sum[R],sum[L-1]就是曾经的某个出现的前缀和
+      // 先查后更新：因为单个元素能形成一个解
       res += map.getOrDefault(sum - k, 0);
-      // 因为是次数，必须更新次数
       map.put(sum, map.getOrDefault(sum, 0) + 1);
     }
 
@@ -39,8 +36,8 @@ public class Solution1 {
 
   public static void main(String[] args) {
     Solution1 solution = new Solution1();
-    int[] nums = {1, 1, 1};
-    int k = 2;
+    int[] nums = {1};
+    int k = 1;
     System.out.println(solution.subarraySum(nums, k));
   }
 }
