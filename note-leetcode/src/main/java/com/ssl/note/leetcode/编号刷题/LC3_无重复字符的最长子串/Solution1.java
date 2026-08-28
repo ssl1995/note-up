@@ -16,14 +16,14 @@ public class Solution1 {
     char[] cs = s.toCharArray();
 
     int res = 0;
-    for (int right = 0, left = 0; right < cs.length; right++) {
+    for (int r = 0, l = 0; r < cs.length; r++) {
       // 左窗口：重复字符上次出现位置在窗口内时，左边界右移；在窗口外时left不能往回退
-      if (map.containsKey(cs[right])) {
-        left = Math.max(left, map.get(cs[right]) + 1);
+      if (map.containsKey(cs[r])) {
+        l = Math.max(l, map.get(cs[r]) + 1);
       }
-      map.put(cs[right], right);
 
-      res = Math.max(res, right - left + 1);
+      map.put(cs[r], r);
+      res = Math.max(res, r - l + 1);
     }
 
     return res;

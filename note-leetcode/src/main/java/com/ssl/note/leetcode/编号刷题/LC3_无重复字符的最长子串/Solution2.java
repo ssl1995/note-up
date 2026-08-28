@@ -17,12 +17,30 @@ public class Solution2 {
     char[] cs = s.toCharArray();
 
     int res = 0;
+    // l初始化-1，表示(l,r]的左边界之外
+    for (int r = 0, l = -1; r < cs.length; r++) {
+      // l表示上次出现的位置,只有重复时才更新
+      if (map[cs[r]] != -1) {
+        l = Math.max(l, map[cs[r]]);
+      }
+      map[cs[r]] = r;
+
+      // 无重复的长度：r-(l+1)+1=r-l
+      res = Math.max(res, r - l);
+    }
+
+    return res;
+  }
+
+  public int lengthOfLongestSubstring2(String s) {
+    int[] map = new int[256];
+    Arrays.fill(map, -1);
+
+    char[] cs = s.toCharArray();
+
+    int res = 0;
     for (int r = 0, l = 0; r < cs.length; r++) {
       // 滑动窗口r和l不能回退,l来到过的位置不能再回去了
-      // "aabbaa",来到倒数第2个a时，以下代码l会回到第一个b
-//      if (map[cs[r]] != -1) {
-//        l = map[cs[r]] + 1;
-//      }
       l = Math.max(l, map[cs[r]] + 1);
       map[cs[r]] = r;
 
