@@ -10,7 +10,7 @@ import java.util.List;
  * @date 2022/1/26 11:08 PM
  * @description
  */
-public class Solution {
+public class Solution1 {
   /**
    * 合并区间
    * 输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
@@ -23,41 +23,26 @@ public class Solution {
     // 按照左端点排序:[[1,3],[2,6],[8,10],[15,18]]
     Arrays.sort(intervals, Comparator.comparingInt(num -> num[0]));
 
-    List<List<Integer>> res = new ArrayList<>();
+    // list套int[]：1、循环判断好赋值 2、返回值短
+    List<int[]> res = new ArrayList<>();
     for (int[] nums : intervals) {
       int a = nums[0];
       int b = nums[1];
 
-      if (res.isEmpty()) {
-        res.add(getNewArray(a, b));
+      // 直接加：结果空 或 当前数左端点>上一个区间的右边
+      if (res.isEmpty() || a > res.get(res.size() - 1)[1]) {
+        res.add(new int[]{a, b});
       } else {
-        List<Integer> last = res.get(res.size() - 1);
-        int lastB = last.get(1);
-        if (a > lastB) {
-          res.add(getNewArray(a, b));
-        } else {
-          last.set(1, Math.max(b, lastB));
-        }
+        // 不加需要更新：当前数右端点<=上一个区间有点，更新上一个区间右端点为彼此最右
+        res.get(res.size() - 1)[1] = Math.max(res.get(res.size() - 1)[1], b);
       }
     }
-
-    int[][] ans = new int[res.size()][2];
-    for (int i = 0; i < res.size(); i++) {
-      ans[i][0] = res.get(i).get(0);
-      ans[i][1] = res.get(i).get(1);
-    }
-    return ans;
-  }
-
-  private List<Integer> getNewArray(int a, int b) {
-    List<Integer> temp = new ArrayList<>();
-    temp.add(a);
-    temp.add(b);
-    return temp;
+    // new int[0][]:告诉JVM，需要什么类型
+    return res.toArray(new int[res.size()][]);
   }
 
   public static void main(String[] args) {
-    Solution solution = new Solution();
+    Solution1 solution = new Solution1();
     int[][] nums = {{1, 3}, {8, 10}, {15, 18}, {2, 6}};
     System.out.println(Arrays.deepToString(solution.merge(nums)));
   }

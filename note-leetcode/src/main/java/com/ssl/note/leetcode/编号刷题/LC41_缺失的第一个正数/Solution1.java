@@ -23,7 +23,7 @@ public class Solution1 {
       // 正确：nums[i] != nums[nums[i] - 1]：目标位置还没放对，第一次循环用这个
       // 错误：nums[i] != i + 1：当前位置没放对，因为[1,1]这种重复的数据就会一直循环不能用
       while (nums[i] >= 1 && nums[i] <= n && nums[i] != nums[nums[i] - 1]) {
-        // nums[i] - 1先存，否则可能会数组越界
+        // nums[nums[i] - 1]先存，否则放nums[nums[i]-1]=t
         int temp = nums[nums[i] - 1];
         nums[nums[i] - 1] = nums[i];
         nums[i] = temp;
@@ -37,7 +37,7 @@ public class Solution1 {
         return i + 1;
       }
     }
-    // 3、第二次遍历没找到，数组所有位置都正确，返回n
+    // 3、第二次遍历没找到，数组所有位置都正确，返回n+1
     // 说明是[1,2,3]，n=3，答案是4
     return n + 1;
   }
