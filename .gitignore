@@ -52,3 +52,6 @@ vendor/
 .vscode
 
 .cursor
+/.agents/
+/.junie/
+/skills-lock.json
