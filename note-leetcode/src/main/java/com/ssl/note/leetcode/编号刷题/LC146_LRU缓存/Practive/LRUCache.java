@@ -18,20 +18,23 @@ public class LRUCache {
   }
 
   private Map<Integer, Node> map;
-  private int capacity;
   private Node head;
   private Node tail;
+  private int cap;
 
   public LRUCache(int capacity) {
-    this.map = new HashMap<>();
-    this.capacity = capacity;
-    this.head = new Node(-1, -1);
-    this.tail = new Node(-1, -1);
-    this.head.next = tail;
-    this.tail.pre = head;
+    map = new HashMap<>();
+    head = new Node(-1, -1);
+    tail = new Node(-1, -1);
+    cap = capacity;
+    head.next = tail;
+    tail.pre = head;
   }
 
   public int get(int key) {
+    if (cap == 0) {
+      return -1;
+    }
     if (!map.containsKey(key)) {
       return -1;
     }
@@ -42,7 +45,7 @@ public class LRUCache {
 
   public void put(int key, int value) {
     if (!map.containsKey(key)) {
-      if (capacity == map.size()) {
+      if (cap == map.size()) {
         deleteHead();
       }
       Node node = new Node(key, value);
@@ -55,7 +58,16 @@ public class LRUCache {
     node.value = value;
   }
 
-  // 原子1:删除一个节点
+  private void insertToTail(Node node) {
+    if (node == null) {
+      return;
+    }
+    node.pre = tail.pre;
+    tail.pre.next = node;
+    node.next = tail;
+    tail.pre = node;
+  }
+
   private void deleteNode(Node node) {
     if (node == null) {
       return;
@@ -64,30 +76,17 @@ public class LRUCache {
     node.next.pre = node.pre;
   }
 
-  // 原子2：插入到队尾
-  private void insertToTail(Node node) {
-    if (node == null) {
-      return;
-    }
-    tail.pre.next = node;
-    node.pre = tail.pre;
-    node.next = tail;
-    tail.pre = node;
-  }
-
-  // 操作1：插入到队尾=最近使用
-  private void moveToTail(Node node) {
-    if (node == null) {
-      return;
-    }
-    deleteNode(node);
-    insertToTail(node);
-  }
-
-  // 操作2：删除对头
   private void deleteHead() {
     Node node = head.next;
+    if (node == null) {
+      return;
+    }
     deleteNode(node);
     map.remove(node.key);
+  }
+
+  private void moveToTail(Node node) {
+    deleteNode(node);
+    insertToTail(node);
   }
 }
