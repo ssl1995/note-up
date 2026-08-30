@@ -28,4 +28,18 @@ public class Solution1 {
     }
     return cur1;
   }
+
+  public ListNode getIntersectionNode1(ListNode headA, ListNode headB) {
+    if (headA == null || headB == null) {
+      return headA == null ? headB : headA;
+    }
+
+    ListNode cur1 = headA;
+    ListNode cur2 = headB;
+    while (cur1 != cur2) {
+      cur1 = cur1.next == null ? headB : cur1.next;
+      cur2 = cur2.next == null ? headA : cur2.next;
+    }
+    return cur1;
+  }
 }
