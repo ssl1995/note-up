@@ -28,12 +28,12 @@ public class Solution1 {
       // 核心：如果它有左子树，那么前序遍历中左子树的最右节点就是右子树的前驱
       if (cur.left != null) {
         // 找到左子树的最右节点
-        TreeNode pre = cur.left;
-        while (pre.right != null) {
-          pre = pre.right;
+        TreeNode mostRight = cur.left;
+        while (mostRight.right != null) {
+          mostRight = mostRight.right;
         }
         // 1、左子树最右指针，记录它的后继
-        pre.right = cur.right;
+        mostRight.right = cur.right;
         // 2、cur左子树移到右边
         cur.right = cur.left;
         // 3、cur左子树置空

@@ -21,26 +21,24 @@ public class Solution {
     for (int i = 0; i < inorder.length; i++) {
       map.put(inorder[i], i);
     }
-    return dfs1(preorder, 0, preorder.length - 1, map, 0, inorder.length - 1);
-//    return dfs2(preorder, 0, map, 0, inorder.length - 1);
+    return dfs(preorder, 0, preorder.length - 1, map, 0, inorder.length - 1);
   }
 
   // 与LC106的写法统一
-  private TreeNode dfs1(int[] pre, int preStart, int preEnd,
-                        Map<Integer, Integer> map, int inStart, int inEnd) {
+  private TreeNode dfs(int[] pre, int preStart, int preEnd,
+                       Map<Integer, Integer> map, int inStart, int inEnd) {
     if (inStart > inEnd || preStart > preEnd) {
       return null;
     }
-    int rootVal = pre[preStart];
-
-    int index = map.get(rootVal);
+    int value = pre[preStart];
+    int index = map.get(value);
     int leftCount = index - inStart;
 
     // 前序：preStart,[preStart+1,preStart+leftCount],[preStart+leftCount+1,preEnd]
     // 中序：[inStart,index-1],index,[index+1,inEnd]
-    TreeNode node = new TreeNode(rootVal);
-    node.left = dfs1(pre, preStart + 1, preStart + leftCount, map, inStart, index - 1);
-    node.right = dfs1(pre, preStart + leftCount + 1, preEnd, map, index + 1, inEnd);
+    TreeNode node = new TreeNode(value);
+    node.left = dfs(pre, preStart + 1, preStart + leftCount, map, inStart, index - 1);
+    node.right = dfs(pre, preStart + leftCount + 1, preEnd, map, index + 1, inEnd);
     return node;
   }
 

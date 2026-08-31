@@ -29,12 +29,11 @@ public class Solution {
     }
     // 后序遍历的最后一个元素就是当前子树的根节点
     // 比如例子中的[9,15,7,20,3]的3就是整颗树的根
-    int rootVal = post[postEnd];
-
-    int index = map.get(rootVal);
+    int value = post[postEnd];
+    int index = map.get(value);
     int leftCount = index - inStart;
 
-    TreeNode node = new TreeNode(rootVal);
+    TreeNode node = new TreeNode(value);
     // 左子树后序段  = [postStart, postStart + leftCount - 1]
     // 右子树后序段  = [postStart + leftCount, postEnd - 1]
     // 根节点       = post[postEnd]
