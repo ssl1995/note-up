@@ -1,68 +1,58 @@
 package com.ssl.note.practice.lc_top_100;
 
 import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
 public class Practice {
 
-  private int fresh = 0;
-
-  public int orangesRotting(int[][] grid) {
-    if (grid == null) {
-      return 0;
+  public boolean canFinish(int numCourses, int[][] prerequisites) {
+    if (prerequisites == null) {
+      return false;
     }
-    int m = grid.length;
-    int n = grid[0].length;
-    Deque<int[]> queue = new ArrayDeque<>();
-    for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-        if (grid[i][j] == 1) {
-          fresh++;
-        }
-        if (grid[i][j] == 2) {
-          queue.offer(new int[]{i, j});
-        }
+    List<List<Integer>> graph = new ArrayList<>();
+    for (int i = 0; i < numCourses; i++) {
+      graph.add(new ArrayList<>());
+    }
+
+    int[] indegree = new int[numCourses];
+    for (int[] p : prerequisites) {
+      int cur = p[0];
+      int pre = p[1];
+      graph.get(pre).add(cur);
+      indegree[cur]++;
+    }
+
+    Queue<Integer> queue = new ArrayDeque<>();
+    for (int i = 0; i < numCourses; i++) {
+      if (indegree[i] == 0) {
+        queue.offer(i);
       }
     }
 
-    if (fresh == 0) {
-      return 0;
-    }
-
-    int res = -1;
+    int count = 0;
     while (!queue.isEmpty()) {
-      int size = queue.size();
+      int poll = queue.poll();
+      count++;
 
-      while (size-- > 0) {
-        int[] pos = queue.poll();
-        int i = pos[0];
-        int j = pos[1];
-        f(grid, i - 1, j, queue);
-        f(grid, i + 1, j, queue);
-        f(grid, i, j - 1, queue);
-        f(grid, i, j + 1, queue);
+      List<Integer> nexts = graph.get(poll);
+      for (int next : nexts) {
+        // indegree[next]--;
+        if (--indegree[next] == 0) {
+          queue.offer(next);
+        }
       }
-      res++;
     }
 
-    return fresh == 0 ? res : -1;
-  }
-
-  private void f(int[][] grid, int i, int j, Deque<int[]> queue) {
-    if (i < 0 || i > grid.length - 1 || j < 0 || j > grid[0].length - 1) {
-      return;
-    }
-    if (grid[i][j] == 1) {
-      grid[i][j] = 2;
-      fresh--;
-      queue.offer(new int[]{i, j});
-    }
+    return count == numCourses;
   }
 
   public static void main(String[] args) {
     Practice practice = new Practice();
-    String s = "10[abc]";
-
+    int[][] nums = {{0, 1}};
+    int num = 2;
+    System.out.println(practice.canFinish(num, nums));
   }
 
 }
