@@ -1,58 +1,60 @@
 package com.ssl.note.practice.lc_top_100;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class Practice {
 
-  public boolean canFinish(int numCourses, int[][] prerequisites) {
-    if (prerequisites == null) {
-      return false;
+  public List<List<String>> partition(String s) {
+    if (s == null || s.isEmpty()) {
+      return new ArrayList<>();
     }
-    List<List<Integer>> graph = new ArrayList<>();
-    for (int i = 0; i < numCourses; i++) {
-      graph.add(new ArrayList<>());
-    }
+    int n = s.length();
+    boolean[][] dp = getDp(s, n);
+    List<String> path = new ArrayList<>();
+    List<List<String>> res = new ArrayList<>();
+    dfs(s, 0, n, dp, path, res);
 
-    int[] indegree = new int[numCourses];
-    for (int[] p : prerequisites) {
-      int cur = p[0];
-      int pre = p[1];
-      graph.get(pre).add(cur);
-      indegree[cur]++;
-    }
+    return res;
+  }
 
-    Queue<Integer> queue = new ArrayDeque<>();
-    for (int i = 0; i < numCourses; i++) {
-      if (indegree[i] == 0) {
-        queue.offer(i);
+  private void dfs(String s, int i, int n, boolean[][] dp, List<String> path, List<List<String>> res) {
+    if (i == n) {
+      res.add(new ArrayList<>(path));
+      return;
+    }
+    for (int j = i; j < n; j++) {
+      if (!dp[i][j]) {
+        continue;
       }
+      path.add(s.substring(i, j + 1));
+      dfs(s, j + 1, n, dp, path, res);
+      path.remove(path.size() - 1);
     }
+  }
 
-    int count = 0;
-    while (!queue.isEmpty()) {
-      int poll = queue.poll();
-      count++;
+  private boolean[][] getDp(String s, int n) {
+    boolean[][] dp = new boolean[n][n];
 
-      List<Integer> nexts = graph.get(poll);
-      for (int next : nexts) {
-        // indegree[next]--;
-        if (--indegree[next] == 0) {
-          queue.offer(next);
+    for (int len = 1; len <= n; len++) {
+      for (int i = 0; i + len - 1 < n; i++) {
+        int j = i + len - 1;
+        if (len == 1) {
+          dp[i][j] = true;
+        } else if (s.charAt(i) != s.charAt(j)) {
+          dp[i][j] = false;
+        } else {
+          dp[i][j] = len == 2 || dp[i + 1][j - 1];
         }
       }
     }
-
-    return count == numCourses;
+    return dp;
   }
 
   public static void main(String[] args) {
     Practice practice = new Practice();
-    int[][] nums = {{0, 1}};
-    int num = 2;
-    System.out.println(practice.canFinish(num, nums));
+    String s = "aab";
+    System.out.println(practice.partition(s));
   }
 
 }

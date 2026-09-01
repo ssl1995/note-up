@@ -25,14 +25,27 @@ public class Solution {
     return res;
   }
 
-  private void backtrack(int[] nums, int start, List<Integer> path, List<List<Integer>> res) {
+  private void backtrack(int[] nums, int i, List<Integer> path, List<List<Integer>> res) {
     // 示例有一个答案：[], 推断子集:一进来就收集
     res.add(new ArrayList<>(path));
 
-    for (int i = start; i < nums.length; i++) {
-      path.add(nums[i]);
+    for (int j = i; j < nums.length; j++) {
+      path.add(nums[j]);
 
-      backtrack(nums, i + 1, path, res);
+      backtrack(nums, j + 1, path, res);
+
+      path.remove(path.size() - 1);
+    }
+  }
+
+  private void backtrack1(int[] nums, int i, List<Integer> path, List<List<Integer>> res) {
+    // 示例有一个答案：[], 推断子集:一进来就收集
+    res.add(new ArrayList<>(path));
+
+    for (int j = i; j < nums.length; j++) {
+      path.add(nums[j]);
+
+      backtrack1(nums, i + 1, path, res);
 
       path.remove(path.size() - 1);
     }
