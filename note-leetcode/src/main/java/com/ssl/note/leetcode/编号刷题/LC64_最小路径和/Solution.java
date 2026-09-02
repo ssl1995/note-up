@@ -1,5 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC64_最小路径和;
 
+import java.util.Arrays;
+
 public class Solution {
 
   /**
@@ -37,9 +39,36 @@ public class Solution {
     return dp[m - 1][n - 1];
   }
 
+  /**
+   * 错误：本题不能初始化m+1和n+1
+   * 初始化元素为0，首行首列min操作会错误
+   * 初始化元素为整形最大，+grid[i-1][j-1]会超出整形最大
+   */
+  public int minPathSum1(int[][] grid) {
+    if (grid == null || grid.length == 0) {
+      return 0;
+    }
+    int m = grid.length;
+    int n = grid[0].length;
+    int[][] dp = new int[m + 1][n + 1];
+    for (int[] d : dp) {
+      Arrays.fill(d, Integer.MAX_VALUE);
+    }
+
+    for (int i = 1; i <= m; i++) {
+      for (int j = 1; j <= n; j++) {
+        // 整形越界
+        dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i - 1][j - 1];
+      }
+    }
+
+    return dp[m][n];
+  }
+
   public static void main(String[] args) {
     Solution solution = new Solution();
     int[][] grid = {{1, 3, 1}, {1, 5, 1}, {4, 2, 1}};
     System.out.println(solution.minPathSum(grid));
+    System.out.println(solution.minPathSum1(grid));
   }
 }

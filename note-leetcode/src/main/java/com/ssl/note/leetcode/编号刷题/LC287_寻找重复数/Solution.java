@@ -10,29 +10,32 @@ public class Solution {
    * 输出：2
    */
   public int findDuplicate(int[] nums) {
-    if (nums == null || nums.length == 0) {
-      return -1;
-    }
-    // 题目要求空间复杂度O(1)，就不能用哈希表方法
-    int n = nums.length;
-    // 长度n：num
-    // 长度n-1:num-1
-    int[] count = new int[n];
-
-    for (int num : nums) {
-      count[num]++;
-
-      if (count[num] > 1) {
-        return num;
+    // 原地交换法的缺点：需要改变原数组
+    // 最优解还是快慢指针找环
+    int i = 0;
+    while (i < nums.length) {
+      if (i + 1 == nums[i]) {
+        i++;
+        continue;
       }
+      if (nums[nums[i] - 1] == nums[i]) {
+        return nums[i];
+      }
+      swap(nums, i, nums[i] - 1);
     }
-
     return -1;
+  }
+
+  private void swap(int[] nums, int i, int j) {
+    int t = nums[i];
+    nums[i] = nums[j];
+    nums[j] = t;
   }
 
   public static void main(String[] args) {
     Solution solution = new Solution();
     int[] nums = {1, 3, 4, 2, 2};
+    // 2
     System.out.println(solution.findDuplicate(nums));
   }
 }

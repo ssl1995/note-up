@@ -41,24 +41,23 @@ public class Solution1 {
    * LC142_判断环形链表II，可能无环，所以需要判断
    */
   public ListNode detectCycle(ListNode head) {
-    if (head == null || head.next == null || head.next.next == null) {
+    if (head == null) {
       return null;
     }
+    // 环形题，快慢指针同起点
     ListNode slow = head;
     ListNode fast = head;
 
-    boolean isCycle = false;
     while (fast != null && fast.next != null) {
       slow = slow.next;
       fast = fast.next.next;
       if (slow == fast) {
-        isCycle = true;
-        // 必须退出，有环时就会一直死循环
         break;
       }
     }
 
-    if (!isCycle) {
+    // 无环while条件被破坏，必须写全
+    if (fast == null || fast.next == null) {
       return null;
     }
 

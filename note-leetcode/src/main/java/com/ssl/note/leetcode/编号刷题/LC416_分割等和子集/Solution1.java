@@ -20,6 +20,7 @@ public class Solution1 {
     int sum = Arrays.stream(nums).sum();
 
     // 如果总和是奇数，无法分割成两个和相等的子集，直接返回false
+    // 换成:(sum % 2) != 0
     if ((sum & 1) == 1) {
       return false;
     }
@@ -38,7 +39,8 @@ public class Solution1 {
       for (int j = target; j >= num; j--) {
         // 状态转移方程：
         // dp[j] = dp[j] || dp[j - num]
-        // 表示不选当前元素时的状态，或选当前元素时的状态（即j - num是否可以实现）
+        // dp[j]:表示不选当前元素时的状态，或选
+        // dp[j - num]:当前元素时的状态（即j - num是否可以实现）
         dp[j] = dp[j] || dp[j - num];
       }
     }

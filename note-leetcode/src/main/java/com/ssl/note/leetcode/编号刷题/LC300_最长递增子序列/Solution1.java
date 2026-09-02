@@ -12,51 +12,58 @@ public class Solution1 {
    */
   public int lengthOfLIS(int[] nums) {
     int m = nums.length;
+    // 贪心思维:让短序列的末尾尽可能小，才能给长序列腾出生长空间
+    // tail[i]表示长度i+1的递增序列最小末尾元素
     int[] tail = new int[m];
-    int len = 0;
+    int size = 0;
 
     for (int num : nums) {
-      int index = find(tail, 0, len, num);
+      // 在tail中找第一个>=num的位置,不存在返回右边界size
+      int index = getFirstGE(tail, 0, size, num);
+      // size内找到了,就更新当前长度的递增子系列的最小末尾
+      if (index < size) {
+        tail[index] = num;
+      } else {
+        // getMin的index最远只返回size位置,这里index==size
+        // size内没找到,更新size
+        tail[size] = num;
+        size++;
+      }
+    }
+
+    return size;
+  }
+
+  // 查找第一个>=v的坐标，[l,r)范围
+  // 也可以理解为插入t的位置下标,不存在插入右边界r
+  private int getFirstGE(int[] nums, int l, int r, int t) {
+    while (l < r) {
+      int mid = l + (r - l) / 2;
+      if (nums[mid] >= t) {
+        r = mid;
+      } else {
+        l = mid + 1;
+      }
+    }
+    return l;
+  }
+
+  // 优化写法
+  public int lengthOfLIS1(int[] nums) {
+    int m = nums.length;
+    int[] tail = new int[m];
+    int size = 0;
+
+    for (int num : nums) {
+      int index = getFirstGE(tail, 0, size, num);
       tail[index] = num;
 
-      if (index == len) {
-        len++;
+      if (index == size) {
+        size++;
       }
     }
 
-    return len;
-  }
-
-  // 查找第一个>=v的坐标，[l,r)范围，找不到的时候，返回right，不需要特判
-  private int find(int[] tail, int left, int right, int v) {
-    while (left < right) {
-      int mid = left + (right - left) / 2;
-      if (tail[mid] < v) {
-        left = mid + 1;
-      } else {
-        right = mid;
-      }
-    }
-
-    return left;
-  }
-
-  // 查找第一个>=v的坐标，[l,r]范围，返回-1需要特判
-  private int find1(int[] nums, int l, int r, int v) {
-    int left = l;
-    int right = r;
-
-    int res = -1;
-    while (left <= right) {
-      int mid = left + (right - left) / 2;
-      if (nums[mid] >= v) {
-        res = mid;
-        right = mid - 1;
-      } else {
-        left = mid + 1;
-      }
-    }
-    return res;
+    return size;
   }
 
   public static void main(String[] args) {

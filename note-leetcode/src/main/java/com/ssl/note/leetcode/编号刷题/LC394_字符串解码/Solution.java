@@ -16,40 +16,38 @@ public class Solution {
     if (s.isEmpty()) {
       return "";
     }
-
-    StringBuilder res = new StringBuilder();
-
     Deque<Integer> numsStack = new ArrayDeque<>();
     Deque<String> letterStack = new ArrayDeque<>();
-    int multi = 0;
 
+    int num = 0;
+    StringBuilder res = new StringBuilder();
     char[] cs = s.toCharArray();
     for (char c : cs) {
-      // 1、数字，数字可能超过十位
+      // 数字，数字判断0-9，整形要-'0'
       if (c >= '0' && c <= '9') {
-        multi = multi * 10 + (c - '0');
+        num = num * 10 + (c - '0');
+      } else if (c >= 'a' && c <= 'z') {
+        // 字母，保存当前res
+        res.append(c);
       } else if (c == '[') {
-        // 2、左括号，压入数字栈和字母栈
-        numsStack.push(multi);
-        multi = 0;
+        // 左括号，压入数字栈和字母栈
+        numsStack.push(num);
+        num = 0;
 
         letterStack.push(res.toString());
 
         res = new StringBuilder();
-      } else if (c == ']') {
-        // 3、右括号，弹出数字栈和字母栈，拼接字符串
-        int count = numsStack.pop();
-
+      } else {
+        // 右括号，两个栈都是同时弹出
+        int count = numsStack.isEmpty() ? 0 : numsStack.pop();
         StringBuilder temp = new StringBuilder();
         while (count-- > 0) {
           temp.append(res);
         }
 
         // 与弹出的字母栈拼接
-        res = new StringBuilder(letterStack.pop() + temp);
-      } else {
-        // 字母，保存当前res
-        res.append(c);
+        String pop = letterStack.isEmpty() ? "" : letterStack.pop();
+        res = new StringBuilder(pop + temp);
       }
     }
 

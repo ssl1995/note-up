@@ -28,25 +28,24 @@ public class Solution {
     map.put('{', '}');
 
     for (char c : s.toCharArray()) {
-      // 第一次入栈
+      // 栈空
       if (stack.isEmpty()) {
         stack.push(c);
         continue;
       }
-      // 栈不为空，就判断栈顶和待插入字符关系
-      char peek = stack.peek();
-      // 只有左边的符号能入栈
-      if (!map.containsKey(peek)) {
+      // 栈顶不是左括号，就失败
+      if (!map.containsKey(stack.peek())) {
         return false;
       }
-
-      if (c == map.get(peek)) {
-        stack.pop();
-      } else {
+      // 不匹配，就入栈，下一轮栈顶判断就返回失败
+      if (c != map.get(stack.peek())) {
         stack.push(c);
+      } else {
+        // 匹配就出栈
+        stack.pop();
       }
     }
-
+    // s='{]'时，栈还有元素
     return stack.isEmpty();
   }
 

@@ -36,17 +36,15 @@ public class Solution {
       if (cs[i] == '(') {
         stack.push(i);
       } else {
-        if (!stack.isEmpty()) {
-          stack.pop();
-        }
+        stack.pop();
+
         if (stack.isEmpty()) {
           // 没有匹配的(，当前)成为新的"最后一个未匹配右括号"
           stack.push(i);
         } else {
-          // peek:最后一个没有被批评的右括号下标
-          Integer peek = stack.peek();
+          // peek:最后一个没有被匹配的右括号下标
           // 匹配上的括号长度=左闭右开：i-peek+1-1=i-peek
-          max = Math.max(max, i - peek);
+          max = Math.max(max, i - stack.peek());
         }
       }
     }

@@ -11,38 +11,31 @@ public class Solution1 {
    * 输出：[0,0,1,1,2,2]
    */
   public void sortColors(int[] nums) {
-    if (nums == null) {
+    if (nums == null || nums.length == 0) {
       return;
     }
-    // 荷兰国旗解法:
-    // 如果初始化left=-1,right=n：
-    // [0,left][left+1,i,right-1],[right+1,n-1]
-    int left = -1;
-    int right = nums.length;
-    int i = 0;
+    // 一次partition，常数空间复杂度
+    partition(nums, 0, nums.length - 1, 1);
+  }
 
-    while (i < right) {
-      if (nums[i] == 0) {
-        // 见0换左边
-        swap(nums, i++, ++left);
-      } else if (nums[i] == 1) {
-        // 见1直接走
+  // 荷兰国旗问题
+  private void partition(int[] nums, int l, int r, int v) {
+    int a = l, b = r, i = l;
+    while (i <= b) {
+      if (nums[i] < v) {
+        swap(nums, a++, i++);
+      } else if (nums[i] > v) {
+        swap(nums, b--, i);
+      } else {
         i++;
-      } else if (nums[i] == 2) {
-        // 见2换右边
-        // cur不动，从right位置换过来的数还没有检查
-        swap(nums, i, --right);
       }
     }
   }
 
   private void swap(int[] nums, int i, int j) {
-    if (i == j) {
-      return;
-    }
-    int temp = nums[i];
+    int t = nums[i];
     nums[i] = nums[j];
-    nums[j] = temp;
+    nums[j] = t;
   }
 
   public static void main(String[] args) {

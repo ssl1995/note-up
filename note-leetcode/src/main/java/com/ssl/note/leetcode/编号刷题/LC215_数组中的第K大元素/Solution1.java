@@ -16,33 +16,36 @@ public class Solution1 {
     return quickSelect(nums, 0, nums.length - 1, target);
   }
 
-  private int quickSelect(int[] nums, int left, int right, int target) {
-    while (true) {
-      // (l,r)开区间写法
-      int[] partition = partition(nums, left, right);
-      int l = partition[0];
-      int r = partition[1];
-
-      if (l < target && target < r) {
+  private int quickSelect(int[] nums, int l, int r, int target) {
+    // 循环不变式：target 始终在 [left, right] 区间内
+    while (l <= r) {
+      // [l,r]闭区间写法，我还是习惯这种写法
+      int[] partition = partition(nums, l, r);
+      int a = partition[0];
+      int b = partition[1];
+      // a、b、t都是坐标值，直接比较
+      if (a <= target && target <= b) {
         return nums[target];
-      } else if (target <= l) {
-        right = l;
+      } else if (target < a) {
+        r = a - 1;
       } else {
-        left = r;
+        l = b + 1;
       }
     }
+    // 理论上不会走到这里，因为题目保证k有效
+    return -1;
   }
 
   // 三路快排
-  private int[] partition(int[] nums, int l, int r) {
-    int random = new Random().nextInt(r - l + 1) + l;
-    // 1、先保存基准值，不能用 nums[random]，否则交换后基准值会跟着变
+  private int[] partition(int[] nums, int l, int right) {
+    // 三路快排，当重复元素过多时，高效处理
+    // 1、交换随机值，防止出现基准=最大值/最小值最坏情况
+    int random = new Random().nextInt(right - l + 1) + l;
     int pivot = nums[random];
-    int a = l;
-    int b = r;
-    int i = l;
+
     // 2、扫描右边界是 b 而不是 r，i > b 时终止
     // [0,a-1] [a,b] [b+1,r]
+    int a = l, b = right, i = l;
     while (i <= b) {
       if (nums[i] < pivot) {
         swap(nums, i++, a++);
@@ -52,8 +55,8 @@ public class Solution1 {
         i++;
       }
     }
-    // 开区间：等于基准的归位区间是 [a, b]，开区间边界必须是 {a-1, b+1}
-    return new int[]{a - 1, b + 1};
+    // 闭区间：直接返回a和b，而不是a-1和b-1
+    return new int[]{a, b};
   }
 
   private void swap(int[] nums, int i, int j) {
@@ -67,7 +70,7 @@ public class Solution1 {
   }
 
   public static void main(String[] args) {
-    int[] nums = {3,2,1,5,6,4};
+    int[] nums = {3, 2, 1, 5, 6, 4};
     int k = 2;
     int res = 5;
     Solution1 solution = new Solution1();

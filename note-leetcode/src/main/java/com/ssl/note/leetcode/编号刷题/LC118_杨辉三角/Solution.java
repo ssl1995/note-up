@@ -17,29 +17,27 @@ public class Solution {
    */
   public List<List<Integer>> generate(int n) {
     int[][] dp = new int[n][n];
-    //"[1, 0, 0, 0, 0]"
-    //"[1, 1, 0, 0, 0]"
-    //"[1, 2, 1, 0, 0]"
-    //"[1, 3, 3, 1, 0]"
-    //"[1, 4, 6, 4, 1]"
+    // 初始化第一列和对角线
     for (int i = 0; i < n; i++) {
-      dp[i][0] = 1;// 第一列
-      dp[i][i] = 1;// 对角线
-      // 初始化第一列和对角线后，就可以直接dp
-      for (int j = 1; j <= i-1; j++) {
-        dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
+      dp[i][i] = 1;
+      dp[i][0] = 1;
+    }
+    // 画图确定动态规划方程
+    for (int i = 2; i < n; i++) {
+      for (int j = 1; j < i; j++) {
+        dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
       }
     }
 
     List<List<Integer>> res = new ArrayList<>();
     for (int i = 0; i < n; i++) {
       List<Integer> temp = new ArrayList<>();
-      // 遍历到对角线是j<=i
       for (int j = 0; j <= i; j++) {
         temp.add(dp[i][j]);
       }
       res.add(temp);
     }
+
     return res;
   }
 

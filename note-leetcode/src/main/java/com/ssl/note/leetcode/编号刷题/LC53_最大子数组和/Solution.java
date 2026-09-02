@@ -20,14 +20,13 @@ public class Solution {
     int sum = 0;
     // 历史最小前缀和
     int preMinSum = 0;
-
-    // 最大连续子数组
+    // 数组元素可能全是负数，导致sum-preMinSum是负数
     int res = Integer.MIN_VALUE;
 
     for (int num : nums) {
-      // 1、先更新前缀和
+      // 1、时间轴推进：先累加当前值
       sum += num;
-      // 2、重点，因为是pre[i-1],所以先更新结果
+      // 2、当前sum-过去最小sum，保证了字数组长度至少为1
       res = Math.max(res, sum - preMinSum);
       // 3、最后更新历史最小前缀和
       preMinSum = Math.min(sum, preMinSum);

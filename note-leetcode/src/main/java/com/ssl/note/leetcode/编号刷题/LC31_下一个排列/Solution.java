@@ -21,9 +21,6 @@ public class Solution {
     if (nums == null || nums.length <= 1) {
       return;
     }
-    // [4,5,2,6,3,1] -> [4,5,3,1,2,6]
-    // [1,2,3]->[1,3,2]
-    // [3,2,1]->[1,2,3]
     // 1、只动低位，从右往左看降序的（升序=从左看右，降序是从右看左）
     int n = nums.length;
     int i = n - 2;
@@ -43,9 +40,14 @@ public class Solution {
     reverse(nums, i + 1, n - 1);
   }
 
-  /**
-   * 交换数组中两个位置的元素
-   */
+  private void reverse(int[] nums, int left, int right) {
+    while (left < right) {
+      // 交换左右指针的元素
+      // 左指针右移，右指针左移
+      swap(nums, left++, right--);
+    }
+  }
+
   private void swap(int[] nums, int i, int j) {
     if (i == j) {
       return;
@@ -53,21 +55,6 @@ public class Solution {
     int temp = nums[i];
     nums[i] = nums[j];
     nums[j] = temp;
-  }
-
-  /**
-   * 反转数组中从start到end的元素
-   */
-  private void reverse(int[] nums, int start, int end) {
-    int left = start;
-    int right = end;
-    while (left < right) {
-      // 交换左右指针的元素
-      swap(nums, left, right);
-      // 左指针右移，右指针左移
-      left++;
-      right--;
-    }
   }
 
   public static void main(String[] args) {

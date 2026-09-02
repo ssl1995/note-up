@@ -1,30 +1,30 @@
 package com.ssl.note.practice.lc_top_100;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Practice {
 
-  public int findMin(int[] nums) {
-    int left = 0;
-    int right = nums.length - 1;
-    while (left <= right) {
+  public int subarraySum(int[] nums, int k) {
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(0, 1);
 
-      int mid = left + (right - left) / 2;
-      int target = nums[0];
-
-      if (nums[mid] < target) {
-        right = mid;
-      } else if (nums[mid] > target) {
-        left = mid + 1;
-      } else {
-        right--;
-      }
+    int sum = 0;
+    int res = 0;
+    for (int num : nums) {
+      sum += num;
+      res += map.getOrDefault(map.get(sum - k), 0);
+      map.put(sum, map.getOrDefault(sum, 0) + 1);
     }
-    return nums[left];
+
+    return res;
   }
+
 
   public static void main(String[] args) {
     Practice practice = new Practice();
-    int[] nums = {5, 7, 7, 8, 8, 10};
-    int t = 8;
+    String s = "10[abc]";
+
   }
 
 }

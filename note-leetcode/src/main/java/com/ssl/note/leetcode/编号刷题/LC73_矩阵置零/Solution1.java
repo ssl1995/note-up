@@ -29,7 +29,6 @@ public class Solution1 {
         break;
       }
     }
-
     // 2、从[1,1]开始扫描，复用该行的首行、该列的首列记录是否0
     for (int i = 1; i < m; i++) {
       for (int j = 1; j < n; j++) {
@@ -39,7 +38,6 @@ public class Solution1 {
         }
       }
     }
-
     // 3、从[1,1]开始扫描，重置为0,不能破坏首行首列的标记信息
     for (int i = 1; i < m; i++) {
       for (int j = 1; j < n; j++) {

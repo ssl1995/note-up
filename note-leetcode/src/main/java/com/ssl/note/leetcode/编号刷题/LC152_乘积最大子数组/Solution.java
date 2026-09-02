@@ -21,7 +21,7 @@ public class Solution {
 
     int res = Integer.MIN_VALUE;
     for (int num : nums) {
-      // 由于存在负数,导致子数组乘积从最大变成最小 -> 遇到负数，交换
+      // 先交换,再计算
       if (num < 0) {
         int temp = max;
         max = min;
