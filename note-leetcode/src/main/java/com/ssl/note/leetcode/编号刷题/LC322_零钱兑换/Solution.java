@@ -68,6 +68,44 @@ public class Solution {
       }
     }
 
+    for (int coin : coins) {
+      for (int i = 1; i <= amount; i++) {
+        if (i >= coin) {
+          // 这里就不需要特判
+          dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+        }
+      }
+    }
+
+    return dp[amount] == amount + 1 ? -1 : dp[amount];
+  }
+
+  // 不用特判版本，外层是物品，内层是dp
+  public int coinChange2(int[] coins, int amount) {
+    if (coins == null || coins.length == 0) {
+      return -1;
+    }
+    // dp[i] 为凑成金额 i 所需的最少硬币数
+    int[] dp = new int[amount + 1];
+    // 为了减少特判：dp[i]=-1取最小需要特判
+    // 思考dp[i]的最大值有没有，有就是金额本身
+    // 考虑初始化为amount+1或者整形最大，但是整形最大+1会越界
+    // 所以 amount + 1 已经是一个"不可能达到"的值了。
+    Arrays.fill(dp, amount + 1);
+    dp[0] = 0;
+
+    // 外层是物品，条件给的确定的值
+    // 内层是我们的动态规划数组
+    for (int coin : coins) {
+      // 无限次，完全背包，正序遍历
+      for (int i = 1; i <= amount; i++) {
+        if (i >= coin) {
+          // 这里就不需要特判
+          dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+        }
+      }
+    }
+
     return dp[amount] == amount + 1 ? -1 : dp[amount];
   }
 

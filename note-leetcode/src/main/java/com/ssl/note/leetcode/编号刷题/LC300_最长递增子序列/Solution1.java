@@ -26,8 +26,7 @@ public class Solution1 {
       } else {
         // getMin的index最远只返回size位置,这里index==size
         // size内没找到,更新size
-        tail[size] = num;
-        size++;
+        tail[size++] = num;
       }
     }
 

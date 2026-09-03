@@ -49,10 +49,47 @@ public class Solution1 {
     return dp[target];
   }
 
+  public boolean canPartition1(int[] nums) {
+    // 边界检查：数组为空直接返回false
+    if (nums == null) {
+      return false;
+    }
+
+    // 计算数组元素的总和
+    int sum = Arrays.stream(nums).sum();
+
+    // 如果总和是奇数，无法分割成两个和相等的子集，直接返回false
+    // 换成:(sum % 2) != 0
+    if ((sum & 1) == 1) {
+      return false;
+    }
+
+    // 目标值为总和的一半
+    int target = sum / 2;
+
+    // dp数组：dp[j]能够凑出和为j的子集
+    boolean[] dp = new boolean[target + 1];
+    // 初始化：和为0不需要任何子集=true
+    dp[0] = true;
+
+    // 必须外层遍历物品、内层倒序遍历容量（01背包）
+    for (int num : nums) {
+      for (int j = target; j >= num; j--) {
+        dp[j] = dp[j] || dp[j - num];
+      }
+    }
+
+    // 返回是否可以找到和为target的子集
+    return dp[target];
+  }
+
   public static void main(String[] args) {
     Solution1 solution1 = new Solution1();
     int[] nums = {1, 5, 11, 5};
     // dp:[ true, true, false, false, false, true, true, false, false, false, true, true ]
     System.out.println(solution1.canPartition(nums));
+
+    int[] nums1 = {3, 3, 3, 4, 5};
+    System.out.println(solution1.canPartition1(nums1));
   }
 }
