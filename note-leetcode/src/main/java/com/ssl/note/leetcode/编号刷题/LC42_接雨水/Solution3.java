@@ -19,22 +19,22 @@ public class Solution3 {
     // 双指针
     int l = 0;
     int r = height.length - 1;
-    int water = 0;
+    int res = 0;
 
     while (l <= r) {
-      // i位置的左右两边最高值,包含自己
+      // l,r位置包含自己，找最高的最小值
       leftMax = Math.max(leftMax, height[l]);
       rightMax = Math.max(rightMax, height[r]);
-
-      // 左右两边低位决定接哪边水
       int min = Math.min(leftMax, rightMax);
-      int diff = height[l] < height[r] ? min - height[l++] : min - height[r--];
-      water += Math.max(diff, 0);
-      // 统一：
-      //water += leftMax < rightMax ? leftMax - height[l++] : rightMax - height[r--];
+
+      // l,r矮的那边作为底座接水，并且移动矮的那边
+      int cur = height[l] < height[r] ? height[l++] : height[r--];
+      int diff = min - cur;
+
+      res += diff;
     }
 
-    return water;
+    return res;
   }
 
   public static void main(String[] args) {
