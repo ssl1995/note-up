@@ -19,6 +19,7 @@ MyBatis 有哪些设计模式？
 输出文档路径：D:\project\note-up\docs\my-note\02-konw\java
 
 
-请扫描以下文档，读取信息，保留md纯格式，清除特殊格式，行与行之间不用空行，我好复制进飞书
-传输层面试题：https://ls8sck0zrg.feishu.cn/wiki/UBYcw5FQoizrVekhqPScJgfknJd
-保存地址：D:\project\note-up\docs\my-note\02-konw\java
+我整理的面试题：https://my.feishu.cn/wiki/KjxywQ9YQisqKNkTOySco7dKnhd
+我的简历-技能描述：https://my.feishu.cn/wiki/FN2OwF16yi7t2EkvFZ9cPlAPnZf
+我目前工作经验5年，实习2年，工作3年，年纪31岁，上一家公司从事权限系统和OA系统，
+现在需要重新整理简历的个人技能描述部分，请结合已有信息，可以保留现有的格式，给出技能描述部分如何修改？
