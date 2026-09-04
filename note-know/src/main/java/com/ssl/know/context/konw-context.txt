@@ -12,8 +12,7 @@ Spring中的设计模式描述如下：
 - 适配器模式 :Spring AOP 的增强或通知 （Advice） 使用到了适配器模式、Spring MVC 中也是用到了适配器模式适配 Controller。
 - 策略模式：Spring 中有一个 Resource 接口，它的不同实现类，会根据不同的策略去访问资源。
 
-我现在在重新学习下设计模式，面试的时候面试官对这块比较感兴趣，请在以下路径写出以上Spring设计常用的设计模式示例代码
-代码示例路径：D:\project\note-up\note-know\src\main\java\com\ssl\know\java\pattern
-
+我现在在背诵理解Spring的事务，其中Spring事务的传播行为和隔离级别不太理解，平时使用都是直接@Transaction，请给出代码示例和经验总结：
+代码示例路径：D:\project\note-up\note-know\src\main\java\com\ssl\know\java\transaction
 然后输出一份md总结文档，不要有空行和换行，方便我复制进飞书
 输出文档路径：D:\project\note-up\docs\my-note\02-konw\java
