@@ -21,17 +21,19 @@ public class Solution1 {
     }
     int n = nums.length;
     int[] res = new int[n];
-    // 从左到右
-    for (int i = 0, leftSum = 1; i < n; i++) {
-      leftSum *= nums[i];
-      res[i] = leftSum;
+
+    for (int left = 1, i = 0; i < n; i++) {
+      left *= nums[i];
+      res[i] = left;
     }
-    // 从右到左，i==0特判
-    for (int i = n - 1, rightSum = 1; i >= 0; i--) {
-      int pre = i == 0 ? 1 : res[i - 1];
-      // 先res再更新sum：i位置的结果，sum不能包含自己
-      res[i] = pre * rightSum;
-      rightSum *= nums[i];
+
+    for (int right = 1, i = n - 1; i >= 0; i--) {
+      if (i == 0) {
+        res[i] = right;
+      } else {
+        res[i] = res[i - 1] * right;
+      }
+      right *= nums[i];
     }
 
     return res;
