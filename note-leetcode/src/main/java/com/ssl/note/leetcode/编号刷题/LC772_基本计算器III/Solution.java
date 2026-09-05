@@ -26,43 +26,44 @@ public class Solution {
   public static int f(char[] s, int i) {
     List<Integer> numbers = new ArrayList<>();
     List<Character> ops = new ArrayList<>();
-    int cur = 0;
+    int num = 0;
     // 循环：指针没越界 且 没遇到右括号
     while (i < s.length && s[i] != ')') {
       // 数字
       if (s[i] >= '0' && s[i] <= '9') {
-        cur = cur * 10 + s[i++] - '0';
+        num = num * 10 + s[i++] - '0';
       } else if (s[i] != '(') {
         // 运算符：+ - * /
-        push(numbers, ops, cur, s[i++]);
-        cur = 0;
+        push(numbers, ops, num, s[i++]);
+        num = 0;
       } else {
         // 左括号：递归交给下个栈处理
-        cur = f(s, i + 1);
+        num = f(s, i + 1);
         i = where + 1;
       }
     }
     // 这里的+是任意一个运算符就行
-    push(numbers, ops, cur, '+');
+    push(numbers, ops, num, '+');
     where = i;
     // 栈非空，计算出栈
     return compute(numbers, ops);
   }
 
-  public static void push(List<Integer> numbers, List<Character> ops, int cur, char op) {
+  public static void push(List<Integer> numbers, List<Character> ops,
+                          int num, char op) {
     int n = numbers.size();
     // 没有数字 或 遇到+、-
     if (n == 0 || ops.get(n - 1) == '+' || ops.get(n - 1) == '-') {
-      numbers.add(cur);
+      numbers.add(num);
       ops.add(op);
     } else {
       int topNumber = numbers.get(n - 1);
       char topOp = ops.get(n - 1);
       if (topOp == '*') {
-        numbers.set(n - 1, topNumber * cur);
+        numbers.set(n - 1, topNumber * num);
       } else {
         // 原始数据保证除号后面跟的非0
-        numbers.set(n - 1, topNumber / cur);
+        numbers.set(n - 1, topNumber / num);
       }
       ops.set(n - 1, op);
     }
