@@ -16,6 +16,7 @@ public class Solution1 {
       map.put(num, map.getOrDefault(num, 0) + 1);
     }
 
+    // 初始化桶，桶的个数最大值=n+1
     int n = nums.length;
     List<List<Integer>> buckets = new ArrayList<>(n + 1);
     for (int i = 0; i < n + 1; i++) {
@@ -28,25 +29,18 @@ public class Solution1 {
       buckets.get(entry.getValue()).add(entry.getKey());
     }
 
+    // 辅助数组list转化结果到res数组
+    List<Integer> list = new ArrayList<>();
+    for (int i = buckets.size() - 1; i >= 0 && list.size() > k; i--) {
+      if (buckets.get(i) != null) {
+        list.addAll(buckets.get(i));
+      }
+    }
+
     int[] res = new int[k];
     int index = 0;
-    // 从后往前遍历桶，拿去前k个数返回
-    for (int i = n; i >= 0; i--) {
-      if (index >= k) {
-        break;
-      }
-      List<Integer> bucket = buckets.get(i);
-      if (bucket.isEmpty()) {
-        continue;
-      }
-      // 每个桶里可能有多个相同的频率的不同的数，返回k个数
-      for (int num : bucket) {
-        if (index >= k) {
-          break;
-        }
-        res[index] = num;
-        index++;
-      }
+    for (int i = k - 1; i >= 0; i--) {
+      res[index++] = list.get(i);
     }
 
     return res;

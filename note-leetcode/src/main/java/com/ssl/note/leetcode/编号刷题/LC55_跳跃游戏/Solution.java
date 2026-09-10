@@ -29,17 +29,17 @@ public class Solution {
       return false;
     }
     int n = nums.length;
-    int maxReach = 0;  // 当前能到达的最远位置
+    int max = 0;  // 当前能到达的最远位置
 
     for (int i = 0; i < n; i++) {
       // 关键判断：当前位置已经超出能到达的范围，走不动了
-      if (i > maxReach) {
+      if (i > max) {
         return false;
       }
       // 更新最远可达距离
-      maxReach = Math.max(maxReach, i + nums[i]);
+      max = Math.max(max, i + nums[i]);
       // 已经能到达或超过终点
-      if (maxReach >= n - 1) {
+      if (max >= n - 1) {
         return true;
       }
     }
