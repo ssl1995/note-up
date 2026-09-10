@@ -30,11 +30,35 @@ public class Solution2 {
     return b;
   }
 
+  public int climbStairs1(int n) {
+    if (n < 0) {
+      return 0;
+    }
+    if (n <= 2) {
+      return n;
+    }
+    int a = 1;
+    int b = 2;
+    // 从2开始
+//    for (int i = 2; i < n; i++) {
+//      int c = a;
+//      a = b;
+//      b = b + c;
+//    }
+    for (int i = 2; i < n; i++) {
+      int c = a + b;
+      a = b;
+      b = c;
+    }
+    return b;
+  }
+
   public static void main(String[] args) {
     Solution2 solution = new Solution2();
-    int n = 4;
+    int n = 3;
     // 3
     System.out.println(solution.climbStairs(n));
+    System.out.println(solution.climbStairs1(n));
   }
 
 }
