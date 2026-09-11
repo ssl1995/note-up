@@ -33,9 +33,7 @@ public class Solution1 {
     while (i < cs.length && cs[i] != ')') {
       if (cs[i] == ' ') {
         i++;
-        continue;
-      }
-      if (cs[i] >= '0' && cs[i] <= '9') {
+      } else if (cs[i] >= '0' && cs[i] <= '9') {
         num = num * 10 + (cs[i++] - '0');
       } else if (cs[i] != '(') {
         push(numberStack, opsStack, num, cs[i++]);

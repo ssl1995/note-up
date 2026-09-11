@@ -33,8 +33,7 @@ public class Solution {
         cur = cur * 10 + (cs[i++] - '0');
       } else {
         // 遇到加减乘除
-        push(numbers, ops, cur, cs[i]);
-        i++;
+        push(numbers, ops, cur, cs[i++]);
         cur = 0;
       }
     }

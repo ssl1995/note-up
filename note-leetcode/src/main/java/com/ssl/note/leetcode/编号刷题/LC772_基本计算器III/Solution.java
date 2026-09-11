@@ -23,27 +23,31 @@ public class Solution {
   // s[i....]开始计算，遇到字符串终止 或者 遇到)停止
   // 返回 : 自己负责的这一段，计算的结果
   // 返回之间，更新全局变量where，为了上游函数知道从哪继续！
-  public static int f(char[] s, int i) {
+  public static int f(char[] cs, int i) {
     List<Integer> numbers = new ArrayList<>();
     List<Character> ops = new ArrayList<>();
     int num = 0;
     // 循环：指针没越界 且 没遇到右括号
-    while (i < s.length && s[i] != ')') {
-      // 数字
-      if (s[i] >= '0' && s[i] <= '9') {
-        num = num * 10 + s[i++] - '0';
-      } else if (s[i] != '(') {
+    while (i < cs.length && cs[i] != ')') {
+      if (cs[i] == ' ') {
+        // 空格跳过
+        i++;
+      } else if (cs[i] >= '0' && cs[i] <= '9') {
+        // 数字
+        num = num * 10 + cs[i++] - '0';
+      } else if (cs[i] != '(') {
         // 运算符：+ - * /
-        push(numbers, ops, num, s[i++]);
+        push(numbers, ops, num, cs[i++]);
         num = 0;
       } else {
         // 左括号：递归交给下个栈处理
-        num = f(s, i + 1);
+        num = f(cs, i + 1);
         i = where + 1;
       }
     }
-    // 这里的+是任意一个运算符就行
+    // 最后一个数字没有入栈，入数字栈，符号位随意设置
     push(numbers, ops, num, '+');
+    // 记录本轮遍历到的位置
     where = i;
     // 栈非空，计算出栈
     return compute(numbers, ops);
@@ -59,25 +63,31 @@ public class Solution {
     } else {
       int topNumber = numbers.get(n - 1);
       char topOp = ops.get(n - 1);
+      // 这里只有乘除可能
       if (topOp == '*') {
-        numbers.set(n - 1, topNumber * num);
+        topNumber *= num;
       } else {
-        // 原始数据保证除号后面跟的非0
-        numbers.set(n - 1, topNumber / num);
+        topNumber /= num;
       }
+      numbers.set(n - 1, topNumber);
       ops.set(n - 1, op);
     }
   }
 
   public static int compute(List<Integer> numbers, List<Character> ops) {
     int n = numbers.size();
-    // 取数字栈最小面的数
-    int ans = numbers.get(0);
+    // 先取数字栈栈底的元素
+    int res = numbers.get(0);
     // ops中只剩加减，末尾不参与计算
     for (int i = 0; i < n - 1; i++) {
-      ans += ops.get(i) == '+' ? numbers.get(i + 1) : -numbers.get(i + 1);
+      char op = ops.get(i);
+      if (op == '+') {
+        res += numbers.get(i + 1);
+      } else {
+        res -= numbers.get(i + 1);
+      }
     }
-    return ans;
+    return res;
   }
 
   public static void main(String[] args) {
