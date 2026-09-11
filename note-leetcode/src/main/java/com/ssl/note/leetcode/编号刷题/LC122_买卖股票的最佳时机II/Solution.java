@@ -15,17 +15,14 @@ public class Solution {
    * 最大总利润为 4 + 3 = 7 。
    */
   public int maxProfit(int[] prices) {
-    // min=谷底，同时也是本轮买入价
     int min = Integer.MAX_VALUE;
     int res = 0;
 
     for (int num : prices) {
-      // 谷底买入
       min = Math.min(min, num);
+      res += num - min;
+      // 贪心：涨了就卖，然后立马买=最大收益
       if (num > min) {
-        // LC122:多次交易，涨了就卖
-        res += num - min;
-        // 卖了后，立马买入，等待下一波上涨
         min = num;
       }
     }

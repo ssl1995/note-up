@@ -37,8 +37,7 @@ public class Solution {
         cur = cur * 10 + (cs[i++] - '0');
       } else if (cs[i] != '(') {
         // 遇到加减
-        push(numbers, ops, cur, cs[i]);
-        i++;
+        push(numbers, ops, cur, cs[i++]);
         cur = 0;
       } else {
         // 遇到左括号

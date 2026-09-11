@@ -11,29 +11,33 @@ public class Solution1 {
    * 输入：nums = [1,3,4,2,2]
    * 输出：2
    */
+  // 如果slow和fast初始化都为0，就是do-while
   public int findDuplicate(int[] nums) {
     if (nums == null || nums.length == 0) {
       return -1;
     }
-    // 初始化慢指针和快指针
-    // 数组和链表LC142题不一样，同点出发，先走再判=也可以换成do-while
-    int slow = nums[0];
-    int fast = nums[nums[0]];
+    // 初始化慢指针和快指针：把数组看成虚拟链表 next(x)=nums[x]
+    // 以nums=[1,3,4,2,2]为例，链路为：0→1→3→2→4→2...，环2→4→2，环入口=2=重复数
+    // 下标0就是虚拟链表的head（值域[1,n]保证无人指向0，它没有前驱）
+
+    // 从头节点0开始
+    int slow = 0;
+    int fast = 0;
 
     // 第一阶段：找相遇点
-    while (slow != fast) {
+    // 如果用while(slow!=fast)就直接false跳出，所以用do-while
+    do {
       slow = nums[slow];
       fast = nums[nums[fast]];
-    }
+    } while (slow != fast);
 
-    // 第二次相遇后
-    // 快指针从第一个节点开始
+    // 第二次相遇：fast从头节点0开始
     fast = 0;
     while (slow != fast) {
       slow = nums[slow];
       fast = nums[fast];
     }
-    // 返回重复的数，这里slow都是数啦
+
     return slow;
   }
 
@@ -62,7 +66,6 @@ public class Solution1 {
     }
 
     fast = head;
-
     while (fast != slow) {
       fast = fast.next;
       slow = slow.next;
