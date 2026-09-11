@@ -11,3 +11,10 @@
 
 我最近把agent相关知识点看了，但是没有实际项目经验，请扫描以下在线文档，给出补充agent相关知识的个人技能描述，我加进去：
 https://my.feishu.cn/wiki/Y9hcw9UI6iiM8FkjbYNcQPTunGc
+
+
+我有一篇完整的SpringCloud八股文整理：https://my.feishu.cn/wiki/Y8DFwYTaoiH1wxkJcDcczbYOnKd
+我现在在重新看个人技能的八股，背诵到这里啦：
+"了解 SpringCloud Alibaba 微服务体系：Nacos 服务注册与配置中心、OpenFeign 远程调用、Gateway 网关、Sentinel 熔断限流、Seata 分布式事务。"
+现在需要你整理完整的八股文信息，结合我简历中的SpringCloud的相关描述，输出一篇更加精简背诵的SpringCloud八股文到这个页面：https://my.feishu.cn/wiki/H2qFw9cjiizspFkAfd5ccAknnyf
+要求是行与行之间不要有空行
