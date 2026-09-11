@@ -45,11 +45,7 @@ public class Practice {
     } else {
       int numPop = numStack.get(n - 1);
       char opPop = letterStack.get(n - 1);
-      if (opPop == '+') {
-        numPop = numPop + num;
-      } else if (opPop == '-') {
-        numPop = numPop - num;
-      } else if (opPop == '*') {
+      if (opPop == '*') {
         numPop = numPop * num;
       } else if (opPop == '/') {
         numPop = numPop / num;
