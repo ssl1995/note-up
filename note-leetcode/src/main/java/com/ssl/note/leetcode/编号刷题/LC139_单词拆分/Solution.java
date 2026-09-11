@@ -31,12 +31,16 @@ public class Solution {
 
     for (int i = 0; i < n; i++) {
       // 1、[0..i]本身就是一个单词
+      String part = s.substring(0, i + 1);
       if (set.contains(s.substring(0, i + 1))) {
         dp[i] = true;
       } else {
         // 2、找切割点j：s[0..j]可拆分 且 s[j+1..i]在字典中
         for (int j = 0; j < i; j++) {
-          if (dp[j] && set.contains(s.substring(j + 1, i + 1))) {
+          part = s.substring(j + 1, i + 1);
+          // 以下写法是错的，只要命中一次就行，否则会被覆盖
+          // dp[i] = dp[j] && set.contains(part);
+          if (dp[j] && set.contains(part)) {
             dp[i] = true;
             break;
           }
@@ -48,7 +52,7 @@ public class Solution {
   }
 
   // 数组n推导出n+1版本，时间复杂度虽然不变，但是耗时会降低
-  public boolean wordBreak2(String s, List<String> wordDict) {
+  public boolean wordBreak3(String s, List<String> wordDict) {
     Set<String> set = new HashSet<>(wordDict);
     int n = s.length();
     // dp[i]：s的前i个字符是否能被拆分
@@ -80,6 +84,6 @@ public class Solution {
 
     // 额外测试一个 false 用例
     String s2 = "leetcodex";
-    System.out.println("原始版本(false): " + solution.wordBreak2(s2, wordDict));
+//    System.out.println("原始版本(false): " + solution.wordBreak2(s2, wordDict));
   }
 }

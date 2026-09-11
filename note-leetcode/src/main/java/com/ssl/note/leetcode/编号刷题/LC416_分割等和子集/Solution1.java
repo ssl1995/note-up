@@ -15,24 +15,19 @@ public class Solution1 {
     if (nums == null) {
       return false;
     }
-
-    // 计算数组元素的总和
-    int sum = Arrays.stream(nums).sum();
-
     // 如果总和是奇数，无法分割成两个和相等的子集，直接返回false
+    int sum = Arrays.stream(nums).sum();
     // 换成:(sum % 2) != 0
     if ((sum & 1) == 1) {
       return false;
     }
-
     // 目标值为总和的一半
     int target = sum / 2;
-
+    // 目标转成：nums中是否有子序列是target
     // dp数组：dp[j]能够凑出和为j的子集
     boolean[] dp = new boolean[target + 1];
     // 初始化：和为0不需要任何子集=true
     dp[0] = true;
-
     // 遍历数组中的每个元素
     for (int num : nums) {
       // 从target开始倒序遍历，避免重复选择同一元素 =01背包
@@ -44,43 +39,40 @@ public class Solution1 {
         dp[j] = dp[j] || dp[j - num];
       }
     }
-
-    // 返回是否可以找到和为target的子集
     return dp[target];
   }
 
-  public boolean canPartition1(int[] nums) {
-    // 边界检查：数组为空直接返回false
+  /**
+   * 变体：dp数组长度初始化为 target（而不是 target + 1）
+   * 核心变化：下标需要偏移1位
+   * - 原写法：dp[j] 表示「能否凑出和为 j」，下标 0~target
+   * - 本写法：dp[j-1] 表示「能否凑出和为 j」，下标 0~target-1
+   * - 因此「和为0」没有对应下标，需要在状态转移时单独判断 j - num == 0 的情况
+   */
+  public boolean canPartition2(int[] nums) {
     if (nums == null) {
       return false;
     }
-
-    // 计算数组元素的总和
     int sum = Arrays.stream(nums).sum();
-
-    // 如果总和是奇数，无法分割成两个和相等的子集，直接返回false
-    // 换成:(sum % 2) != 0
     if ((sum & 1) == 1) {
       return false;
     }
-
-    // 目标值为总和的一半
     int target = sum / 2;
 
-    // dp数组：dp[j]能够凑出和为j的子集
-    boolean[] dp = new boolean[target + 1];
-    // 初始化：和为0不需要任何子集=true
-    dp[0] = true;
+    // dp[j-1]：能否凑出和为 j（j 范围 1~target）
+    boolean[] dp = new boolean[target];
+    // 注意：dp[0]=true 的初始化没有了，因为「和为0」在数组中没有位置
 
-    // 必须外层遍历物品、内层倒序遍历容量（01背包）
     for (int num : nums) {
       for (int j = target; j >= num; j--) {
-        dp[j] = dp[j] || dp[j - num];
+        // j - num == 0：当前元素 num 自己就能凑出和 j（相当于原写法的 dp[0]=true）
+        // j - num > 0：看「和为 j-num」是否可达，即 dp[j-num-1]
+        dp[j - 1] = dp[j - 1] || (j - num == 0 || dp[j - num - 1]);
       }
     }
 
-    // 返回是否可以找到和为target的子集
-    return dp[target];
+    // 「和为 target」对应下标 target-1
+    return dp[target - 1];
   }
 
   public static void main(String[] args) {
@@ -88,8 +80,5 @@ public class Solution1 {
     int[] nums = {1, 5, 11, 5};
     // dp:[ true, true, false, false, false, true, true, false, false, false, true, true ]
     System.out.println(solution1.canPartition(nums));
-
-    int[] nums1 = {3, 3, 3, 4, 5};
-    System.out.println(solution1.canPartition1(nums1));
   }
 }
