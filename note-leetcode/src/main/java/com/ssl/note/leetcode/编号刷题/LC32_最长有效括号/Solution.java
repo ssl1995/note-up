@@ -1,7 +1,7 @@
 package com.ssl.note.leetcode.编号刷题.LC32_最长有效括号;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  * @author SongShengLin
@@ -24,11 +24,12 @@ public class Solution {
       return 0;
     }
     int max = 0;
-    // 栈底保存最后一个没有被匹配的右括号的下标
-    Deque<Integer> stack = new LinkedList<>();
     // 有效长度 = 当前匹配成功的右括号位置 - 最近一个未匹配位置
-    // 如果s="()",那么都是匹配的左右，当)遍历时，出栈后，peek=-1就能计算正确长度
-    // 栈底初始化放-1，作为"虚拟的最后一个未匹配右括号"
+    // 栈：保存当前位置之前，所有未消除的下标，所以就会有以下2个含义：
+    // 1、栈底：最后一个未匹配的)括号下标，初始值未哨兵-1
+    // 2、栈顶到栈底：未匹配的(括号下标，等待被匹配
+    Deque<Integer> stack = new ArrayDeque<>();
+    // 哨兵，栈底初始化放-1，比如()(),当遍历到最后一个)位置是3时，无法之前前面已经匹配过多少
     stack.push(-1);
 
     char[] cs = s.toCharArray();
@@ -37,7 +38,6 @@ public class Solution {
         stack.push(i);
       } else {
         stack.pop();
-
         if (stack.isEmpty()) {
           // 没有匹配的(，当前)成为新的"最后一个未匹配右括号"
           stack.push(i);
@@ -52,4 +52,10 @@ public class Solution {
     return max;
   }
 
+
+  public static void main(String[] args) {
+    Solution soluiton = new Solution();
+    String s="(()";
+    System.out.println(soluiton.longestValidParentheses(s));
+  }
 }
