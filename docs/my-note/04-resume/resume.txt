@@ -1,20 +1,11 @@
 个人情况：D:\project\note-up\docs\my-note\04-resume\个人情况.txt
 面试题整理：D:\project\note-up\docs\my-note\04-resume\八股文整理背景.txt
+个人简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
 
-现在要修改个人技能描述部分：
-个人技能飞书在线文档：https://my.feishu.cn/wiki/FN2OwF16yi7t2EkvFZ9cPlAPnZf
-以上链接有2个一级标题：第二个标题是当前要修改精进的
-第一个一级标题：2023版
-第二个一级标题：2026版
-
-请结合上面的面试题整理和联网补充、个人情况，给出第二个一级标题【2026版】的个人技能描述修改意见
-
-我最近把agent相关知识点看了，但是没有实际项目经验，请扫描以下在线文档，给出补充agent相关知识的个人技能描述，我加进去：
-https://my.feishu.cn/wiki/Y9hcw9UI6iiM8FkjbYNcQPTunGc
-
-
-我有一篇完整的SpringCloud八股文整理：https://my.feishu.cn/wiki/Y8DFwYTaoiH1wxkJcDcczbYOnKd
+我有一篇完整的八股文整理：
+    https://my.feishu.cn/wiki/XNEvw5BP5i9B60kkrulck4NVn4f
+    https://my.feishu.cn/wiki/AUzSw0oM7i2772kBmd9cG0oJntA
 我现在在重新看个人技能的八股，背诵到这里啦：
-"了解 SpringCloud Alibaba 微服务体系：Nacos 服务注册与配置中心、OpenFeign 远程调用、Gateway 网关、Sentinel 熔断限流、Seata 分布式事务。"
-现在需要你整理完整的八股文信息，结合我简历中的SpringCloud的相关描述，输出一篇更加精简背诵的SpringCloud八股文到这个页面：https://my.feishu.cn/wiki/H2qFw9cjiizspFkAfd5ccAknnyf
-要求是行与行之间不要有空行
+"精通 Java 语言与面向对象编程，具备良好的算法和编码能力：集合框架底层实现（HashMap等）、异常、泛型、反射等"
+现在需要你整理完整的八股文信息，结合我简历中的上述的相关描述，不足之处可以联网补充，要求是行与行之间不要有空行
+输出一篇更加精简背诵的八股文到这个页面：https://my.feishu.cn/wiki/IXepwOzFtiglZNkH9XHcY5gFnAb
