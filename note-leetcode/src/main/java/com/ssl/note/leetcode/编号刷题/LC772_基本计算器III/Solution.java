@@ -79,14 +79,22 @@ public class Solution {
     // 先取数字栈栈底的元素
     int res = numbers.get(0);
     // ops中只剩加减，末尾不参与计算
-    for (int i = 0; i < n - 1; i++) {
-      char op = ops.get(i);
+    for (int i = 1; i < n; i++) {
+      char op = ops.get(i - 1);
       if (op == '+') {
-        res += numbers.get(i + 1);
+        res += numbers.get(i);
       } else {
-        res -= numbers.get(i + 1);
+        res -= numbers.get(i);
       }
     }
+//    for (int i = 0; i < n - 1; i++) {
+//      char op = ops.get(i);
+//      if (op == '+') {
+//        res += numbers.get(i + 1);
+//      } else {
+//        res -= numbers.get(i + 1);
+//      }
+//    }
     return res;
   }
 
