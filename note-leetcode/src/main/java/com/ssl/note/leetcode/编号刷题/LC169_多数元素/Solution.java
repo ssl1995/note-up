@@ -11,23 +11,22 @@ public class Solution {
    * 输出：3
    */
   public int majorityElement(int[] nums) {
-    int x = nums[0];
+    int candidate = nums[0];
     int count = 1;
-
     for (int i = 1; i < nums.length; i++) {
       // 投票
-      if (nums[i] == x) {
+      if (nums[i] == candidate) {
         count++;
       } else {
         count--;
-      }
-      // 计数器如果=0,重置计数器和候选数
-      if (count == 0) {
-        x = nums[i];
-        count = 1;
+        // 计数器如果=0,重置计数器和候选数
+        if (count == 0) {
+          candidate = nums[i];
+          count = 1;
+        }
       }
     }
-    return x;
+    return candidate;
   }
 
   public static void main(String[] args) {
