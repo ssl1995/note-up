@@ -2,10 +2,11 @@
 面试题整理：D:\project\note-up\docs\my-note\04-resume\八股文整理背景.txt
 个人简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
 
-我有一篇完整的八股文整理：
-    https://my.feishu.cn/wiki/XNEvw5BP5i9B60kkrulck4NVn4f
-    https://my.feishu.cn/wiki/AUzSw0oM7i2772kBmd9cG0oJntA
+我有一篇完整的八股文整理：Agent相关的，都在以下目录的子目录里
+    https://my.feishu.cn/wiki/Y9hcw9UI6iiM8FkjbYNcQPTunGc
 我现在在重新看个人技能的八股，背诵到这里啦：
-"精通 Java 语言与面向对象编程，具备良好的算法和编码能力：集合框架底层实现（HashMap等）、异常、泛型、反射等"
-现在需要你整理完整的八股文信息，结合我简历中的上述的相关描述，不足之处可以联网补充，要求是行与行之间不要有空行
-输出一篇更加精简背诵的八股文到这个页面：https://my.feishu.cn/wiki/IXepwOzFtiglZNkH9XHcY5gFnAb
+"熟悉 AI Agent 核心概念与技术体系，理解 LLM 与 Agent 的本质区别，Agent 与 Workflow 的差异，ReAct、Plan-and-Execute 等工作模式。"
+现在需要你整理上述子目录中完整的八股文信息，结合我简历中的上述的相关描述，不足之处可以联网补充，
+格式要求：无序或者有序列表进行答案编排，行与行之间不要有空行，
+保持地址：输出一篇更加精简背诵的八股文到这个页面：
+   https://my.feishu.cn/wiki/CBq7wLcwRiuZU2kXXCMcwPeYnUb
