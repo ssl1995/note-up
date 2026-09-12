@@ -26,6 +26,8 @@ public class Solution {
     if (s.length() < t.length()) {
       return "";
     }
+    int m = s.length();
+    int n = t.length();
     char[] cs = s.toCharArray();
     char[] ct = t.toCharArray();
     // 需要的
@@ -34,28 +36,24 @@ public class Solution {
       cnts[c]--;
     }
     // 总的债务:t的个数
-    int debt = ct.length;
+    int debt = n;
     // 求子串，考虑初始坐标和长度
     int start = 0;
     int len = Integer.MAX_VALUE;
-    for (int r = 0, l = 0; r < cs.length; r++) {
-      // ++/-- 写进条件里，条件成功or失败都会执行
-      // 这里是必须发生的，所以加1后还<0,说明还需要
-      // 也可以写成：++cnts[cs[right]] <= 0
-      if (cnts[cs[r]]++ < 0) {
+    for (int i = 0, l = 0; i < m; i++) {
+      if (cnts[cs[i]] < 0) {
         debt--;
       }
+      cnts[cs[i]]++;
 
       if (debt == 0) {
-        // ++/-- 写进条件里，条件成功or失败都会执行
-        // 这里不是必须发生的，所以不能写成cnts[cs[left]]-->0
         while (cnts[cs[l]] > 0) {
           cnts[cs[l++]]--;
         }
 
-        if (r - l + 1 < len) {
+        if (i - l + 1 < len) {
           start = l;
-          len = r - l + 1;
+          len = i - l + 1;
         }
       }
     }
