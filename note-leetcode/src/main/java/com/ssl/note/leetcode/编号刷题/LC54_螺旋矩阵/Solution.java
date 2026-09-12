@@ -26,7 +26,8 @@ public class Solution {
     return res;
   }
 
-  // 闭区间取值
+  // (a,b) (a,d)
+  // (c,b) (c,d)
   private void f(int[][] matrix, int a, int b, int c, int d) {
     for (int j = b; j <= d; j++) {
       res.add(matrix[a][j]);
@@ -39,6 +40,7 @@ public class Solution {
         res.add(matrix[c][j]);
       }
     }
+    // 最后一个不能有等于
     if (b < d) {
       for (int i = c - 1; i > a; i--) {
         res.add(matrix[i][b]);

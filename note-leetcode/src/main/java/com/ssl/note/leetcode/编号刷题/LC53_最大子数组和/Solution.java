@@ -16,10 +16,8 @@ public class Solution {
   public int maxSubArray(int[] nums) {
     // 前缀和方法：sum(i,j) = prefix[j] - prefix[i-1]
     // 要想最大，就得使前者尽量大，后者尽量小
-    // 当前前缀和
     int sum = 0;
-    // 历史最小前缀和
-    int preMinSum = 0;
+    int min = 0;
     // 数组元素可能全是负数，导致sum-preMinSum是负数
     int res = Integer.MIN_VALUE;
 
@@ -27,9 +25,9 @@ public class Solution {
       // 1、时间轴推进：先累加当前值
       sum += num;
       // 2、当前sum-过去最小sum，保证了字数组长度至少为1
-      res = Math.max(res, sum - preMinSum);
+      res = Math.max(res, sum - min);
       // 3、最后更新历史最小前缀和
-      preMinSum = Math.min(sum, preMinSum);
+      min = Math.min(sum, min);
     }
 
     return res;

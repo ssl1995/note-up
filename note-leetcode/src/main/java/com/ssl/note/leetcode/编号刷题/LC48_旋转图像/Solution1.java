@@ -26,12 +26,12 @@ public class Solution1 {
     }
   }
 
+  // (a,b) (a,d)
+  // (c,b) (c,d)
   private void rotateEdge(int[][] nums, int a, int b, int c, int d) {
     int times = c - a;
     int offset = 0;
     while (times-- > 0) {
-      // a,b  a,d
-      // c,b  c,d
       int temp = nums[a][b + offset];
       nums[a][b + offset] = nums[c - offset][b];
       nums[c - offset][b] = nums[c][d - offset];
