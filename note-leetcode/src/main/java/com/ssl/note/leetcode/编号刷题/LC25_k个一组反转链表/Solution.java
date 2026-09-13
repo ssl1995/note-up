@@ -38,10 +38,10 @@ public class Solution {
       // 2、pre,[start,end],next
       start = pre.next;
       next = end.next;
-
-      // 3、切断、翻转、连接
-      // pre,[end,start],next
       end.next = null;// 切断
+
+      // 3、翻转、连接
+      // pre,[end,start],next
       pre.next = reverse(start);// 翻转
       start.next = next;// 连接next
 
