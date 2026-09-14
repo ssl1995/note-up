@@ -1,0 +1,8 @@
+<p><b>方案对比（为什么不选别的）</b>：</p>
+<ul>
+<li><b>为什么 V2 用 TransmittableThreadLocal 而不是普通 ThreadLocal</b>：普通 ThreadLocal 在线程池 / CompletableFuture 线程切换时上下文丢失，子线程会重复查全量业务系统；TTL 由 TtlExecutors 包装线程池完成上下文在父子线程间的复制。</li>
+<li><b>为什么 V3 还要把 N 次并行查询合并成 2 次批量 SQL</b>：并行只缩短墙钟时间，N+1 的 DB 往返和连接占用依然存在；合并批量才真正降低 DB 压力，且比线程池并行更可控。</li>
+<li><b>为什么全量员工缓存用 256 桶分桶而不是单 Key</b>：单 Key 存全量员工 = 大 Key + 热 Key，一次 GET 网络包过大易阻塞 IO；hashCode()%256 分桶后按 64 桶/批分批并行读，单次包大小可控。</li>
+<li><b>为什么压缩选 Snappy 而不是 Gzip</b>：Snappy 压缩/解压速度优先于压缩率、CPU 友好，适合缓存读多写多、延迟敏感场景（内存降 80%）；Gzip 压缩率高但 CPU 开销大。</li>
+<li><b>为什么写侧要填充空桶</b>：读侧逻辑统一、无需判空，避免空桶请求穿透到 DB。</li>
+</ul>

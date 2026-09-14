@@ -1,0 +1,183 @@
+<h2>一、面试表达框架：STAR 原则</h2>
+<p>STAR 是面试中描述项目经历的结构化表达框架，核心是让回答<b>有情境、有目标、有行动、有结果</b>，避免流水账。</p>
+<ul>
+<li><b>S（Situation 情境）</b>：事情的背景与痛点。讲清"当时系统/业务是什么状态、遇到什么问题"，让面试官理解问题难度。</li>
+<li><b>T（Task 任务）</b>：我在该情境下的目标与职责。突出"<b>我个人</b>负责什么"，与团队工作划清边界。</li>
+<li><b>A（Action 行动）</b>：为达成目标的具体行动。<b>面试中占比最大（约 60%）</b>：方案设计、技术选型对比、关键实现、踩坑与兜底。</li>
+<li><b>R（Result 结果）</b>：最终成果，<b>必须量化</b>（性能 x 倍、耗时 A→B、改动量、覆盖范围），可附个人收获。</li>
+</ul>
+<p><b>使用要点</b>：</p>
+<ul>
+<li>先一句话总起（结论/R 前置吸引注意），再按 S→T→A→R 展开；A 内部按"方案对比→落地步骤→兜底设计"分层。</li>
+<li>每个 R 都要带数字：没有数字的结果 ≈ 没有结果。</li>
+<li>预判 A 中每个技术点的追问（如提了 Redisson 就会被问看门狗、可重入、丢锁场景）。</li>
+</ul>
+<p><b>STAR 举例（以 Crane 权限查询优化为例）</b>：</p>
+<ul>
+<li><b>S</b>：Chidori 单点登录每次鉴权都要 RPC 调 Crane 查员工权限，是全公司最高频链路；V1 逐系统串行循环查 N 次 DB，延迟高、DB 压力大。</li>
+<li><b>T</b>：我独立负责把该接口优化到可支撑日均十万级调用，并保证高可用。</li>
+<li><b>A</b>：三代演进——V2 用 CompletableFuture 并行 + TransmittableThreadLocal 传递上下文（普通 ThreadLocal 在线程池切换会丢）；V3 把 N 次查询合并为 2 次批量 SQL 消除 N+1；叠加 Redis + Snappy 压缩 + 256 桶分桶缓存，失败自动降级全量缓存兜底。</li>
+<li><b>R</b>：稳定支撑日均十万级 RPC；缓存内存占用降 80%；两代独立灰度开关可秒级回滚。</li>
+</ul>
+<h2>二、Crane 权限中台 · 项目概述（总 Situation）</h2>
+<ul>
+<li><b>项目背景</b>：公司统一权限管理平台，为内部所有业务系统提供统一的权限定义、角色管理、申请审批、权限查询与审计能力；对接 OA 审批流、Chidori 单点登录、Tableau 等 <b>10+ 业务系统</b>，支撑国内 + 印尼 + 菲律宾三地员工权限体系，<b>日均 RPC 调用量十万级</b>。</li>
+<li><b>技术栈</b>：SpringBoot 1.5 + JDK8 + MyBatis + MySQL8 + Redis（Redisson）+ Kafka + MongoDB + 自研 Feign 注解 + YJob（120+ 定时任务）。</li>
+<li><b>个人职责</b>：<b>独立负责</b>系统全部模块的设计与开发（2024.05 - 2026.04）。</li>
+<li><b>核心模型</b>：员工 → 角色 → 权限的 RBAC 模型，员工不直接持有权限；权限申请底层实际申请的是"权限自动生成角色"（RoleSourceType.PERMISSION_AUTO），统一了开通逻辑。</li>
+<li><b>系统规模</b>：110+ 服务接口、52 个 MyBatis Mapper、120+ 定时 Job、7 个 Kafka 消费组、100+ Flyway 迁移脚本。</li>
+</ul>
+<h2>三、模块一：权限申请-审批流三层架构设计</h2>
+<p><b>S 情境</b>：权限分散在各业务系统，审批不规范、离职回收不及时、无法追溯；系统要同时支持 4 类申请流（系统权限 ROLE_APPLY、Tableau 报表 TABLE_AU、Tableau 账号开通 TABLE_AU_ACCOUNT、Tableau 账号变更 TABLE_AU_ACCOUNT_CHANGE），各类流程有共性（OA 流程状态管理、员工快照、回调处理）又有差异（开通方式、Tableau API 联动）。</p>
+<p><b>T 任务/设计目标</b>：设计一套<b>可扩展</b>的审批流架构——新增审批类型不改主流程，共性逻辑沉淀复用，遵循开闭原则。</p>
+<p><b>A 行动/技术方案</b>：设计「<b>策略接口 + 模板方法基类 + 工厂自注册路由</b>」三层架构：</p>
+<ul>
+<li><b>策略接口 IAbstractPermissionApplyFlow</b>：只声明 getPermissionApplyBusinessType() 与 registerPermissionApply() 两个方法。</li>
+<li><b>模板基类 AbstractPermissionApplyFlow</b>：沉淀 OA 流程操作、终态判断、回调响应构建等共用逻辑；启动时 @PostConstruct <b>自注册</b>进工厂；两个 Tableau 账号类流程再抽二级模板 AbstractTableAuAccountFlowService（模板基类可再分层）。</li>
+<li><b>工厂 PermissionApplyFlowFactory</b>：ConcurrentHashMap 按枚举路由；Controller、OA 回调、重试 Job 等所有入口统一从工厂取实现。</li>
+</ul>
+<pre lang="java" caption="模板基类 @PostConstruct 自注册（新增子类零改动主流程）"><code>@PostConstruct
+@Override
+public void registerPermissionApply() {
+    permissionApplyFactory.registerPermissionApply(getPermissionApplyBusinessType(), this);
+}</code></pre>
+<pre lang="java" caption="工厂：ConcurrentHashMap 注册中心，按枚举路由"><code>@Component
+public class PermissionApplyFlowFactory {
+    private final Map&lt;PermissionApplyType, IAbstractPermissionApplyFlow&gt; permissionApplyByTypeMap = new ConcurrentHashMap&lt;&gt;();
+
+    public void registerPermissionApply(PermissionApplyType businessType, IAbstractPermissionApplyFlow impl) {
+        if (!permissionApplyByTypeMap.containsKey(businessType)) {
+            permissionApplyByTypeMap.put(businessType, impl);
+        }
+    }
+    public IAbstractPermissionApplyFlow getPermissionApplyImpl(PermissionApplyType sourceType) {
+        return permissionApplyByTypeMap.get(sourceType);
+    }
+}</code></pre>
+<pre lang="java" caption="submitRoleFlow 提交主流程（RoleApplyServiceImpl）"><code>@CommonLock(prefix = "SUBMIT_FLOW_ROLE_")
+public CraneFlowRespVo submitRoleFlow(@LockField String submitWorkNumber, RoleFlowSubmitVo req) {
+    checkSubmitFlowReq(submitWorkNumber, req);                        // 1.校验参数
+    RoleApplyFlowMessageLinkVo messageLinkVo = buildSnapshotVo(...);  // 2.构建OA快照(落库可追溯)
+    PermissionApplyVO applyVO = saveApplyInfo(req, messageLinkVo);    // 3.落3张表(申请单/员工/详情)
+    FlowResponse flowResponse = createOAFlow(applyVO, messageLinkVo); // 4.创建OA审批流(失败则清理脏数据)
+    updatePermissionApplyId(applyVO, flowResponse);                   // 5.回写flowId
+    return buildCraneFLowResp(flowResponse);
+}</code></pre>
+<p><b>R 结果</b>：新增审批类型零改动主流程——2025 年新增 Tableau 员工状态拆分审批流（海外员工场景）<b>改动不足 200 行</b>；4 类申请、回调、重试全部按类型统一路由分发。</p>
+<h2>四、模块二：并发控制与数据一致性</h2>
+<p><b>S 情境</b>：OA 回调可能重复投递；同一员工并发重复提交；回调与重试 Job 可能并发开通同一"员工+角色"；批量开通中单条失败不能拖垮整批。</p>
+<p><b>T 任务/设计目标</b>：保证提交、回调、开通全链路的<b>幂等与最终一致性</b>，且持锁时间尽可能短。</p>
+<p><b>A 行动/技术方案（四层防线 + 两个关键细节）</b>：</p>
+<ul>
+<li><b>防线1 · 声明式分布式锁</b>：自研 @CommonLock 注解 + AOP（@Order(1) 保证<b>锁在事务外</b>，避免"锁已释放、事务未提交"的并发窗口）；Redisson tryLock(waitTime, -1) 看门狗自动续期，finally 中 isHeldByCurrentThread() 防误删；<b>锁粒度最小化</b>：提交=工号、开通=工号+roleId。</li>
+<li><b>防线2 · 状态机</b>：permission_apply.flow_state 校验 OA 终态（非终态回调直接拒绝）；permission_apply_result.status 白名单（仅 INIT / CALLBACK_FAIL 可开通）。</li>
+<li><b>防线3 · DB 唯一索引兜底</b>：uindex__apply_group_number（申请ID+业务ID+工号）防重复回调插入重复结果；uindex__emp_role_id 防重复分配角色。</li>
+<li><b>防线4 · 补偿体系</b>：失败置 CALLBACK_FAIL + 递增 retry_time，OpenRetryJob 定时扫描重试开通；Kafka 生产端用<b>本地消息表</b>（与业务同事务写 kafka_message）+ Job 每批 500 条投递，消费端 AT_LEAST_ONCE + 手动 commit。</li>
+<li><b>批量失败隔离</b>：NESTED 嵌套事务（savepoint 单条回滚，不影响外部事务）；注意自调用必须经 SpringContextHelper.getBean 拿代理对象，否则注解失效。</li>
+<li><b>缩短持锁</b>：编程式事务 TransactionTemplate 只包裹核心 DB 操作；调岗"取消旧部门 + 关联新部门"放同一事务避免中间态，持锁从秒级降到毫秒级。</li>
+</ul>
+<pre lang="java" caption="声明式分布式锁 + NESTED 单条失败隔离（openEmployeeRelationRole）"><code>@CommonLock(prefix = "role_apply_op_", matchAllMarkField = true, waitTime = 5L)
+@Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
+public void openEmployeeRelationRole(@LockField String applyNumber, @LockField Long roleId, Long applyResultId, ValidTime validTime) {
+    PermissionApplyResultVO result = permissionApplyResultService.fetchApplyResultById(applyResultId);
+    // 状态机幂等：只有 INIT / CALLBACK_FAIL 可开通
+    if (!PermissionApplyResultStatus.getCraneCanOpenStatus().contains(result.getStatus())) { return; }
+    boolean success = employeeRoleService.assignRoleByFlow(employeeRoleRequest, expireTime);
+    if (!success) {
+        // 失败置 CALLBACK_FAIL + retry_time+1，交给 OpenRetryJob 重试，不影响外部事务提交
+        permissionApplyResultService.updateApplyResultStatusAndIncreaseRetryTime(applyResultId, CALLBACK_FAIL);
+    }
+}</code></pre>
+<pre lang="java" caption="DistributedRedisLock：Redisson 看门狗 + 防误删"><code>RLock lock = redissonClient.getLock(buildLockKey(lockName));
+boolean locked = lock.tryLock(waitTime, -1L, timeUnit);        // leaseTime=-1 → 看门狗自动续期
+if (!locked) { throw new CraneException(LOCK_ERROR, ...); }
+try { return supplier.get(); }
+finally { if (lock.isHeldByCurrentThread()) { lock.unlock(); } }  // 只释放自己持有的锁，防误删</code></pre>
+<p><b>R 结果</b>：OA 回调重复投递零脏数据；批量开通单条失败自动重试至最终成功；编程式事务将持锁时间从秒级降至毫秒级，<b>并发能力提升 10 倍+</b>。</p>
+<h2>五、模块三：权限查询接口性能优化（三代演进）</h2>
+<p><b>S 情境</b>：Crane 是全公司权限数据源，Chidori 单点登录每次鉴权必调 fetchUserAuthority，是最高频链路；员工数据不落地 MySQL、全部来自 OA 远程查询；V1 逐系统串行循环查询，N 个系统 = N 次 DB 往返，延迟高。</p>
+<p><b>T 任务/设计目标</b>：降低接口延迟与 DB 压力，支撑日均十万级 RPC，且每一代都可灰度、可回滚。</p>
+<p><b>A 行动/技术方案</b>：</p>
+<ul>
+<li><b>V1 → V2 并行化</b>：CompletableFuture 并行查 N 个系统 + 整体超时控制；单系统失败只记日志返回 null，不影响其他系统（可用性优先）；线程池用 TtlExecutors 包装，TransmittableThreadLocal 传递全量 BusinessVO 上下文，子线程不重复查（普通 ThreadLocal 在线程池切换时会丢）。灰度开关 fetchV2。</li>
+<li><b>V2 → V3 批量合并</b>：N 次单系统查询合并为 2 次批量 SQL（角色 1 次 + 权限 1 次），内存中按 businessCode 分组组装，彻底消除 N+1。灰度开关 mult.v3.enabled。</li>
+<li><b>缓存体系</b>：Redis + Snappy 压缩（CPU 友好、压缩速度优先于压缩率）；全量员工按 hashCode()%256 分 <b>256 桶</b>（避免大 Key / 热 Key，单次 GET 网络包过大）；写侧空桶填充空列表（读侧免判空），读侧按 64 桶/批分批并行读取；全量缓存永不过期 + Job 定时全量刷新；单员工查询失败自动降级全量缓存兜底。</li>
+</ul>
+<pre lang="java" caption="V2：CompletableFuture 并行 + 整体超时 + 单系统失败隔离"><code>for (BusinessVO businessVO : request.getBusinessVOS()) {
+    futures.add(CompletableFuture.supplyAsync(() -&gt; {
+        try {
+            List&lt;RoleVO&gt; roleVOS = employeeRoleService.fetchRoleByEmployeeAndBusiness(empNo, businessVO.getCode());
+            List&lt;EmployeePermissionVO&gt; perms = employeePermissionService.fetchPermissionListByRequest(queryRequest);
+            return new BusinessAuthorityVO(businessVO, perms, roleVOS);
+        } catch (Throwable e) {
+            log.error("getBusinessAuthorityVOListV2-exception, businessCode:{}", businessVO.getCode(), e);
+            return null;    // 单系统失败不影响其他系统
+        }
+    }, ttlExecutorService));   // TtlExecutors 包装，TransmittableThreadLocal 传递上下文
+}
+CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get(fetchV2TimeOut, TimeUnit.SECONDS);</code></pre>
+<pre lang="java" caption="V3：N 次查询合并为 2 次批量 SQL，内存分组组装"><code>Set&lt;String&gt; businessCodes = businessVOS.stream().map(b -&gt; b.getCode().toUpperCase()).collect(Collectors.toSet());
+List&lt;RoleVO&gt; allRoles = employeeRoleService.fetchRoleByEmployeeAndBusinessCodes(empNo, businessCodes);       // 角色 1 次批量
+List&lt;EmployeePermissionVO&gt; allPerms = employeePermissionService.fetchEmployeePermissionVOList(empNo, businessCodes); // 权限 1 次批量
+Map&lt;String, List&lt;EmployeePermissionVO&gt;&gt; permGroup = allPerms.stream().collect(groupingBy(EmployeePermissionVO::getBusinessCode));
+Map&lt;String, List&lt;RoleVO&gt;&gt; roleGroup = allRoles.stream().collect(groupingBy(RoleVO::getBusinessCode));</code></pre>
+<pre lang="java" caption="全量员工缓存：256 桶分桶 + 空桶填充 + 分批读取"><code>private String hashKey(String employeeNumber) { return String.valueOf(Math.abs(employeeNumber.hashCode() % 256)); }
+// 读：256 桶按 64 桶/批分批并行读取；写：缺失桶位填充空列表，保证 256 个桶始终完整，读侧无需判空
+private List&lt;List&lt;String&gt;&gt; partitionHashKeys(List&lt;String&gt; allHashKey) {
+    return ListUtils.partition(allHashKey, DynamicProperties.getInt("cache.allEmployee.get.partitionSize", 64));
+}</code></pre>
+<p><b>R 结果</b>：稳定支撑<b>日均十万级 RPC</b>；Snappy 压缩使缓存内存占用<b>降 80%</b>；两代独立灰度开关，问题可秒级回滚。</p>
+<h2>六、模块四：权限治理-生命周期自动化</h2>
+<p><b>S 情境</b>：员工入职要逐系统手工配权限、调岗换权靠人肉、离职回收不及时有安全隐患；权限不分级导致所有申请走同样长的审批流，体验差。</p>
+<p><b>T 任务/设计目标</b>：权限"该有的人自动有、不该有的自动收"，入/调/离全生命周期零人工介入。</p>
+<p><b>A 行动/技术方案</b>：</p>
+<ul>
+<li><b>Basic 角色矩阵</b>：「部门层级（部门级/人员节点级）× 员工类型（内部/外包/供应商）」2×3 = 每部门自动生成 6 种角色，员工入职即自动获得基础权限（替代已下线的"角色申请"功能）；增量补建用 Sets.difference 算缺失类型只补缺失，带灰度开关（先只检查不真建）。</li>
+<li><b>事件驱动</b>：消费 OA 5 个 Kafka Topic（部门/员工/组织架构/员工组织关系/业务线变更）；before/after 快照比对天然幂等（OA 同时改部门+职级会发两次消息）；消费异常只记日志不抛出，防止消费阻塞。</li>
+<li><b>三个生命周期动作</b>：入职 = 关联部门 Basic 角色 + 建账号 + 分数据权限；调岗 = 编程式事务内"取消旧部门 + 关联新部门"避免中间态；离职 = 回收角色权限 + 删账号 + Tableau 解绑 + Chidori 强制登出，另有兜底 Job 扫描最近 2 天离职人员。</li>
+<li><b>权限分级审批</b>：L1 普通 / L2 敏感 / L3 高危差异化审批流，批量申请按最高权限等级定审批流长度。</li>
+<li><b>临时权限回收</b>：有效期 永久 / 7 / 30 / 60 / 90 天；CancelJob 每天扫当天到期记录批量撤销（index__expire_time_status 联合索引专为扫描设计），失败交 RetryJob，到期前 3 天邮件提醒。</li>
+</ul>
+<pre lang="java" caption="Kafka 消费：入职/调岗/离职统一分发（EmployeeKafkaMessageServiceImpl）"><code>public void employeeAssignPermission(EmployeeOaVo beforeVo, EmployeeOaVo afterVo) {
+    if (isEntry) { employeeEntryAssignPermission(employeeVO); return; }   // 入职：关联Basic角色+建账号+分数据权限
+    if (isLeave) { employeeLeaveCancelPermission(employeeVO); return; }   // 离职：全量回收
+    employeeChangeAssignPermission(beforeErpVo, employeeVO);              // 调岗：事务内换部门角色
+}</code></pre>
+<pre lang="java" caption="离职自动回收：权限 + 账号 + Tableau + 强制登出"><code>permissionService.cancelEmployeePermission(employeeErpVo);                       // 1.回收角色权限
+changeAccountInterfaceService.deleteAccountForEmployeeByPermissionIds(...);      // 2.删除权限点关联账号
+tableAuManageService.handleEmployeeLeaveAssign(employeeErpVo);                   // 3.Tableau 解绑
+remoteChidoriService.forceLogOut(workNumber, ActionSourceType.SYSTEM);           // 4.Chidori 强制登出</code></pre>
+<p><b>R 结果</b>：入职当天权限自动就绪、离职权限分钟级自动回收；基础权限零申请；临时权限到期 100% 自动回收，敏感/高危权限全部走差异化长审批流。</p>
+<h2>七、数据库表模式（核心表设计）</h2>
+<p>Flyway 管理 100+ 迁移脚本，索引命名统一 uindex__ / index__ 前缀规范。RBAC 核心链路：<b>permission（权限点）→ role（角色）→ employee_role_relation（员工-角色）</b>；申请链路：<b>permission_apply（申请单）→ permission_apply_result（开通结果）</b>。</p>
+<table>
+<colgroup><col /><col /><col /></colgroup>
+<thead><tr><th background-color="light-gray"><p>表名</p></th><th background-color="light-gray"><p>核心字段</p></th><th background-color="light-gray"><p>关键索引 / 设计点</p></th></tr></thead>
+<tbody>
+<tr><td><p><b>permission_apply</b><br/>权限申请单</p></td><td><p>business_type、submit_number、flow_id、flow_state（默认 PENDING）、status、business_snapshot（业务快照 JSON）</p></td><td><p>flow_state 是状态机核心字段；快照落库使权限后续被删改仍可追溯申请时状态，供 OA iframe 展示</p></td></tr>
+<tr><td><p><b>permission_apply_result</b><br/>开通结果</p></td><td><p>permission_apply_id、business_id、apply_number、status（0 INIT / 1 成功 / 2 失败 / 3 撤销失败 / 4 撤销成功）、retry_count、expire_time</p></td><td><p>★ <b>uindex__apply_group_number（申请ID+业务ID+工号）</b>防重复回调插入 = DB 层幂等兜底；index__expire_time_status 专供到期扫描</p></td></tr>
+<tr><td><p><b>role</b><br/>角色</p></td><td><p>name、code、path（层级路径 1/4/5）、business_code、source_type（0 手动 / 1 部门自动 / 2 权限自动）、usage（1 赋权 / 2 审批）</p></td><td><p>path 支持角色层级检索；source_type 区分三类角色来源，Basic 角色与权限自动角色均由此识别</p></td></tr>
+<tr><td><p><b>employee_role_relation</b><br/>员工-角色</p></td><td><p>role_id、employee_number、expire_time、operate_type（1 管理员分配 / 2 主动申请 / 3 系统自动分配）</p></td><td><p>★ <b>uindex__emp_role_id（工号+角色ID）</b>防重复分配；系统自动分配记录永不过期</p></td></tr>
+<tr><td><p><b>role_permission_relation</b><br/>角色-权限</p></td><td><p>role_id、permission_id、data_rule（数据规则 JSON）、status（1 手动 / 2 流程）</p></td><td><p>uindex__role_id_permission_id；data_rule 承载数据维度权限</p></td></tr>
+<tr><td><p><b>permission</b><br/>权限点</p></td><td><p>feature（唯一）、name（唯一）、security_level（1 普通 / 2 敏感 / 3 高危）、support_data_rule</p></td><td><p>security_level 驱动差异化审批流（普通/敏感/高危）</p></td></tr>
+<tr><td><p><b>kafka_message</b><br/>本地消息表</p></td><td><p>topic、message、partition_key、message_type、status（1 初始化 / 2 消费中 / 3 完成 / 4 失败）</p></td><td><p>与业务操作同事务写入，Job 每批 500 条循环投递，保证跨系统最终一致</p></td></tr>
+</tbody>
+</table>
+<h2>八、方案对比与选型（高频追问）</h2>
+<table>
+<colgroup><col /><col /><col /></colgroup>
+<thead><tr><th background-color="light-gray"><p>决策点</p></th><th background-color="light-gray"><p>最终选型</p></th><th background-color="light-gray"><p>为什么不选别的 / 理由</p></th></tr></thead>
+<tbody>
+<tr><td><p>分布式锁实现</p></td><td><p>Redisson tryLock(waitTime, -1) 看门狗</p></td><td><p>原生 SETNX 要自处理"锁提前过期"和"误删别人锁"两个坑；Redisson 看门狗自动续期 + isHeldByCurrentThread 天然规避</p></td></tr>
+<tr><td><p>锁与事务顺序</p></td><td><p>AOP @Order(1)，锁切面先于事务切面（锁在事务外）</p></td><td><p>先开事务再加锁，会出现"锁已释放、事务未提交"的并发窗口期</p></td></tr>
+<tr><td><p>锁粒度</p></td><td><p>提交=工号；开通=工号+roleId</p></td><td><p>最小化冲突面：不同员工/不同角色互不阻塞；粒度太粗并发上不去，太细防不住重复</p></td></tr>
+<tr><td><p>批量失败隔离</p></td><td><p>Propagation.NESTED（savepoint）</p></td><td><p>REQUIRES_NEW 要独立连接、开销大且超连接数风险；NESTED 单条回滚不影响外部事务，失败由状态机 + 重试 Job 兜底</p></td></tr>
+<tr><td><p>异步上下文传递</p></td><td><p>TransmittableThreadLocal + TtlExecutors</p></td><td><p>普通 ThreadLocal 在 CompletableFuture / 线程池切换时上下文丢失，子线程会重复查全量业务系统</p></td></tr>
+<tr><td><p>查询优化终态</p></td><td><p>2 次批量 SQL 替代 N 次串行</p></td><td><p>并行（V2）只缩短墙钟时间，N+1 的 DB 往返仍在；合并（V3）才能真正降低 DB 压力</p></td></tr>
+<tr><td><p>全量缓存结构</p></td><td><p>256 桶哈希分桶 + Snappy 压缩</p></td><td><p>单 Key 存全量员工 = 大 Key + 热 Key，一次 GET 网络包过大；Snappy 压缩速度优先于压缩率，适合读多写多、延迟敏感场景（内存降 80%）</p></td></tr>
+<tr><td><p>空桶处理</p></td><td><p>写侧填充空列表</p></td><td><p>读侧逻辑统一、无需判空，避免空桶穿透到 DB</p></td></tr>
+<tr><td><p>新增审批类型</p></td><td><p>模板方法 + 工厂 + @PostConstruct 自注册</p></td><td><p>if-else / switch 分发违反开闭原则；手动注册易遗漏；自注册新增子类零改动主流程（新增 Tableau 拆分审批流不足 200 行实证）</p></td></tr>
+<tr><td><p>跨系统一致性</p></td><td><p>状态机 + 本地消息表 + 定时重试（最终一致）</p></td><td><p>技术栈无 Seata 等分布式事务组件；审批/权限场景允许秒级延迟，最终一致成本最低、最贴合现状</p></td></tr>
+<tr><td><p>消费容错</p></td><td><p>catch 异常只记日志不抛出 + before/after 快照比对</p></td><td><p>抛出会阻塞分区消费；OA 重复发消息（部门+职级同改发两次）靠快照比对天然幂等</p></td></tr>
+</tbody>
+</table>

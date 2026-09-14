@@ -1,0 +1,124 @@
+<h1>员工信息缓存设计详解（Redis + Snappy 压缩 + 256 桶分桶 + 降级兜底）</h1>
+<h2>一、背景与设计目标</h2>
+<ul>
+<li><b>数据不在本地</b>：Crane 的员工数据不落地 MySQL，全部来自 OA / Chidori 远程查询（UnifiedEmployeeUtil），每次查询都是 RPC。</li>
+<li><b>链路最高频</b>：权限查询是全公司最高频链路——Chidori 单点登录每次鉴权都要调 Crane，日均 RPC 十万级，员工信息是每次查询的必取数据。</li>
+<li><b>设计目标</b>：① 低延迟（缓存命中免 RPC）；② 控内存（压缩 + 分桶）；③ 高可用（远程服务挂了也能查 → 降级兜底）；④ 可灰度（缓存实现可动态切换）。</li>
+</ul>
+<h2>二、整体架构：门面 + 多实例 + Read-Through</h2>
+<ul>
+<li><b>统一入口 EmployeeCacheFacade</b>：所有员工查询走门面；内置 CacheType 枚举（LOCAL / REDIS），通过配置 employee.cache.type <b>动态切换缓存实现</b>，无需改代码；印尼环境走独立路径（全量缓存内过滤）。</li>
+<li><b>基类 AbstractRedisCacheWithNamespace</b>：统一管理 Redis Key 命名空间（{ns}_前缀，namespace 可配置），并实现 <b>Read-Through</b> 模式：先查 Redis → 未命中调 loadFromDb() 回源 → 回写 Redis 后返回。</li>
+</ul>
+<table>
+<colgroup><col /><col /><col /><col /></colgroup>
+<thead><tr><th background-color="light-gray"><p>缓存实例</p></th><th background-color="light-gray"><p>Key 前缀</p></th><th background-color="light-gray"><p>过期时间</p></th><th background-color="light-gray"><p>说明</p></th></tr></thead>
+<tbody>
+<tr><td><p><b>EmployeeCache</b></p></td><td><p>{ns}_employee</p></td><td><p>60s（cache.employee.expire 可配）</p></td><td><p>单员工信息，支持批量查询</p></td></tr>
+<tr><td><p><b>AllEmployeeCache</b></p></td><td><p>{ns}_allEmployee</p></td><td><p><b>永不过期（-1）</b></p></td><td><p>全量员工，hashCode%256 分 256 桶</p></td></tr>
+<tr><td><p>SubEmployeeNumberCache</p></td><td><p>{ns}_subEmployeeNumber</p></td><td><p>120s</p></td><td><p>员工下级组织树</p></td></tr>
+<tr><td><p>VirtualSubEmployeeNumberCache</p></td><td><p>{ns}_virtualSubEmployeeNumber</p></td><td><p>120s</p></td><td><p>虚线下级组织树</p></td></tr>
+<tr><td><p>EmployeeAttributeRedisCache</p></td><td><p>{ns}_employeeAttribute</p></td><td><p>永不过期</p></td><td><p>员工数据属性（数据权限用）</p></td></tr>
+</tbody>
+</table>
+<h2>三、Snappy 压缩</h2>
+<ul>
+<li><b>数据链路</b>：Java 对象 → JSON 序列化（CacheJsonConverter）→ Snappy.compress 压缩成字节 → 存 Redis；读取反向解压。</li>
+<li><b>为什么压缩</b>：全量/批量员工 JSON 体积大，不压缩则 Redis 内存占用高、单次网络包大。</li>
+<li><b>为什么 Snappy 而不是 Gzip</b>：Snappy 是<b>压缩/解压速度优先于压缩率</b>的 CPU 友好型算法，适合缓存"读多写多、延迟敏感"场景；Gzip 压缩率高但 CPU 开销大。实测内存占用降约 80%。</li>
+<li><b>可替换设计</b>：SnappyCompressor 实现 ICompressor 接口 + 单例，换压缩算法只需新增实现类。</li>
+</ul>
+<pre lang="java" caption="SnappyCompressor：单例 + 接口抽象"><code>public class SnappyCompressor implements ICompressor {
+    @Getter
+    private static final SnappyCompressor instance = new SnappyCompressor();
+
+    @Override
+    public byte[] compress(byte[] data) { return Snappy.compress(data); }
+
+    @Override
+    public byte[] decompress(byte[] data) { return Snappy.uncompress(data); }
+}</code></pre>
+<h2>四、256 桶哈希分桶（核心设计）</h2>
+<p><b>为什么分桶</b>：全量员工如果存单个 Key，就是典型的<b>大 Key + 热 Key</b>——一次 GET 传输几 MB，阻塞 Redis 单线程 IO，所有请求实例同时打同一个 Key。分成 256 桶后，单桶数据量只有全量的 1/256，读写都被打散。</p>
+<pre lang="java" caption="分桶算法：工号哈希取模，桶号即 Redis Key 后缀"><code>private String hashKey(String employeeNumber) {
+    return String.valueOf(Math.abs(employeeNumber.hashCode() % hashSize()));
+}
+private int hashSize() { return 256; }</code></pre>
+<ul>
+<li><b>为什么是 256</b>：2 的幂；对公司级员工规模（万级），每桶几十人，粒度刚好——太少起不到拆分效果，太多则 Key 数量膨胀、批量读时 RT 次数变多。</li>
+<li><b>写侧：分桶 + 空桶填充</b>。groupByHash 按桶分组后，用 Sets.difference 找出缺失桶位，<b>填充空列表</b>，保证 256 个桶永远完整存在：</li>
+</ul>
+<pre lang="java" caption="写入：分桶 + 空桶填充空列表"><code>public void set(List&lt;EmployeeErpVO&gt; allEmployee) {
+    Map&lt;String, List&lt;EmployeeErpVO&gt;&gt; kvs = groupByHash(allEmployee);
+    fillLackedKeyForAllEmployee(kvs);   // 缺失桶位填充空列表，保证 256 桶完整
+    set(kvs);
+}
+
+private void fillLackedKeyForAllEmployee(Map&lt;String, List&lt;EmployeeErpVO&gt;&gt; groupByHashKey) {
+    Sets.SetView&lt;String&gt; lackHashKeys = Sets.difference(new HashSet&lt;&gt;(allHashKey()), groupByHashKey.keySet());
+    if (!lackHashKeys.isEmpty()) {
+        lackHashKeys.forEach(k -&gt; groupByHashKey.put(k, Collections.emptyList()));
+    }
+}</code></pre>
+<ul>
+<li><b>空桶填充的价值</b>：读侧逻辑统一、<b>无需判空</b>；空桶返回空列表而不是 null，避免被误判为"缓存未命中"而穿透到回源。</li>
+</ul>
+<h2>五、读取路径：全量 / 批量 / 单员工，都按桶分批</h2>
+<ul>
+<li><b>全量读取 get()</b>：生成 0~255 全部桶号 → 按 <b>64 桶/批</b>（cache.allEmployee.get.partitionSize 可动态配置）分批 → 每批一次批量获取 → 合并结果。分批的意义：控制单次请求的包大小，避免一次 mget 256 个 key 的大请求。</li>
+<li><b>指定员工批量读取 getMap(keys)</b>：先把工号映射成桶号、<b>去重 + 排序</b>，只读实际命中的桶（不必读全部 256 桶），再在桶内按工号过滤——批量查 10 个人最多读 10 个桶。</li>
+<li><b>单员工读取 getOneOrNull</b>：算桶号 → 读单个桶 → 桶内 filter 找工号。</li>
+<li><b>单员工缓存的批量查询也分批</b>：EmployeeCache 批量接口按 300 人/批（employee.cache.redis.queryByNum.partitionSize）拆分。</li>
+</ul>
+<pre lang="java" caption="批量读取：先定位桶，再分批，只读命中的桶"><code>public Map&lt;String, EmployeeErpVO&gt; getMap(Set&lt;String&gt; employeeNumbers) {
+    List&lt;String&gt; keys = employeeNumbers.stream()
+        .map(this::hashKey).distinct()
+        .sorted(Comparator.comparingInt(Integer::parseInt))
+        .collect(Collectors.toList());   // 工号 → 桶号，去重排序
+
+    return partitionHashKeys(keys).stream()       // 按 64/批 分批
+        .map(this::getOrEmpty)                    // 每批批量获取，异常返回空Map不拖垮整体
+        .map(Map::values).flatMap(Collection::stream).flatMap(Collection::stream)
+        .filter(e -&gt; employeeNumbers.contains(e.getEmployeeNumber()))  // 桶内按工号过滤
+        .collect(Collectors.toMap(EmployeeErpVO::getEmployeeNumber, Function.identity()));
+}</code></pre>
+<h2>六、查询失败自动降级全量缓存兜底（可用性设计）</h2>
+<p><b>设计逻辑</b>：AllEmployeeCache <b>永不过期</b> + 定时全量刷新，它是"最后的数据底稿"；单员工缓存（60s TTL）回源失败时，降级到全量缓存里捞，宁可数据稍旧，不可鉴权不可用。</p>
+<pre lang="java" caption="EmployeeCache.loadFromDb：回源失败 → 降级全量缓存"><code>protected EmployeeErpVO loadFromDb(String key) {
+    try {
+        return unifiedEmployeeUtil.getEmployeeErpInfo(key);      // 正常回源 OA/Chidori
+    } catch (Exception e) {
+        // 查询失败尝试从全量缓存中获取（降级）
+        EmployeeErpVO employeeErpVO = allEmployeeCache.getOneOrNull(key);
+        if (employeeErpVO != null) {
+            log.warn("employee cache load error, key:{}, downgrade to load from allEmployeeCache", key, e);
+        } else {
+            log.error("employee cache load error, key:{}", key, e);   // 降级也没有 → error + null
+        }
+        return employeeErpVO;
+    }
+}</code></pre>
+<ul>
+<li><b>批量查询同样降级</b>：loadFromDb(Set) 失败 → allEmployeeCache.getMap(keys)；若降级后仍缺工号，打 error 日志并<b>列出缺失工号</b>，便于排查。</li>
+<li><b>单桶故障隔离</b>：AllEmployeeCache 读取包了一层 getOrEmpty（catch Throwable 返回空），某一个桶异常不会拖垮整体读取。</li>
+<li><b>为什么全量缓存不设 TTL</b>：它是降级底稿，过期清空等于撤掉安全网；一致性由定时刷新 Job 保证，而不是靠过期。</li>
+</ul>
+<h2>七、缓存刷新策略</h2>
+<table>
+<colgroup><col /><col /><col /></colgroup>
+<thead><tr><th background-color="light-gray"><p>刷新方式</p></th><th background-color="light-gray"><p>触发机制</p></th><th background-color="light-gray"><p>说明</p></th></tr></thead>
+<tbody>
+<tr><td><p>定时全量刷新</p></td><td><p>EmployeeRedisCacheRefreshJob（YJob）</p></td><td><p>定时从 OA 拉全量员工重写全量缓存 + 单员工缓存</p></td></tr>
+<tr><td><p>TTL 过期回源</p></td><td><p>缓存到期后下次访问</p></td><td><p>单员工 60s、下级树 120s，Read-Through 自动回源</p></td></tr>
+<tr><td><p>变更通知刷新</p></td><td><p>权限/角色变更后 refreshAuth</p></td><td><p>通知 Chidori 刷新对应员工会话缓存</p></td></tr>
+<tr><td><p>手动刷新</p></td><td><p>EmployeeRefreshAuthorJob</p></td><td><p>支持指定工号或全量刷新，用于应急</p></td></tr>
+</tbody>
+</table>
+<h2>八、面试追问预案</h2>
+<ul>
+<li><b>大 Key / 热 Key 怎么发现、怎么处理</b>：发现用 redis-cli --bigkeys、慢日志、内存分析；处理 = 拆分（本分桶方案）+ 压缩（Snappy）+ 删除用 UNLINK 异步删。</li>
+<li><b>为什么不用本地缓存（Caffeine）</b>：门面其实支持 LOCAL/REDIS 双实现可切；默认 Redis 是因为服务多实例部署，本地缓存各实例不一致，权限数据对一致性敏感。</li>
+<li><b>缓存穿透/击穿/雪崩在这套设计里怎么体现</b>：穿透 → 空桶填充空列表 + 回源结果也缓存；击穿 → 单员工 60s 短 TTL + 回源天然重建；雪崩 → 全量缓存永不过期 + 定时刷新，不搞大规模同时过期。</li>
+<li><b>分桶数为什么是 256，能不能调</b>：2 的幂、万级员工每桶几十人粒度刚好；太小拆分无效，太大 Key 膨胀、批量读 RT 变多；分桶数变化需全量重写（hashSize 写死 256，属设计决策点）。</li>
+<li><b>降级返回旧数据会不会有问题</b>：员工基础信息（姓名/部门/状态）短期旧值可接受；权限关键动作（如离职回收）走 Kafka 事件 + 定时任务主动失效，不依赖这层缓存的新鲜度。</li>
+</ul>

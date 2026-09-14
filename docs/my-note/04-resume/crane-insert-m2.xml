@@ -1,0 +1,30 @@
+<p><b>方案对比（为什么不选别的）</b>：</p>
+<ul>
+<li><b>为什么用 Snappy 而不是 Gzip</b>：Snappy 压缩/解压速度优先于压缩率、CPU 友好，适合缓存读多写多、延迟敏感场景；Gzip 压缩率高但 CPU 开销大。</li>
+<li><b>为什么写侧要填充空桶</b>：读侧逻辑统一、无需判空，避免空桶请求穿透到 DB。</li>
+</ul>
+<p><b>高频追问详解 1：NESTED 与其他传播行为有什么区别，为什么用它？</b></p>
+<table>
+<colgroup><col /><col /><col /><col /></colgroup>
+<thead><tr><th background-color="light-gray"><p>传播行为</p></th><th background-color="light-gray"><p>当前有事务</p></th><th background-color="light-gray"><p>当前无事务</p></th><th background-color="light-gray"><p>关键点</p></th></tr></thead>
+<tbody>
+<tr><td><p><b>REQUIRED</b>（默认）</p></td><td><p>加入当前事务</p></td><td><p>新建事务</p></td><td><p>最常用</p></td></tr>
+<tr><td><p><b>REQUIRES_NEW</b></p></td><td><p>挂起当前事务，新建独立事务</p></td><td><p>新建事务</p></td><td><p>独立连接、独立提交/回滚</p></td></tr>
+<tr><td><p><b>NESTED</b></p></td><td><p>事务内建 Savepoint 嵌套执行</p></td><td><p>新建事务（等价 REQUIRED）</p></td><td><p>子回滚只回滚到保存点</p></td></tr>
+<tr><td><p>SUPPORTS</p></td><td><p>加入</p></td><td><p>非事务运行</p></td><td><p>可有可无</p></td></tr>
+<tr><td><p>NOT_SUPPORTED</p></td><td><p>挂起</p></td><td><p>非事务运行</p></td><td><p>—</p></td></tr>
+<tr><td><p>MANDATORY</p></td><td><p>加入</p></td><td><p>抛异常</p></td><td><p>强制要求事务</p></td></tr>
+<tr><td><p>NEVER</p></td><td><p>抛异常</p></td><td><p>非事务运行</p></td><td><p>强制无事务</p></td></tr>
+</tbody>
+</table>
+<ul>
+<li><b>NESTED vs REQUIRES_NEW 核心区别</b>：NESTED 与外部是同一物理事务、同一连接，基于 JDBC Savepoint——子事务回滚只到保存点、外部回滚则一起回滚；REQUIRES_NEW 是真正的独立物理事务（新连接、独立提交），互不影响但开销大。</li>
+<li><b>选 NESTED 的三个理由</b>：① 失败语义本就是"允许失败、OpenRetryJob 重试"，不需要独立提交；② 开通结果必须与申请单在同一物理事务，REQUIRES_NEW 会造成"申请单回滚但权限已开通"的脏数据；③ 批量几百条复用同一连接，REQUIRES_NEW 每条占一个连接，有连接池打爆风险。</li>
+<li><b>限制（可主动说）</b>：NESTED 依赖 JDBC 3.0 Savepoint，仅 DataSourceTransactionManager（JDBC/MyBatis）支持，JPA/Hibernate 不支持。</li>
+</ul>
+<p><b>高频追问详解 2：@Transactional 自调用为什么要 SpringContextHelper.getBean？</b></p>
+<ul>
+<li><b>根因</b>：Spring AOP 基于代理（JDK 动态代理 / CGLIB），@Transactional、@CommonLock 织入在<b>代理对象</b>上；同类内 this.method() 是目标对象直接调用、<b>绕过代理</b>，拦截器链不执行 → 事务/锁注解全部失效。</li>
+<li><b>四种解法</b>：① SpringContextHelper.getBean(getClass()) 取代理再调用（本项目用法）；② @Lazy 自注入（Spring 4.3+）；③ AopContext.currentProxy()（需 @EnableAspectJAutoProxy(exposeProxy = true)）；④ 拆到另一个 Service（最干净但改动大）。</li>
+<li><b>延伸追问</b>：@Async、@Cacheable、@Retryable 自调用同样失效，同一根因；CGLIB 通过生成子类拦截，无法代理 final 类/方法，private 方法也代理不到。</li>
+</ul>

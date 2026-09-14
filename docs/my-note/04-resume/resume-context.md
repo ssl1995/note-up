@@ -1,7 +1,7 @@
 # 简历项目上下文（跨会话交接文档）
 
 > 用途：新会话窗口读取本文档即可了解全部历史背景，继续修改操作。
-> 最后更新：2026-09-09（V1 简历定稿 + 复习手册输出完成）
+> 最后更新：2026-09-14（Crane 项目 STAR 背诵手册输出完成）
 
 ---
 
@@ -19,11 +19,10 @@
 | 文档 | 链接 | 说明 |
 |---|---|---|
 | 简历 v1（已定稿 ✅） | https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd | document_id: CoLcwykKQiDjwrkhH3MckIIrnhd，可直接投递 |
-| 个人技能（2023版/2026版两个 h1） | https://my.feishu.cn/wiki/FN2OwF16yi7t2EkvFZ9cPlAPnZf | 2026版 h1 block_id: EfRNdbuH2oIlAMxJYJhcDDORngg |
-| 项目经验（老版本/新版本两个 h1） | https://my.feishu.cn/wiki/FlsnwTFqIilyrZkBuPrcHvu3nBb | 新版本 h1 block_id: AxX0dnGImo49gvxrG9Qc4tjNnjb；含修改建议+定稿版+弹药库 |
-| 复习背诵手册（简历八股） | https://my.feishu.cn/wiki/Bo8ewwGcIis0SqkM0BccCR6Dnqd | 五部分：Crane/OA 问答、技能速测、必背口径、自查表 |
+| 项目初步整理 | https://my.feishu.cn/wiki/FlsnwTFqIilyrZkBuPrcHvu3nBb | 新版本 h1 block_id: AxX0dnGImo49gvxrG9Qc4tjNnjb；含修改建议+定稿版+弹药库 |
+| 口述整理 | https://my.feishu.cn/wiki/OL08wgBQLiDQGaklj5Ccx2jpnYf | 五部分：Crane/OA 问答、技能速测、必背口径、自查表 |
 | AI Agent 概念笔记 | https://my.feishu.cn/wiki/Y9hcw9UI6iiM8FkjbYNcQPTunGc | V2 素材来源 |
-| 八股文整理背景 | 本地 04-resume/八股文整理背景.txt | 内含 9 个八股文档链接（Java基础/集合/并发/JVM/MySQL/SSM/SpringBoot/网络×2；Redis、Kafka 暂无 ⚠️） |
+| 项目背诵手册 | https://my.feishu.cn/wiki/D3gcwTaekii186kHfQNcW8RVnpc | h1【Crane】已完成（2026-09-14）：4 模块按 STAR 梳理（含代码片段）、核心表结构；方案对比已拆入各模块内部（A 行动之后、R 结果之前），模块二含追问详解（NESTED vs REQUIRES_NEW、自调用代理）；h1【OA】待整理。注意：STAR 原则章节已被用户手动删除，章节从"二、"开始编号 |
 
 ## 3. 本地代码库（简历事实来源）
 
@@ -33,6 +32,7 @@
 | OA 系统 | D:\project\yqg_oa | 团队协作，用户深度参与（git 账号 songshenglin，87 次提交排第二）；文档在 doc/oa-knowledge |
 
 ### Crane 代码证据（写简历/面试追问的事实依据）
+- ⚠️ 项目实际路径：`D:\project\java\crane-backend`（不是 D:\project\crane-backend）
 - 权限申请入口：`crane-admin/.../controller/internal/permission/PermissionApplyController.java`
 - 核心服务：`crane-core/.../service/impl/RoleApplyServiceImpl.java`（L269 submitRoleFlow / L473 flowCallBack / L597 openEmployeeRelationRole）
 - 三层架构：`PermissionApplyFlowFactory` + `AbstractPermissionApplyFlow`（@PostConstruct 自注册，4 种申请类型路由）
@@ -60,20 +60,16 @@
 | ⚠️ 高 | Redis 八股补课（持久化/主从哨兵/大key热key），技能栏写"熟练掌握"但无整理文档 | 未开始 |
 | 中 | 查询接口 V1→V3 的 TP99/耗时数字，回忆后补入简历 bullet 3 | 未补 |
 | 中 | Kafka 八股整理（目前参考模板描述） | 未开始 |
+| 中 | 项目背诵手册 OA 部分（异动/Moka 按 STAR 整理到背诵手册 h1【OA】下） | 未开始 |
 | 面试前 | 必背口径 5 个（离职空窗/非全学历/SpringCloud 追问/最难问题/优势）——复习手册第四部分已有参考答法 | 待背 |
 
 ## 6. V2 版本目标（AI 方向）
 
 - 现状：V1 仅技能栏 2 条 AI（了解 Agent 概念 + 熟练 AI 工具），项目经验无 AI
-- V2 思路：把真实 AI 实践写成项目条目，可用素材：
-  - Crane 的 CLAUDE.md 沉淀 20 条代码规范、CR 阶段 AI 自动校验（真实存在）
-  - SKILL.md 编写实践、Cursor/Claude Code 提效量化（代码占比/案例）
-  - AI Agent 概念体系（飞书笔记 Y9hcw9UI...）：LLM/Agent 区别、Workflow vs Agent、ReAct/Plan-and-Execute、Function Call/MCP/Skills/A2A
-- 原则：不硬编 AI 项目，基于真实使用沉淀可量化素材
+- 待整理Agent项目，先把V1中设计的项目经历部分全部梳理完成再说
 
 ## 7. 工具环境备忘
 
-- lark-cli 不在 PATH：`export PATH="$PATH:/c/Users/87291/AppData/Roaming/npm"`（版本 1.0.92）
-- 读飞书文档：`lark-cli docs +fetch --doc <url> --as user`；改文档：`docs +update --command str_replace|block_replace|block_insert_after|append --as user`
+-  读飞书文档：`lark-cli docs +fetch --doc <url> --as user`；改文档：`docs +update --command str_replace|block_replace|block_insert_after|append --as user`
 - Windows bash 输出中文需 `PYTHONIOENCODING=utf-8 python -c ...` 处理 JSON
 - 本目录其他文件：resume.txt（任务入口）、个人情况.txt、八股文整理背景.txt、项目经验.txt

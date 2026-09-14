@@ -1,17 +1,19 @@
-个人情况：D:\project\note-up\docs\my-note\04-resume\个人情况.txt
-面试题整理：D:\project\note-up\docs\my-note\04-resume\八股文整理背景.txt
+历史上下文：D:\project\java\note-up\docs\my-note\04-resume\resume-context.md
 个人简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
+项目地址：D:\project\java\note-up\docs\my-note\04-resume\项目经验.txt
 
-我有一篇完整的八股文整理：Agent相关的，都在以下目录的子目录里
-    https://my.feishu.cn/wiki/Y9hcw9UI6iiM8FkjbYNcQPTunGc
+我现在进度到把个人简历中的【个人技能】部分的知识点都梳理背诵了一遍，
+现在需要非常详细的梳理我的项目经验的描述和代码片段，进行背诵梳理：
+1、整理程序员面试时候需要的START原则，进行举例说明
+2、扫描我简历中的【项目经历】第一部分的【Crane 权限中台系统】部分文字
+3、请结合【项目地址】中的Crane项目地址的代码和相关文件、代码，整理出该该项目经历中的设计的代码、设计目标、数据库表模式、以及方案对比选型，
+    按照START原则更新到以下文档的第一个一级标题【Crane】下，行与行之间不用有空行，可以用无序列表、加粗等字体渲染关键部分，方便我背诵梳理逻辑
+    https://my.feishu.cn/wiki/D3gcwTaekii186kHfQNcW8RVnpc
 
-我现在在重新看个人技能的八股，背诵到这里啦：
-"熟练使用 Claude Code 等 AI 编程工具提升研发效率，有 AI 辅助代码生成、编写 SKILL.md 的实践经验。"
-项目地址：
-    D:\project\crane-backend
-    D:\project\context-hub
-现在需要你扫描上述子目录中的两个项目，找到可以总结的后端Java相关的SKILL经验或者AI使用经验，
-结合我简历中的上述的相关描述，不足之处可以联网补充，
-格式要求：无序或者有序列表进行答案编排，行与行之间不要有空行，
-保持地址：输出一篇总结后的经验到这个页面，需要有相应的例子或者代码：
-   https://my.feishu.cn/wiki/SM3twRxTkiU4P9kE8p5c8dCzn5g
+
+
+1、批量失败隔离：NESTED 嵌套事务（savepoint 单条回滚，不影响外部事务）；
+与其他事务传播行为比较，有什么区别，为什么使用这个传播行为？
+
+2、注意自调用必须经 SpringContextHelper.getBean 拿代理对象，否则注解失效。
+@Transactional的使用，为什么要用SpringContextHelper.getBean？
