@@ -46,7 +46,7 @@ public class Solution {
     dfs(node.right, preSum, target, map);
     // 1、回溯必须整颗子树处理完，才能回溯
     // 2、前面加过一次，后面只能减一次
-    map.put(preSum, map.getOrDefault(preSum, 0) - 1);
+    map.put(preSum, map.get(preSum) - 1);
   }
 
 

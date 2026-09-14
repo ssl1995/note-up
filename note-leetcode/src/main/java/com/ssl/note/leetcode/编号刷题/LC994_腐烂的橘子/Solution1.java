@@ -38,7 +38,7 @@ public class Solution1 {
       return 0;
     }
 
-    int res = 0;
+    int times = 0;
     // 每轮 BFS 代表一分钟的扩散
     while (!queue.isEmpty()) {
       int size = queue.size();
@@ -52,10 +52,10 @@ public class Solution1 {
         f(grid, queue, i, j + 1);
       }
       // 完成一轮扩散，时间 +1
-      res++;
+      times++;
       // 一旦所有新鲜橘子都腐烂了，立即返回当前时间
       if (fresh == 0) {
-        return res;
+        return times;
       }
     }
 

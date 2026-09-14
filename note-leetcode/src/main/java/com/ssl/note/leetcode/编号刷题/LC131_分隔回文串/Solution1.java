@@ -21,23 +21,24 @@ public class Solution1 {
     boolean[][] dp = getDp1(s, n);
 
     List<List<String>> res = new ArrayList<>();
-    dfs(s, 0, dp, new ArrayList<>(), res);
+    dfs(s, n, 0, dp, new ArrayList<>(), res);
     return res;
   }
 
-  private void dfs(String s, int i, boolean[][] dp, List<String> path, List<List<String>> res) {
-    if (i == s.length()) {
+  // s的[0,i)已经分割好了，现在把s[i,n)分割成回文子串
+  private void dfs(String s, int n, int i, boolean[][] dp, List<String> path, List<List<String>> res) {
+    if (i == n) {
       res.add(new ArrayList<>(path));
       return;
     }
-    for (int j = i; j < s.length(); j++) {
+    for (int j = i; j < n; j++) {
       // 用dp判断回文串，时间复杂度O(1)
       if (!dp[i][j]) {
         continue;
       }
       path.add(s.substring(i, j + 1));
       // 一定是从j+1开始
-      dfs(s, j + 1, dp, path, res);
+      dfs(s, n,j + 1, dp, path, res);
       path.remove(path.size() - 1);
     }
   }

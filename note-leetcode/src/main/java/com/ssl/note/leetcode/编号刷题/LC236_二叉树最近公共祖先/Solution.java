@@ -14,29 +14,17 @@ public class Solution {
    * 二叉树最近公共祖先
    */
   public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-    // base case: 空节点
-    if (root == null) {
-      return null;
-    }
-    // base case:遇到p、q节点
-    if (root == p || root == q) {
+    // Base case：就是root：root空或者就是p、q
+    if (root == null || root == p || root == q) {
       return root;
     }
-    // 后序遍历，获取左右子树判断
     TreeNode left = lowestCommonAncestor(root.left, p, q);
     TreeNode right = lowestCommonAncestor(root.right, p, q);
-
-    // 左右子树都不为空，说明p、q都在异侧，root就是最近公共祖先
+    // 找异测：左右子树都不为空，说明p、q都在异侧，root就是最近公共祖先
     if (left != null && right != null) {
       return root;
     }
-
-    // 两者都是空，就返回空
-    if (left == null && right == null) {
-      return null;
-    }
-
-    // 那个不为空，就往哪里遍历
-    return left == null ? right : left;
+    // 找同侧，走不为空的那个，如果都为空，也适用
+    return left != null ? left : right;
   }
 }

@@ -4,9 +4,14 @@
 
 我有一篇完整的八股文整理：Agent相关的，都在以下目录的子目录里
     https://my.feishu.cn/wiki/Y9hcw9UI6iiM8FkjbYNcQPTunGc
+
 我现在在重新看个人技能的八股，背诵到这里啦：
-"熟悉 AI Agent 核心概念与技术体系，理解 LLM 与 Agent 的本质区别，Agent 与 Workflow 的差异，ReAct、Plan-and-Execute 等工作模式。"
-现在需要你整理上述子目录中完整的八股文信息，结合我简历中的上述的相关描述，不足之处可以联网补充，
+"熟练使用 Claude Code 等 AI 编程工具提升研发效率，有 AI 辅助代码生成、编写 SKILL.md 的实践经验。"
+项目地址：
+    D:\project\crane-backend
+    D:\project\context-hub
+现在需要你扫描上述子目录中的两个项目，找到可以总结的后端Java相关的SKILL经验或者AI使用经验，
+结合我简历中的上述的相关描述，不足之处可以联网补充，
 格式要求：无序或者有序列表进行答案编排，行与行之间不要有空行，
-保持地址：输出一篇更加精简背诵的八股文到这个页面：
-   https://my.feishu.cn/wiki/CBq7wLcwRiuZU2kXXCMcwPeYnUb
+保持地址：输出一篇总结后的经验到这个页面，需要有相应的例子或者代码：
+   https://my.feishu.cn/wiki/SM3twRxTkiU4P9kE8p5c8dCzn5g
