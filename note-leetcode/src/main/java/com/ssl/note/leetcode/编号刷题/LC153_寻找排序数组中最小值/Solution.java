@@ -20,32 +20,20 @@ public class Solution {
     }
     int left = 0;
     int right = nums.length - 1;
+    // l <= r 是"找值"，l < r 是"找界"
     while (left < right) {
+      // 选择跟右端点比
       int mid = left + (right - left) / 2;
       int t = nums[right];
-      if (nums[mid] < t) {
-        // <,最小值可能是nums[mid]
-        right = mid;
-      } else {
-        // >,最小值不可能是nums[mid]
-        left = mid + 1;
-      }
-    }
-    return nums[left];
-  }
-
-  // 如果nums有重复元素？
-  public int findMin1(int[] nums) {
-    if (nums == null) {
-      return -1;
-    }
-    int left = 0;
-    int right = nums.length - 1;
-    while (left <= right) {
-      int mid = left + (right - left) / 2;
-      // 断崖点=唯一一个左边元素比右边元素大位置
-      // 找mid和一个"确定在右段的元素"比大小
-      int t = nums[right];
+      // 本题是无重复元素，可以直接用下面的代码
+//      if (nums[mid] < t) {
+//        // <,最小值可能是nums[mid]
+//        right = mid;
+//      } else {
+//        // >,最小值不可能是nums[mid]
+//        left = mid + 1;
+//      }
+      // 如果本题是有重复的元素，答案依然覆盖了
       if (nums[mid] < t) {
         // <,最小值可能是nums[mid]
         right = mid;

@@ -28,20 +28,15 @@ public class Solution {
     map.put('{', '}');
 
     for (char c : s.toCharArray()) {
-      // 栈空
-      if (stack.isEmpty()) {
-        stack.push(c);
-        continue;
-      }
-      // 栈顶不是左括号，就失败
-      if (!map.containsKey(stack.peek())) {
-        return false;
-      }
-      // 不匹配，就入栈，下一轮栈顶判断就返回失败
-      if (c != map.get(stack.peek())) {
+      // 入栈：栈空或者是左括号
+      if (stack.isEmpty() || map.containsKey(c)) {
         stack.push(c);
       } else {
-        // 匹配就出栈
+        // 出栈前检查：栈顶不是左 或者 待入的不匹配
+        if (!map.containsKey(stack.peek()) || map.get(stack.peek()) != c) {
+          return false;
+        }
+        // 出栈
         stack.pop();
       }
     }

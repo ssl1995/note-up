@@ -22,8 +22,8 @@ public class Solution {
       if (nums[m] == target) {
         return m;
       } else {
-        // 哪侧有序就二分哪侧，先比较端点再比较值域
-        // m是向下取整，两个元素时，l=m，左端点必须有等于
+        // 1、那边有序，就先对那边二分
+        // 2、m是向下取整，两个元素时，l=m，左端点必须有等于
         if (nums[l] <= nums[m]) {
           if (nums[l] <= target && target < nums[m]) {
             r = m - 1;
@@ -31,14 +31,13 @@ public class Solution {
             l = m + 1;
           }
         } else {
-          // 右侧有序，就二分
+          // 右侧有序，就对右侧先二分
           if (nums[m] < target && target <= nums[n - 1]) {
             l = m + 1;
           } else {
             r = m - 1;
           }
         }
-
       }
     }
     return -1;
