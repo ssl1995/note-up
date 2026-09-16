@@ -1,7 +1,7 @@
 # 简历项目上下文（跨会话交接文档）
 
 > 用途：新会话窗口读取本文档即可了解全部历史背景，继续修改操作。
-> 最后更新：2026-09-15（OA 项目 STAR 背诵手册输出完成，Crane + OA 均已梳理完毕）
+> 最后更新：2026-09-15（面试口述文档已写入自我介绍/项目简述/追问口径模板；简历扫描完成，修复点待用户确认）
 > 当前工作模式：用户直接在 OA 项目（D:\project\java\yqg_oa）用 IDEA Kimi 提问，把本文档喂给它即可，无需切回本仓库。
 
 ---
@@ -10,7 +10,7 @@
 
 - 95 年男，211 计算机硕士（北京林业大学 软件工程 2020.09-2023.06，**非全日制**，简历上不标注，面试口径：边工作边读）
 - 本科：贵州师范学院 特殊教育（2013-2017），跨专业
-- 工作经历：2021.09-2022.03 脉脉（实习）→ 2022.03-2023.03 滴滴（实习）→ 2023.03-2026.04 瓴岳科技/洋钱罐金融（正式，Java 后端）
+- 工作经历：2021.08-2022.03 脉脉（实习）→ 2022.03-2023.03 滴滴（实习）→ 2023.03-2026.04 瓴岳科技/洋钱罐金融（正式，Java 后端）
 - 简历写"工作年限 5 年"（用户决定：2021 年起边工作边读非全，实习与学业重叠，不单独标注实习）
 - 求职意向：Java 后端开发工程师（北京）；2024、2025 连续两年 A 档绩效
 - 已离职（2026.04），空窗期口径需准备
@@ -21,7 +21,7 @@
 |---|---|---|
 | 简历 v1（已定稿 ✅） | https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd | document_id: CoLcwykKQiDjwrkhH3MckIIrnhd，可直接投递 |
 | 项目初步整理 | https://my.feishu.cn/wiki/FlsnwTFqIilyrZkBuPrcHvu3nBb | 新版本 h1 block_id: AxX0dnGImo49gvxrG9Qc4tjNnjb；含修改建议+定稿版+弹药库 |
-| 口述整理 | https://my.feishu.cn/wiki/OL08wgBQLiDQGaklj5Ccx2jpnYf | 五部分：Crane/OA 问答、技能速测、必背口径、自查表 |
+| 面试口述 | https://my.feishu.cn/wiki/OL08wgBQLiDQGaklj5Ccx2jpnYf | ✅ 2026-09-15 已写入三部分：一、自我介绍模板（1 分钟版默认开场 + 3 分钟版展开）；二、项目经历简述（一句话电梯版 + Crane/OA 各 1.5 分钟详述版）；三、开场高频追问口径（离职空窗⚠️口径待定/非全学历/个人优势） |
 | AI Agent 概念笔记 | https://my.feishu.cn/wiki/Y9hcw9UI6iiM8FkjbYNcQPTunGc | V2 素材来源 |
 | 项目背诵手册 | https://my.feishu.cn/wiki/D3gcwTaekii186kHfQNcW8RVnpc | h1【Crane】✅ + h1【OA】✅（2026-09-15 完成）均按 STAR 梳理。OA 章节结构：概述 → 模块一 其他异动审批流 0 到 1（动态审批人/驳回重提排序）→ 模块二 生效同步与业务管理者字段改造 → 模块三 Moka 审批流双向对接（幂等）→ 模块四 自动入职与数据同步 → 数据库表模式。注意：STAR 原则章节已被用户手动删除，章节从"二、"开始编号 |
 
@@ -57,8 +57,6 @@
 - 429 修复：`MokaTalentPoolCandidateToOaJob` Thread.sleep + `MokaAutoEntryInfoConfig.threadSleep=1000`（配置化）；git `98a4bc3496`（2024-03-15）、幂等优化 `ac278feafb`（2024-01-12 oncall 触发）
 - 幂等中枢表：`sync_out_history` 四元组唯一索引 uindex__biz_third_type（V584）
 - OA 技术栈：SpringBoot + SpringCloud **Eureka** + JOOQ + MySQL + Redis/Redisson + Kafka + ES + YJob
-- ⚠️ 勿写：年度晋升批量异动、下级联动异动（employee_changes_sub）、会议室时间段运算（无用户提交记录）
-- ⚠️ 已知存疑点：`EmployeeChangesOtherCallback` L231 疑似 bug（beforeVo 取的是 afterVo），面试被深挖详情页权限时注意口径
 
 ## 4. V1 简历定稿内容摘要
 
@@ -70,10 +68,8 @@
 
 | 优先级 | 事项 | 状态 |
 |---|---|---|
-| ⚠️ 高 | Redis 八股补课（持久化/主从哨兵/大key热key），技能栏写"熟练掌握"但无整理文档 | 未开始 |
-| 中 | 查询接口 V1→V3 的 TP99/耗时数字，回忆后补入简历 bullet 3 | 未补 |
 | 中 | Kafka 八股整理（目前参考模板描述） | 未开始 |
-| 面试前 | 必背口径 5 个（离职空窗/非全学历/SpringCloud 追问/最难问题/优势）——复习手册第四部分已有参考答法 | 待背 |
+| 面试前 | 必背口径 5 个（离职空窗/非全学历/SpringCloud 追问/最难问题/优势）——面试口述文档第三部分已有模板，空窗口径待定稿 | 部分完成 |
 
 ## 6. V2 版本目标（AI 方向）
 

@@ -11,38 +11,46 @@ public class Solution1 {
    * 输出: [1,2]
    */
   public int[] topKFrequent(int[] nums, int k) {
+    if (nums == null) {
+      return new int[]{};
+    }
     Map<Integer, Integer> map = new HashMap<>();
     for (int num : nums) {
       map.put(num, map.getOrDefault(num, 0) + 1);
     }
 
-    // 初始化桶，桶的个数最大值=n+1
+    // 前k个高频元素，最大的频率是n+1个，用桶排序
     int n = nums.length;
-    List<List<Integer>> buckets = new ArrayList<>(n + 1);
+    List<Set<Integer>> buckets = new ArrayList<>(n + 1);
     for (int i = 0; i < n + 1; i++) {
-      buckets.add(new ArrayList<>());
+      buckets.add(new HashSet<>());
     }
 
     for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-      // 桶下标：频率
-      // 桶放入：数字，可能是相同频率的但不相同的数字
-      buckets.get(entry.getValue()).add(entry.getKey());
-    }
-
-    // 辅助数组list转化结果到res数组
-    List<Integer> list = new ArrayList<>();
-    for (int i = buckets.size() - 1; i >= 0 && list.size() > k; i--) {
-      if (buckets.get(i) != null) {
-        list.addAll(buckets.get(i));
-      }
+      int num = entry.getKey();
+      int count = entry.getValue();
+      // 桶的下标就是频率，值就是那个数
+      buckets.get(count).add(num);
     }
 
     int[] res = new int[k];
     int index = 0;
-    for (int i = k - 1; i >= 0; i--) {
-      res[index++] = list.get(i);
+    for (int i = n; i >= 0; i--) {
+      if (buckets.get(i).isEmpty()) {
+        continue;
+      }
+      if (index == k) {
+        break;
+      }
+      // 频率相同的,Set天然去重
+      Set<Integer> sameCount = buckets.get(i);
+      for (int num : sameCount) {
+        res[index++] = num;
+        if (index == k) {
+          break;
+        }
+      }
     }
-
     return res;
   }
 

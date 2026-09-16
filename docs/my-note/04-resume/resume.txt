@@ -1,12 +1,11 @@
 历史上下文：D:\project\java\note-up\docs\my-note\04-resume\resume-context.md
-个人简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
 项目地址：D:\project\java\note-up\docs\my-note\04-resume\项目经验.txt
+个人简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
 
-我现在进度到把个人简历中的【项目经历】中的【Crane 权限中台系统】都梳理背诵了一遍，
-现在需要非常详细的梳理我的【项目经历】中的【OA 人事行政数字化平台】项目经验的描述和代码片段，进行背诵梳理：
-1、扫描我简历中的【项目经历】第一部分的【OA 人事行政数字化平台】文字部分
-2、请结合【项目地址】中的OA项目地址的代码和相关文件、代码，整理出该该项目经历中的设计的代码、设计目标、数据库表模式、以及方案对比选型，
-    按照START原则更新到以下文档的第二个一级标题【OA】下，行与行之间不用有空行，可以用无序列表、加粗等字体渲染关键部分，方便我背诵梳理逻辑
-    https://my.feishu.cn/wiki/D3gcwTaekii186kHfQNcW8RVnpc
-3、然后更新本题resume-context上下文，补充或者删除无用信息，我直接去OA项目，用idea的kimi询问后续问题，我就可以把该上下文给到OA项目，不用切换到这个项目了
-    D:\project\java\note-up\docs\my-note\04-resume\resume-context.md
+我现在进度到把个人简历中的【项目经历】中的【Crane 权限中台系统】和【OA 人事行政数字化平台】都梳理背诵了一遍，
+1、请重新扫描在线个人简历，是否有错别字和可以优化的描述？
+    个人简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
+2、面试时，会先进行自我介绍和简短说明项目经历、个人经历等，请整理模板到这个文档
+    面试口述：https://my.feishu.cn/wiki/OL08wgBQLiDQGaklj5Ccx2jpnYf
+
+5 年 Java 后端经验，任职过脉脉、滴滴、洋钱罐金融，曾独立负责公司级权限中台（日均 RPC 十万级），熟悉并发编程、JVM 调优与线上问题排查。工作认真负责，2024、2025 连续两年 A 档绩效。深度使用 Claude Code、Cursor 等 AI 编程工具，习惯 SDD（规格驱动开发）模式，有编写 SKILL.md 沉淀 AI 工作流的实践经验，注重代码规范与团队沉淀。

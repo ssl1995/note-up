@@ -53,10 +53,48 @@ public class Solution {
     return res.toString();
   }
 
+  public String decodeString1(String s) {
+    if (s == null || s.isEmpty()) {
+      return "";
+    }
+    Deque<Integer> numStack = new ArrayDeque<>();
+    Deque<String> letterStack = new ArrayDeque<>();
+
+    char[] cs = s.toCharArray();
+    int num = 0;
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < cs.length; i++) {
+      char c = cs[i];
+      if (c >= '0' && c <= '9') {
+        num = num * 10 + (c - '0');
+      } else if (c >= 'a' && c <= 'z') {
+        sb.append(String.valueOf(c));
+      } else if (c == '[') {
+        numStack.push(num);
+        letterStack.push(sb.toString());
+        num = 0;
+        sb = new StringBuilder();
+      } else {
+        int count = numStack.isEmpty() ? 0 : numStack.pop();
+        String pop = letterStack.isEmpty() ? "" : letterStack.pop();
+
+        StringBuilder temp = new StringBuilder();
+        while (count-- > 0) {
+          temp.append(sb.toString());
+        }
+        // pop不用判空
+        pop += temp.toString();
+        sb = new StringBuilder(pop);
+      }
+    }
+    return sb.toString();
+  }
+
   public static void main(String[] args) {
     Solution solution = new Solution();
-    String s = "abc3[cd]xyz";
-    String res = "abccdcdcdxyz";
+    String s = "3[a]2[bc]";
+    String res = "aaabcbc";
     System.out.println(solution.decodeString(s).equals(res));
+    System.out.println(solution.decodeString1(s).equals(res));
   }
 }

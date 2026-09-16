@@ -54,6 +54,9 @@ public class Solution {
         end = max;  // 更新边界为下一步的最远位置
         res++;
       }
+      if (end >= n - 1) {
+        return res;
+      }
     }
     return res;
   }

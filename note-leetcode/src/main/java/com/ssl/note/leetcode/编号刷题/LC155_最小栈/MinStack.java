@@ -39,22 +39,22 @@ public class MinStack {
 
   // 题目要求只在栈非空时执行pop、top、getMin
   public void pop() {
-    Long diff = stack.pop();
+    long pop = stack.pop();
     // 负差：弹掉的正是当前最小值，用 min - diff 还原上一个最小值
     // （diff = 新min - 旧min => 旧min = 当前min - diff）
-    if (diff < 0) {
-      min = min - diff;
+    if (pop < 0) {
+      min = min - pop;
     }
     // 非负差：min 本来就不是它刷新的，不用动
   }
 
   public int top() {
-    long diff = stack.peek();
+    long peek = stack.peek();
     // 负差：栈顶真实值就是当前 min；非负差：真实值 = min + 差
-    if (diff < 0) {
+    if (peek < 0) {
       return (int) min;
     }
-    return (int) (min + diff);
+    return (int) (min + peek);
   }
 
   public int getMin() {
