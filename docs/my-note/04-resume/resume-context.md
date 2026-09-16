@@ -75,6 +75,7 @@
 
 - 现状：V1 仅技能栏 2 条 AI（了解 Agent 概念 + 熟练 AI 工具），项目经验无 AI
 - 待整理Agent项目，V1 中项目经历部分（Crane + OA）已全部梳理完成，可开始 V2
+- 2026-09-16 进展：AI Agent 项目（BitGuide Agent Platform，飞书说明父目录 https://ecnz1eq1tqym.feishu.cn/wiki/EskgwYLsHiaZnYkKk8OcLRujn1F）已扫描完毕；7 天学习计划已写入 https://my.feishu.cn/wiki/QQqWw7LlfiAvfukoODdcCeLynWf（Day1-3 读 ch01-ch06 概念与设计，Day4-6 ch07 Java 实战跑通三阶段+4 个递进练习，Day7 ch09a/b/c 面试冲刺+简历段落定稿）。⚠️ ch09b 简历模板明确警告不可照搬，项目名需改。扩展篇 Stage4/Stage5 不在 7 天计划内，可作第二周补充
 
 ## 7. 工具环境备忘
 
