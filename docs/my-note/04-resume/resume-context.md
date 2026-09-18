@@ -1,7 +1,7 @@
 # 简历项目上下文（跨会话交接文档）
 
 > 用途：新会话窗口读取本文档即可了解全部历史背景，继续修改操作。
-> 最后更新：2026-09-18（Day3 笔记全面重写补全；新增第 8 节笔记整理经验）
+> 最后更新：2026-09-18（新增第 9 节：国庆前项目学习推荐结论——RAG + 支付）
 > 当前工作模式：用户直接在 OA 项目（D:\project\java\yqg_oa）用 IDEA Kimi 提问，把本文档喂给它即可，无需切回本仓库。
 
 ---
@@ -106,3 +106,31 @@
 4. 新增章节导致编号变化时，用 `str_replace` 改后续章节号（如 1.6→1.9、2.12→2.13）
 5. 最后必须验证：重新 fetch 全文，检查关键内容点全部命中 + 章节顺序正确，不能只信 update 返回的 success
 6. 中间产物（插入 XML、最终 fetch JSON）留在 .tmp/ 备查
+
+---
+
+## 9. 国庆前项目学习推荐结论（2026-09-18 分析定稿）
+
+**结论：RAG 项目（DeepRAG Engine）+ 支付项目（s-pay-mall），不推荐三个全学。**
+
+### 分析依据（信息来源均已核实）
+
+- **RAG 项目**（https://ecnz1eq1tqym.feishu.cn/wiki/YmzEwZHiQipBFBkTnYocrkh4nWd）：与 BitGuide 同系列（同知识库、同 Java 主线、同 Milvus/Ollama 环境），四阶段递进：Naive RAG+评估基准线 → 全链路优化（Chunking 5 策略/混合检索/Rerank，准确率 ~60%→~90% 有量化数据）→ Self-RAG/CRAG/Adaptive RAG → Agentic RAG。恰好补 BitGuide 中最浅的 RAG 环节，两项目可串成一条叙事线
+- **AI 智能办公项目**（https://ls8sck0zrg.feishu.cn/wiki/J4g0wKfDfinnbPkS4I4c9ipgnIe）：❌ 排除。文档自己警告：不适合放简历首项目、只解决"有无"、接不住追问风险大、实践需 1 个月+
+- **拼团**（bugstack group-buy-market）：价值在 SpringCloud（Feign/Sentinel/Nacos），可补简历"了解 SpringCloud Alibaba 无项目支撑"的短板；但体量最大（前后端+DevOps），面试季消化不透的风险最高
+- **支付**（bugstack s-pay-mall）：官方定位"小型核心链路、花费很少的时间"；MVC+DDD 双架构对比是现成架构谈资；支付主题（掉单/补偿/幂等）与 OA Moka 幂等实战同源加强，且金融背景（洋钱罐）使支付域可信自然
+
+### 备选口径
+
+若目标岗位明确偏 C 端/高并发/微服务，则改选 **RAG + 拼团**（补 SpringCloud 短板优先）。
+
+### 排期建议（距 10.7 约 19 天，下周起有面试）
+
+1. **本周末**：BitGuide Day5-6 实战 → Day7 简历 V2 定稿（最高优先级，面试前必须完成）
+2. **下周**（面试间隙）：RAG Stage 1-2（环境复用 BitGuide Day4 已搭好的 Milvus/Ollama）
+3. **再往后**：支付项目（支付宝沙箱核心链路 + MVC/DDD 差异）；有余力再看 RAG Stage 3-4 或拼团
+4. **穿插**：Kafka 八股 + 空窗期口径定稿（对下周面试的直接影响大于新项目）
+
+### 中间产物
+
+分析素材备份在 note-up/.tmp/：rec_plan.md（学习计划）、rec_rag.md（RAG ch01）、rec_ai_office.md（AI办公说明）及对应 *_clean.txt

@@ -5,7 +5,3 @@
 我打算开始学习AI-Agent项目了，这是项目飞书说明的父目录：https://ecnz1eq1tqym.feishu.cn/wiki/EskgwYLsHiaZnYkKk8OcLRujn1F
 学习计划：https://my.feishu.cn/wiki/Nf8NwXFUgiADGFkWEnHcTayjntg
 Day3在线笔记：https://my.feishu.cn/wiki/LzJswWlKfi1QG6kBzdZczvExnPd
-原始ch05-stage2：https://ecnz1eq1tqym.feishu.cn/wiki/XopvwmalTi8ASRkyzb5cWpQznQe
-原始ch06-stage3：https://ecnz1eq1tqym.feishu.cn/wiki/LnV7w1vseiL7HtkZ0GOca2OInvy
-
-我发现以上的Day3的笔记不够全面，比如配置等代码块省略的比较多，请重新扫描Day3笔记和2篇原始文档，重新修改Day3笔记，全面的梳理重新更新
