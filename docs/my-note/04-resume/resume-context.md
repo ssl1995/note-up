@@ -1,7 +1,7 @@
 # 简历项目上下文（跨会话交接文档）
 
 > 用途：新会话窗口读取本文档即可了解全部历史背景，继续修改操作。
-> 最后更新：2026-09-15（面试口述文档已写入自我介绍/项目简述/追问口径模板；简历扫描完成，修复点待用户确认）
+> 最后更新：2026-09-18（Day3 笔记全面重写补全；新增第 8 节笔记整理经验）
 > 当前工作模式：用户直接在 OA 项目（D:\project\java\yqg_oa）用 IDEA Kimi 提问，把本文档喂给它即可，无需切回本仓库。
 
 ---
@@ -76,6 +76,7 @@
 - 现状：V1 仅技能栏 2 条 AI（了解 Agent 概念 + 熟练 AI 工具），项目经验无 AI
 - 待整理Agent项目，V1 中项目经历部分（Crane + OA）已全部梳理完成，可开始 V2
 - 2026-09-16 进展：AI Agent 项目（BitGuide Agent Platform，飞书说明父目录 https://ecnz1eq1tqym.feishu.cn/wiki/EskgwYLsHiaZnYkKk8OcLRujn1F）已扫描完毕；7 天学习计划已写入 https://my.feishu.cn/wiki/QQqWw7LlfiAvfukoODdcCeLynWf（Day1-3 读 ch01-ch06 概念与设计，Day4-6 ch07 Java 实战跑通三阶段+4 个递进练习，Day7 ch09a/b/c 面试冲刺+简历段落定稿）。⚠️ ch09b 简历模板明确警告不可照搬，项目名需改。扩展篇 Stage4/Stage5 不在 7 天计划内，可作第二周补充
+- 2026-09-18 进展：Day3 笔记（https://my.feishu.cn/wiki/LzJswWlKfi1QG6kBzdZczvExnPd）已按原始 ch05/ch06 文档全面重写补全（rev 38，16.8K→44.7K 字符，43 代码块+13 表格）。ch05 部分补：stage2.yml 完整 YAML、字段说明表、etcdctl 实操、etcd 存储设计表、冷热重启对比表、健康检查表、新增 1.6 CLI 交互/1.7 全链路追踪（3 场景）/1.8 可观测性（原 1.6 小结改 1.9）；ch06 部分补：复用/新增能力表、Gateway 位置图+process 伪码、Filter 接口+执行顺序、API Key 配置、三重校验器、令牌桶+两级限流+单机vs分布式表、Lane 冲突示例+四种策略行为、DistributedMemory 读写、API 表+请求/响应 JSON+Web 前端表、SIGTERM+K8s 滚动更新、架构数据流总图、新增 2.12 可观测性（原 2.12 改 2.13）。中间产物在 note-up/.tmp/（ins_01~22.xml 插入内容、day3_v2.json 最终版）
 
 ## 7. 工具环境备忘
 
@@ -83,3 +84,25 @@
 - Windows bash 输出中文需 `PYTHONIOENCODING=utf-8 python -c ...` 处理 JSON
 - 本目录其他文件：resume.txt（任务入口）、个人情况.txt、八股文整理背景.txt、项目经验.txt
 - 中间产物备份：note-up/.tmp/ 下有 changes_report.md（异动模块调查报告）、moka_report.md（Moka 调查报告）、oa_1~6_*.xml（背诵手册 OA 章节源稿），可追溯原始行号与完整代码
+
+## 8. 笔记整理经验（学习笔记质量标准，2026-09-18 Day3 重写总结）
+
+**核心教训：不能过度省略。** 学习笔记是用来背诵和面试复盘的，只写结论性文字、省略代码块和配置，复习时无法还原细节，等于白记。Day3 第一版就是反面教材（16.8K 字符，配置全靠一句话概括），被迫对照原文重写（补到 44.7K、43 代码块+13 表格）。
+
+### 必须齐全的内容清单（以后整理笔记逐条对照）
+
+1. **配置文件必须给全文**：如 stage2.yml 的 agents+models 完整 YAML，不能只写"配置字段有 id/modelRef/..."一句话；字段说明另配表格
+2. **命令实操必须可复现**：如 etcdctl put 的完整命令+JSON body，不能只写"往 etcd 推配置"
+3. **核心流程必须给伪码/时序**：如 Gateway.process() 全流程、AgentRegistry 结构、SIGTERM 关闭步骤、T0-T13 全链路追踪，不能只写步骤摘要列表
+4. **对比维度必须列表格**：冷热重启对比、单机vs分布式限流、四种 Lane 策略等，表格比一段文字好背
+5. **示例必须具体**：注入攻击示例、并发冲突示例、请求/响应 JSON 示例，一个具体例子胜过三段描述
+6. **易遗漏的固定章节**：CLI/交互演示、全链路数据流追踪（多场景）、可观测性埋点（指标+告警）——原始文档的这三类章节第一版全丢了
+
+### 工作方法（重写/补全流程）
+
+1. 先 `docs +fetch` 原始文档和笔记全文（--detail with-ids），逐节 diff 找出省略点，列成清单再动手
+2. 保留笔记原有骨架（章节编号、口诀、面试话术、高亮重点），只补缺不重写——用 `block_insert_after` 按节插入，不整体 overwrite（会丢图片和评论）
+3. 插入内容写成 XML 文件（.tmp/ins_*.xml），同一锚点插多块时注意后插的在前；写完统一跑脚本执行并检查每步 `ok:true`
+4. 新增章节导致编号变化时，用 `str_replace` 改后续章节号（如 1.6→1.9、2.12→2.13）
+5. 最后必须验证：重新 fetch 全文，检查关键内容点全部命中 + 章节顺序正确，不能只信 update 返回的 success
+6. 中间产物（插入 XML、最终 fetch JSON）留在 .tmp/ 备查
