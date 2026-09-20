@@ -1,7 +1,7 @@
 # 简历项目上下文（跨会话交接文档）
 
 > 用途：新会话窗口读取本文档即可了解全部历史背景，继续修改操作。
-> 最后更新：2026-09-17（Boss直聘【工作经历】STAR 修改建议已产出，见第 8 节，待用户复制到 Boss 直聘）
+> 最后更新：2026-09-18（新增第 9 节：国庆前项目学习推荐结论——RAG + 支付）
 > 当前工作模式：用户直接在 OA 项目（D:\project\java\yqg_oa）用 IDEA Kimi 提问，把本文档喂给它即可，无需切回本仓库。
 
 ---
@@ -76,6 +76,7 @@
 - 现状：V1 仅技能栏 2 条 AI（了解 Agent 概念 + 熟练 AI 工具），项目经验无 AI
 - 待整理Agent项目，V1 中项目经历部分（Crane + OA）已全部梳理完成，可开始 V2
 - 2026-09-16 进展：AI Agent 项目（BitGuide Agent Platform，飞书说明父目录 https://ecnz1eq1tqym.feishu.cn/wiki/EskgwYLsHiaZnYkKk8OcLRujn1F）已扫描完毕；7 天学习计划已写入 https://my.feishu.cn/wiki/QQqWw7LlfiAvfukoODdcCeLynWf（Day1-3 读 ch01-ch06 概念与设计，Day4-6 ch07 Java 实战跑通三阶段+4 个递进练习，Day7 ch09a/b/c 面试冲刺+简历段落定稿）。⚠️ ch09b 简历模板明确警告不可照搬，项目名需改。扩展篇 Stage4/Stage5 不在 7 天计划内，可作第二周补充
+- 2026-09-18 进展：Day3 笔记（https://my.feishu.cn/wiki/LzJswWlKfi1QG6kBzdZczvExnPd）已按原始 ch05/ch06 文档全面重写补全（rev 38，16.8K→44.7K 字符，43 代码块+13 表格）。ch05 部分补：stage2.yml 完整 YAML、字段说明表、etcdctl 实操、etcd 存储设计表、冷热重启对比表、健康检查表、新增 1.6 CLI 交互/1.7 全链路追踪（3 场景）/1.8 可观测性（原 1.6 小结改 1.9）；ch06 部分补：复用/新增能力表、Gateway 位置图+process 伪码、Filter 接口+执行顺序、API Key 配置、三重校验器、令牌桶+两级限流+单机vs分布式表、Lane 冲突示例+四种策略行为、DistributedMemory 读写、API 表+请求/响应 JSON+Web 前端表、SIGTERM+K8s 滚动更新、架构数据流总图、新增 2.12 可观测性（原 2.12 改 2.13）。中间产物在 note-up/.tmp/（ins_01~22.xml 插入内容、day3_v2.json 最终版）
 
 ## 7. 工具环境备忘
 
@@ -83,3 +84,53 @@
 - Windows bash 输出中文需 `PYTHONIOENCODING=utf-8 python -c ...` 处理 JSON
 - 本目录其他文件：resume.txt（任务入口）、个人情况.txt、八股文整理背景.txt、项目经验.txt
 - 中间产物备份：note-up/.tmp/ 下有 changes_report.md（异动模块调查报告）、moka_report.md（Moka 调查报告）、oa_1~6_*.xml（背诵手册 OA 章节源稿），可追溯原始行号与完整代码
+
+## 8. 笔记整理经验（学习笔记质量标准，2026-09-18 Day3 重写总结）
+
+**核心教训：不能过度省略。** 学习笔记是用来背诵和面试复盘的，只写结论性文字、省略代码块和配置，复习时无法还原细节，等于白记。Day3 第一版就是反面教材（16.8K 字符，配置全靠一句话概括），被迫对照原文重写（补到 44.7K、43 代码块+13 表格）。
+
+### 必须齐全的内容清单（以后整理笔记逐条对照）
+
+1. **配置文件必须给全文**：如 stage2.yml 的 agents+models 完整 YAML，不能只写"配置字段有 id/modelRef/..."一句话；字段说明另配表格
+2. **命令实操必须可复现**：如 etcdctl put 的完整命令+JSON body，不能只写"往 etcd 推配置"
+3. **核心流程必须给伪码/时序**：如 Gateway.process() 全流程、AgentRegistry 结构、SIGTERM 关闭步骤、T0-T13 全链路追踪，不能只写步骤摘要列表
+4. **对比维度必须列表格**：冷热重启对比、单机vs分布式限流、四种 Lane 策略等，表格比一段文字好背
+5. **示例必须具体**：注入攻击示例、并发冲突示例、请求/响应 JSON 示例，一个具体例子胜过三段描述
+6. **易遗漏的固定章节**：CLI/交互演示、全链路数据流追踪（多场景）、可观测性埋点（指标+告警）——原始文档的这三类章节第一版全丢了
+
+### 工作方法（重写/补全流程）
+
+1. 先 `docs +fetch` 原始文档和笔记全文（--detail with-ids），逐节 diff 找出省略点，列成清单再动手
+2. 保留笔记原有骨架（章节编号、口诀、面试话术、高亮重点），只补缺不重写——用 `block_insert_after` 按节插入，不整体 overwrite（会丢图片和评论）
+3. 插入内容写成 XML 文件（.tmp/ins_*.xml），同一锚点插多块时注意后插的在前；写完统一跑脚本执行并检查每步 `ok:true`
+4. 新增章节导致编号变化时，用 `str_replace` 改后续章节号（如 1.6→1.9、2.12→2.13）
+5. 最后必须验证：重新 fetch 全文，检查关键内容点全部命中 + 章节顺序正确，不能只信 update 返回的 success
+6. 中间产物（插入 XML、最终 fetch JSON）留在 .tmp/ 备查
+
+---
+
+## 9. 国庆前项目学习推荐结论（2026-09-18 分析定稿）
+
+**结论：RAG 项目（DeepRAG Engine）+ 支付项目（s-pay-mall），不推荐三个全学。**
+
+### 分析依据（信息来源均已核实）
+
+- **RAG 项目**（https://ecnz1eq1tqym.feishu.cn/wiki/YmzEwZHiQipBFBkTnYocrkh4nWd）：与 BitGuide 同系列（同知识库、同 Java 主线、同 Milvus/Ollama 环境），四阶段递进：Naive RAG+评估基准线 → 全链路优化（Chunking 5 策略/混合检索/Rerank，准确率 ~60%→~90% 有量化数据）→ Self-RAG/CRAG/Adaptive RAG → Agentic RAG。恰好补 BitGuide 中最浅的 RAG 环节，两项目可串成一条叙事线
+- **AI 智能办公项目**（https://ls8sck0zrg.feishu.cn/wiki/J4g0wKfDfinnbPkS4I4c9ipgnIe）：❌ 排除。文档自己警告：不适合放简历首项目、只解决"有无"、接不住追问风险大、实践需 1 个月+
+- **拼团**（bugstack group-buy-market）：价值在 SpringCloud（Feign/Sentinel/Nacos），可补简历"了解 SpringCloud Alibaba 无项目支撑"的短板；但体量最大（前后端+DevOps），面试季消化不透的风险最高
+- **支付**（bugstack s-pay-mall）：官方定位"小型核心链路、花费很少的时间"；MVC+DDD 双架构对比是现成架构谈资；支付主题（掉单/补偿/幂等）与 OA Moka 幂等实战同源加强，且金融背景（洋钱罐）使支付域可信自然
+
+### 备选口径
+
+若目标岗位明确偏 C 端/高并发/微服务，则改选 **RAG + 拼团**（补 SpringCloud 短板优先）。
+
+### 排期建议（距 10.7 约 19 天，下周起有面试）
+
+1. **本周末**：BitGuide Day5-6 实战 → Day7 简历 V2 定稿（最高优先级，面试前必须完成）
+2. **下周**（面试间隙）：RAG Stage 1-2（环境复用 BitGuide Day4 已搭好的 Milvus/Ollama）
+3. **再往后**：支付项目（支付宝沙箱核心链路 + MVC/DDD 差异）；有余力再看 RAG Stage 3-4 或拼团
+4. **穿插**：Kafka 八股 + 空窗期口径定稿（对下周面试的直接影响大于新项目）
+
+### 中间产物
+
+分析素材备份在 note-up/.tmp/：rec_plan.md（学习计划）、rec_rag.md（RAG ch01）、rec_ai_office.md（AI办公说明）及对应 *_clean.txt

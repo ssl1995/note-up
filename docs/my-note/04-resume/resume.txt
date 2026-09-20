@@ -2,6 +2,6 @@
 个人简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
 
 我现在进度到把个人简历中的【项目经历】中的【Crane 权限中台系统】和【OA 人事行政数字化平台】都梳理背诵了一遍，
-我打算开始学习AI-Agent项目了，这是项目飞书说明的父目录，子目录里是学习指引和说明：https://ecnz1eq1tqym.feishu.cn/wiki/EskgwYLsHiaZnYkKk8OcLRujn1F
-现在请快速扫描该项目，因为我有后端经验，我打算尽量短时间，最长一周完成该项目的学习，和把经历写进简历，整理每天的学习计划，更新到以下飞书文档里
-学习计划：https://my.feishu.cn/wiki/QQqWw7LlfiAvfukoODdcCeLynWf
+我打算开始学习AI-Agent项目了，这是项目飞书说明的父目录：https://ecnz1eq1tqym.feishu.cn/wiki/EskgwYLsHiaZnYkKk8OcLRujn1F
+学习计划：https://my.feishu.cn/wiki/Nf8NwXFUgiADGFkWEnHcTayjntg
+Day3在线笔记：https://my.feishu.cn/wiki/LzJswWlKfi1QG6kBzdZczvExnPd
