@@ -22,7 +22,7 @@ public class Solution2 {
     int b = Math.max(nums[0], nums[1]);
 
     for (int i = 2; i < n; i++) {
-      int c = Math.max(a + nums[i], b);
+      int c = Math.max(b, a + nums[i]);
       a = b;
       b = c;
     }

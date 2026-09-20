@@ -1,7 +1,12 @@
-历史上下文：D:\project\java\note-up\docs\my-note\04-resume\resume-context.md
 个人简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
+上下文：https://my.feishu.cn/wiki/X0Erwhr8hi8YjNkWX5Kc0Widnwc
 
-我现在进度到把个人简历中的【项目经历】中的【Crane 权限中台系统】和【OA 人事行政数字化平台】都梳理背诵了一遍，
-我打算开始学习AI-Agent项目了，这是项目飞书说明的父目录：https://ecnz1eq1tqym.feishu.cn/wiki/EskgwYLsHiaZnYkKk8OcLRujn1F
+我现在开始学习Agent的代码实战部分：
 学习计划：https://my.feishu.cn/wiki/Nf8NwXFUgiADGFkWEnHcTayjntg
-Day3在线笔记：https://my.feishu.cn/wiki/LzJswWlKfi1QG6kBzdZczvExnPd
+原始笔记：https://ecnz1eq1tqym.feishu.cn/wiki/SpB1w1iJYitkPJkvCVAc7DSJnaf
+
+请把原始笔记扫描下载下来，总结精简到如下飞书笔记里，格式注意见resume-context的8. 笔记整理经验：
+Day4笔记：https://my.feishu.cn/wiki/PlmAwA3Ubionozk4yAPci8Binqc
+
+历史上下文：D:\project\java\note-up\docs\my-note\04-resume\resume-context.md
+把以上历史上下文精简推送到这个飞书上，方便我其他项目使用该上下文，并且整理哪些部分需要更新删除，行与行之间不需要空行：https://my.feishu.cn/wiki/X0Erwhr8hi8YjNkWX5Kc0Widnwc
