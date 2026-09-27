@@ -57,16 +57,8 @@ public class Solution {
     // 考虑初始化为amount+1或者整形最大，但是整形最大+1会越界
     // 所以 amount + 1 已经是一个"不可能达到"的值了。
     Arrays.fill(dp, amount + 1);
+    // 不能忽略
     dp[0] = 0;
-
-    for (int i = 1; i <= amount; i++) {
-      for (int coin : coins) {
-        if (i >= coin) {
-          // 这里就不需要特判
-          dp[i] = Math.min(dp[i], dp[i - coin] + 1);
-        }
-      }
-    }
 
     for (int coin : coins) {
       for (int i = 1; i <= amount; i++) {
