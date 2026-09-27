@@ -30,6 +30,8 @@ public class Solution {
     while (i < m && j < n) {
       nums[k++] = nums1[i] < nums2[j] ? nums1[i++] : nums2[j++];
     }
+
+
     while (i < m) {
       nums[k++] = nums1[i++];
     }
