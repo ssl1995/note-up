@@ -10,3 +10,11 @@ Day4笔记：https://my.feishu.cn/wiki/PlmAwA3Ubionozk4yAPci8Binqc
 
 历史上下文：D:\project\java\note-up\docs\my-note\04-resume\resume-context.md
 把以上历史上下文精简推送到这个飞书上，方便我其他项目使用该上下文，并且整理哪些部分需要更新删除，行与行之间不需要空行：https://my.feishu.cn/wiki/X0Erwhr8hi8YjNkWX5Kc0Widnwc
+
+权限相关问题：https://my.feishu.cn/wiki/JTW7wc75sidrv0kPirwctbNgnJd
+在线简历：https://my.feishu.cn/wiki/CoLcwykKQiDjwrkhH3MckIIrnhd
+上下文：https://my.feishu.cn/wiki/X0Erwhr8hi8YjNkWX5Kc0Widnwc
+修改建议：https://my.feishu.cn/wiki/PxPwwerN7itHXCkrg7DcRfcunCf
+请整理本次权限相关问题中的权限隔离和数据维度相关部分，
+1、思考是否可以更新简历-Crane 权限中台系统（业务方向）的个人职责描述部分
+2、以及思考更新Boss中的个人优势描述部分，Boss上的HR和面试官会看这个
