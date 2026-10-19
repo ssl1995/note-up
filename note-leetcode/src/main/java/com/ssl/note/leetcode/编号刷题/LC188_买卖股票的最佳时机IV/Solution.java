@@ -19,48 +19,25 @@ public class Solution {
     if (n < 2 || k == 0) {
       return 0;
     }
-    // n天中，最多完成n/2笔交易，比如一天买、一天卖，
-    // 1、k大当无限，贪心随便买
-    if (k >= n / 2) {
-      return maxProfit2(prices);
-    }
-    // 2、k小要计数，用状态机
-    return maxProfit3(k, prices);
+    // 力扣的k<100,n<1000,k<n
+    // k<n且量级不大，LC123通用化
+    return getKTrade(prices, k);
   }
 
-  // LC122买卖股票II
-  private int maxProfit2(int[] prices) {
-    // min=谷底，同时也是本轮买入价
-    int min = Integer.MAX_VALUE;
-    int res = 0;
-
-    for (int num : prices) {
-      // 谷底买入
-      min = Math.min(min, num);
-      if (num > min) {
-        // LC122:多次交易，涨了就卖
-        res += num - min;
-        // 卖了后，立马买入，等待下一波上涨
-        min = num;
-      }
-    }
-
-    return res;
-  }
-
-  // LC123买卖股票III
-  private int maxProfit3(int k, int[] prices) {
+  // LC123买卖股票III,通用化
+  private int getKTrade(int[] prices, int k) {
     int[] buy = new int[k];
     int[] sell = new int[k];
     Arrays.fill(buy, -prices[0]);
 
     for (int num : prices) {
       for (int i = 0; i < k; i++) {
-        int prevSell = i == 0 ? 0 : sell[i - 1];
-        buy[i] = Math.max(buy[i], prevSell - num);
+        int pre = i == 0 ? 0 : sell[i - 1];
+        buy[i] = Math.max(buy[i], pre - num);
         sell[i] = Math.max(sell[i], buy[i] + num);
       }
     }
+
     return sell[k - 1];
   }
 

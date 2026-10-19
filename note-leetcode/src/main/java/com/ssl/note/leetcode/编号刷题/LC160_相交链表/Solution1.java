@@ -20,26 +20,27 @@ public class Solution1 {
       return headA == null ? headB : headA;
     }
 
-    ListNode cur1 = headA;
-    ListNode cur2 = headB;
-    while (cur1 != cur2) {
-      cur1 = cur1 == null ? headB : cur1.next;
-      cur2 = cur2 == null ? headA : cur2.next;
+    ListNode l1 = headA;
+    ListNode l2 = headB;
+    while (l1 != l2) {
+      l1 = l1 == null ? headB : l1.next;
+      l2 = l2 == null ? headA : l2.next;
     }
-    return cur1;
+    return l1;
   }
 
-  public ListNode getIntersectionNode1(ListNode headA, ListNode headB) {
+  // 错误：加上next就是死循环
+  public ListNode getIntersectionNodeError(ListNode headA, ListNode headB) {
     if (headA == null || headB == null) {
       return headA == null ? headB : headA;
     }
 
-    ListNode cur1 = headA;
-    ListNode cur2 = headB;
-    while (cur1 != cur2) {
-      cur1 = cur1.next == null ? headB : cur1.next;
-      cur2 = cur2.next == null ? headA : cur2.next;
+    ListNode l1 = headA;
+    ListNode l2 = headB;
+    while (l1 != l2) {
+      l1 = l1.next == null ? headB : l1.next;
+      l2 = l2.next == null ? headA : l2.next;
     }
-    return cur1;
+    return l1;
   }
 }

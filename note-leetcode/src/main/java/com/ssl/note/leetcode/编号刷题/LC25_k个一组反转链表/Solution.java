@@ -20,10 +20,10 @@ public class Solution {
     dummy.next = head;
 
     // 将链表分为已反转区域、待反转区域、未反转区域
-    // 待反转区域四个指针: pre [start、end] next
+    // 待反转区域四个指针: pre,[start,end],next
     ListNode pre = dummy;
     ListNode start;
-    ListNode end = pre;
+    ListNode end = dummy;
     ListNode next;
     // end!=null也行，内部靠break跳出
     while (end.next != null) {
@@ -34,18 +34,16 @@ public class Solution {
       if (end == null) {
         break;
       }
-
       // 2、pre,[start,end],next
       start = pre.next;
       next = end.next;
-      end.next = null;// 切断
 
       // 3、翻转、连接
-      // pre,[end,start],next
+      end.next = null;// 切断
       pre.next = reverse(start);// 翻转
       start.next = next;// 连接next
 
-      // 4、归位：pre,[end,start],next
+      // 4、归位：pre和end指向待翻转区域前一个
       pre = start;
       end = pre;
     }

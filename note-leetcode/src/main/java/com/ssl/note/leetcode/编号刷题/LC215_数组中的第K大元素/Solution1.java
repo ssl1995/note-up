@@ -16,20 +16,20 @@ public class Solution1 {
     return quickSelect(nums, 0, nums.length - 1, target);
   }
 
-  private int quickSelect(int[] nums, int l, int r, int target) {
+  private int quickSelect(int[] nums, int left, int right, int target) {
     // 循环不变式：target 始终在 [left, right] 区间内
-    while (l <= r) {
+    while (left <= right) {
       // [l,r]闭区间写法，我还是习惯这种写法
-      int[] partition = partition(nums, l, r);
+      int[] partition = partition(nums, left, right);
       int a = partition[0];
       int b = partition[1];
       // a、b、t都是坐标值，直接比较
       if (a <= target && target <= b) {
         return nums[target];
       } else if (target < a) {
-        r = a - 1;
+        right = a - 1;
       } else {
-        l = b + 1;
+        left = b + 1;
       }
     }
     // 理论上不会走到这里，因为题目保证k有效
@@ -37,15 +37,15 @@ public class Solution1 {
   }
 
   // 三路快排
-  private int[] partition(int[] nums, int l, int right) {
+  private int[] partition(int[] nums, int left, int right) {
     // 三路快排，当重复元素过多时，高效处理
     // 1、交换随机值，防止出现基准=最大值/最小值最坏情况
-    int random = new Random().nextInt(right - l + 1) + l;
+    int random = new Random().nextInt(right - left + 1) + left;
     int pivot = nums[random];
 
     // 2、扫描右边界是 b 而不是 r，i > b 时终止
     // [0,a-1] [a,b] [b+1,r]
-    int a = l, b = right, i = l;
+    int a = left, b = right, i = left;
     while (i <= b) {
       if (nums[i] < pivot) {
         swap(nums, i++, a++);

@@ -38,13 +38,12 @@ public class Solution {
   }
 
   /**
-   * 归并
+   * 归并：LC21_合并两个有序链表之和代码相同
    */
   private ListNode merge(ListNode head1, ListNode head2) {
     if (head1 == null || head2 == null) {
       return head1 == null ? head2 : head1;
     }
-    // 以下LC21_合并两个有序链表之和代码相同
     ListNode dummy = new ListNode(-1);
     ListNode cur = dummy;
     while (head1 != null && head2 != null) {

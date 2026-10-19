@@ -20,9 +20,9 @@ public class Solution {
 
     for (int num : prices) {
       min = Math.min(min, num);
-      res += num - min;
       // 贪心：涨了就卖，然后立马买=最大收益
-      if (num > min) {
+      if (num - min > 0) {
+        res += num - min;
         min = num;
       }
     }

@@ -17,29 +17,29 @@ public class Solution2 {
     if (prices.length <= 1) {
       return 0;
     }
-    // 最多2笔交易，每笔交易有2种状态，总共4种状态
-    // 第一次买入
-    int hold1 = -prices[0];
-    // 第一次卖出
-    int sold1 = 0;
-    // 第二次买入
-    int hold2 =  -prices[0];
-    // 第二次卖出
-    int sold2 = 0;
-    // 状态机：每次都询问自己，是保持 or 执行某个操作更好，最后留下最好的那个
-    // hold1 ⇄ sold1 ⇄ hold2 ⇄ sold2
-    for (int num : prices) {
-      // 保持不买 vs 今天买入（花 num 元）
-      hold1 = Math.max(hold1, -num);
-      // 保持不卖 vs 今天卖出（收入 num 元）
-      sold1 = Math.max(sold1, hold1 + num);
+    int n = prices.length;
 
-      // 保持不买 vs 用第一笔赚的钱 today 买入
-      hold2 = Math.max(hold2, sold1 - num);
-      // 保持不卖 vs 今天卖出
-      sold2 = Math.max(sold2, hold2 + num);
+    // 超时解进一步，预处理解法：正着扫一遍 + 反着扫一遍，降低时间复杂度
+    int[] left = new int[n];
+    int min = prices[0];
+    for (int i = 1; i < n; i++) {
+      min = Math.min(min, prices[i]);
+      left[i] = Math.max(left[i - 1], prices[i] - min);
     }
-    return sold2;
+
+    int[] right = new int[n];
+    int max = prices[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+      max = Math.max(max, prices[i]);
+      right[i] = Math.max(right[i + 1], max - prices[i]);
+    }
+
+    int res = 0;
+    for (int i = 0; i < n; i++) {
+      res = Math.max(res, left[i] + right[i]);
+    }
+
+    return res;
   }
 
   public static void main(String[] args) {

@@ -20,15 +20,16 @@ public class Solution1 {
 
     int res = 0;
     int n = prices.length;
-    // 普通解：两笔交易不能重叠，所以一定存在某个分割点i，完成2笔交易分成2个区间
-    // 这个解法会超时，但是能更好理解
+    // 超时解：两笔交易不能重叠，所以一定存在某个分割点i，完成2笔交易分成2个区间
     for (int i = 0; i < n; i++) {
+      // 大量重复计算导致超时，思考预处理解法
       int max = maxProfitBase(prices, 0, i) + maxProfitBase(prices, i, n - 1);
       res = Math.max(max, res);
     }
     return res;
   }
 
+  // LC121：只能交易一次，只记录发生的最大值即可
   public int maxProfitBase(int[] prices, int start, int end) {
     if (prices == null) {
       return 0;
@@ -36,14 +37,10 @@ public class Solution1 {
     int min = Integer.MAX_VALUE;
     int res = 0;
 
-    // 贪心：每次遍历到一个数，局部最优解是之前的最小值-当前数就是最大利润
     for (int i = start; i <= end; i++) {
       int num = prices[i];
       min = Math.min(min, num);
-      if (num > min) {
-        // LC121：只能交易一次，只记录发生的最大值即可
-        res = Math.max(res, num - min);
-      }
+      res = Math.max(res, num - min);
     }
     return res;
   }

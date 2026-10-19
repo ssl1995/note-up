@@ -13,23 +13,22 @@ public class Solution3 {
       return 0;
     }
     // 记录i位置左右两边最高
-    int leftMax = 0;
-    int rightMax = 0;
+    int leftMax = 0, rightMax = 0;
 
     // 双指针
-    int l = 0;
-    int r = height.length - 1;
+    int l = 0, r = height.length - 1;
     int res = 0;
 
-    while (l <= r) {
-      // l,r位置包含自己，找最高的最小值
+    while (l < r) {
+      // l,r位置包含自己，找左右最高的最小值
       leftMax = Math.max(leftMax, height[l]);
       rightMax = Math.max(rightMax, height[r]);
       int min = Math.min(leftMax, rightMax);
 
       // l,r矮的那边作为底座接水，并且移动矮的那边
-      int cur = height[l] < height[r] ? height[l++] : height[r--];
-      int diff = min - cur;
+      int h = height[l] < height[r] ? height[l++] : height[r--];
+      // 雨水量=左右两边小的-底座
+      int diff = min - h;
 
       res += diff;
     }
