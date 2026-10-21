@@ -63,7 +63,7 @@ public class Solution2 {
       int colIdx = Integer.numberOfTrailingZeros(place);
 
       board[row][colIdx] = 'Q';
-      // 递归下一行，当前列影响下一行的同列，左斜影响下一行右边，右斜影响下一行左边
+      // 递归下一行，当前列影响下一行的同列，左斜影响下一行左边，右斜影响下一行右边
       dfs(board, limit, row + 1, col | place, (left | place) >> 1, (right | place) << 1, res);
       board[row][colIdx] = '.';
     }

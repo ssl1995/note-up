@@ -23,4 +23,25 @@ public class Solution {
     }
     return res == Integer.MAX_VALUE ? 0 : res;
   }
+
+  // 官方题解
+  public int minSubArrayLen1(int s, int[] nums) {
+    int n = nums.length;
+    if (n == 0) {
+      return 0;
+    }
+    int res = Integer.MAX_VALUE;
+    int start = 0, end = 0;
+    int sum = 0;
+    while (end < n) {
+      sum += nums[end];
+      while (sum >= s) {
+        res = Math.min(res, end - start + 1);
+        sum -= nums[start];
+        start++;
+      }
+      end++;
+    }
+    return res == Integer.MAX_VALUE ? 0 : res;
+  }
 }
